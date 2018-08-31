@@ -1,0 +1,17 @@
+{
+  "name": "GraphQLServer",
+  "version": "0.0.1",
+  "description": "GraphQL server to connect front end to backend",
+  "main": "index.js",
+  "author": "Juan Peredo Bolbeck LLC <jperedo@Bolbeck.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "mocha src/tests/**"
+  },
+  "dependencies": {
+    "chai": "^4.1.2",
+    "graphql-yoga": "^1.16.1",
+    "mocha": "^5.2.0"
+  }
+}

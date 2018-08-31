@@ -1,0 +1,25 @@
+version: "3"
+
+services:
+  arangodb_dev:
+    image: arangodb
+    container_name: bolbeck_arangodb_dev
+    environment:
+      - ARANGO_ROOT_PASSWORD=TestDB@home2
+    ports:
+      - "8540:8529"
+    volumes:
+        - ./Arango/db:/var/lib/arangodb3
+        - ./Arango/apps_db_system:/var/lib/arangodb3-apps/_db/
+  graphql_server:
+    build: ./GraphQLServer
+    depends_on:
+      - arangodb_dev
+    container_name: bolbeck_graphserver_dev
+    command: nodemon -L --inspect=0.0.0.0:5858
+    volumes:
+      - ./GraphQLServer:/Bolbeck/code
+    ports:
+      - "8000:8000"
+      - "5858:5858"
+      - "4000:4000"

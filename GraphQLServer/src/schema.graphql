@@ -1,0 +1,70 @@
+# This defines the GraphQL schema
+# the exclamation point indicates mandatory field
+# [link!]! indicates that server will always return an object and that
+# object will always have a link type inside
+
+type Query {
+  info: String!
+  feed: [Link!]!
+  custKpiFormulas: [CustKpiFormula]
+  custKpiFormula(_key: ID!): [CustKpiFormula],
+  custKpiFormulaFieldByKey(_key: ID!, fieldName: String!): [custKpiFormulaField]
+}
+
+type Mutation {
+  post(url: String!, description: String!): Link!,
+  customerKpiPost(input: CustKpiFormulaInput!):CustKpiFormula!
+  customerKpiPut(_key: ID!, input: CustKpiFormulaInput!):CustKpiFormula!
+  customerKpiPatch(_key: ID!, input: CustKpiFormulaPatchInput!):CustKpiFormula!
+  customerKpiDeleteLogical(_key: ID!):Boolean
+  customerKpiDeleteFull(_key: ID!):Boolean
+}
+
+
+type Link {
+  id: ID!
+  description: String!
+  url: String!
+}
+
+type CustKpiFormula {
+  _key: ID,
+  name: String!
+  formula: String!
+  type: String!
+  validityDate: String!
+  calculationOrder: Int!
+  editable: Int,
+  active: Int,
+  displayOrder: Int
+}
+
+input CustKpiFormulaInput {
+  _key: ID,
+  name: String!
+  formula: String!
+  type: String!
+  validityDate: String!
+  calculationOrder: Int!
+  editable: Int,
+  active: Int,
+  displayOrder: Int
+}
+
+input CustKpiFormulaPatchInput {
+  _key: ID,
+  name: String
+  formula: String
+  type: String
+  validityDate: String
+  calculationOrder: Int
+  editable: Int,
+  active: Int,
+  displayOrder: Int
+}
+
+type custKpiFormulaField {
+  _key: ID!,
+  fieldName: String!,
+  fieldValue: String
+}

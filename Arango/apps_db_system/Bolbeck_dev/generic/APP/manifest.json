@@ -1,0 +1,14 @@
+{
+  "name": "Generic_Queries",
+  "version": "0.0.1-dev",
+  "description": "Get data using generic queries",
+  "author": "Juan Peredo, Bolbeck LLC",
+  "engines": {
+    "arangodb": "^3.3.0"
+  },
+  "provides" :{
+    "@generic/generic" : "0.0.1"
+  },
+  "tests": "tests/**",
+  "main": "index.js"
+}

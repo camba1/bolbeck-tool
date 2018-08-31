@@ -1,0 +1,19 @@
+{
+  "name": "Customer_Kpi_Formula",
+  "version": "0.0.1-dev",
+  "description": "Customer KPIs formula service",
+  "author": "Juan Peredo, Bolbeck LLC",
+  "engines": {
+    "arangodb": "^3.3.0"
+  },
+  "dependencies": {
+    "generic": {
+      "name": "@generic/generic",
+      "version": "^0.0.1",
+      "description": "Generic collection get",
+      "required": false,
+      "multiple":false
+    }
+  },
+  "main": "index.js"
+}

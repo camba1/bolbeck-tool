@@ -116,8 +116,6 @@ let idCount = links.length
 // }
 
 
-
-
 const resolvers = {
   Query,
   Mutation

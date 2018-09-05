@@ -8,7 +8,10 @@ type Query {
   feed: [Link!]!
   custKpiFormulas: [CustKpiFormula]
   custKpiFormula(_key: ID!): [CustKpiFormula],
-  custKpiFormulaFieldByKey(_key: ID!, fieldName: String!): [custKpiFormulaField]
+  custKpiFormulaFieldByKey(_key: ID!, fieldName: String!): [custKpiFormulaField],
+  genericDocumentsGet(collectionName: String!): [genericDocument] ,
+  genericDocumentGet(collectionName: String!, _key: ID!): [genericDocument],
+  genericDocumentFieldByKey(collectionName: String!,_key: ID!, fieldName: String!): [genericFieldByKey]
 }
 
 type Mutation {
@@ -67,4 +70,15 @@ type custKpiFormulaField {
   _key: ID!,
   fieldName: String!,
   fieldValue: String
+}
+
+type genericFieldByKey {
+  _key: ID!,
+  fieldName: String!,
+  fieldValue: String
+}
+
+type genericDocument {
+  _key: ID!,
+  name: String
 }

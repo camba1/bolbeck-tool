@@ -17,6 +17,8 @@ function post(root, args, context) {
   }
 
 
+// custKpiFormula end points
+
   function customerKpiPost(root, args, context) {
     const backendURL = context.backendURL
     const foxxMountPoint = context.foxxServMountPoints.custKpiFormula

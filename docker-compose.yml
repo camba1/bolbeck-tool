@@ -7,7 +7,7 @@ services:
     environment:
       - ARANGO_ROOT_PASSWORD=TestDB@home2
     ports:
-      - "8540:8529"
+      - "8529:8529"
     volumes:
         - ./Arango/db:/var/lib/arangodb3
         - ./Arango/apps_db_system:/var/lib/arangodb3-apps/_db/
@@ -23,3 +23,15 @@ services:
       - "8000:8000"
       - "5858:5858"
       - "4000:4000"
+  ember_gui:
+    image: danlynn/ember-cli
+    container_name: bolbeck_ember_dev
+    depends_on:
+      - graphql_server
+    volumes:
+      - ./Ember:/myapp
+    command: ember server
+    ports:
+      - "4200:4200"
+      - "7020:7020"
+      - "7357:7357"

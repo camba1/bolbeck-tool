@@ -2,7 +2,7 @@
   "name": "GraphQLServer",
   "version": "0.0.1",
   "description": "GraphQL server to connect front end to backend",
-  "main": "index.js",
+  "main": "./src/index.js",
   "author": "Juan Peredo Bolbeck LLC <jperedo@Bolbeck.com>",
   "license": "MIT",
   "scripts": {

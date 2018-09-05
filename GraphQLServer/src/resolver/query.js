@@ -14,6 +14,8 @@ function feed(root, args, context){
   return context.myLinkObj
 }
 
+//custKpiFormula queries
+
 function custKpiFormulas(root, args, context) {
   const backendURL = context.backendURL
   const foxxMountPoint = context.foxxServMountPoints.generic

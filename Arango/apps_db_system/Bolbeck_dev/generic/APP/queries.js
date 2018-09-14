@@ -11,7 +11,7 @@ const status = require('statuses');
 const HTTP_NOT_FOUND = status('not found');
 const HTTP_CONFLICT = status('conflict');
 
-const g_MaxRecordsByQuery = 10;
+const g_MaxRecordsByQuery = 20;
 
 // Get a number of documents from a given collection
 var genericCollectionGet = function (collection) {

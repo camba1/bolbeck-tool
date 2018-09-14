@@ -16,11 +16,11 @@ type Query {
 
 type Mutation {
   post(url: String!, description: String!): Link!,
-  customerKpiPost(input: CustKpiFormulaInput!):CustKpiFormula!
-  customerKpiPut(_key: ID!, input: CustKpiFormulaInput!):CustKpiFormula!
-  customerKpiPatch(_key: ID!, input: CustKpiFormulaPatchInput!):CustKpiFormula!
-  customerKpiDeleteLogical(_key: ID!):Boolean
-  customerKpiDeleteFull(_key: ID!):Boolean
+  custKpiFormulaPost(input: CustKpiFormulaInput!):CustKpiFormula!
+  custKpiFormulaPut(_key: ID!, input: CustKpiFormulaInput!):CustKpiFormula!
+  custKpiFormulaPatch(_key: ID!, input: CustKpiFormulaPatchInput!):CustKpiFormula!
+  custKpiFormulaDeleteLogical(_key: ID!):Boolean
+  custKpiFormulaDeleteFull(_key: ID!):Boolean
 }
 
 

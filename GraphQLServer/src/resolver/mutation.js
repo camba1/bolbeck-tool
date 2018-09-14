@@ -19,12 +19,12 @@ function post(root, args, context) {
 
 // custKpiFormula end points
 
-  function customerKpiPost(root, args, context) {
+  function custKpiFormulaPost(root, args, context) {
     const backendURL = context.backendURL
     const foxxMountPoint = context.foxxServMountPoints.custKpiFormula
     const endPoint = `${collectionName}Post`
     const data = args.input
-    return genericHelper.fetchMutation(backendURL,foxxMountPoint, endPoint,'post',customerKpiPostAfterMutationHandler, data)
+    return genericHelper.fetchMutation(backendURL,foxxMountPoint, endPoint,'post',custKpiFormulaPostAfterMutationHandler, data)
     // var mutationRequest = genericHelper.buildMutationRequest(backendURL,foxxMountPoint, endPoint,'post', data)
     // return fetch( mutationRequest ).then(res => res.json())
     // .catch(error => console.error('Error:', error));
@@ -41,72 +41,72 @@ function post(root, args, context) {
     // //.then(response => console.log('Success:', JSON.stringify(response)))
   }
 
-  function customerKpiPostAfterMutationHandler(serverResponse){
+  function custKpiFormulaPostAfterMutationHandler(serverResponse){
     // Do something here if needed
     return serverResponse
   }
 
-  function customerKpiPut(root, args, context) {
+  function custKpiFormulaPut(root, args, context) {
     const backendURL = context.backendURL
     const foxxMountPoint = context.foxxServMountPoints.custKpiFormula
     const endPoint = `${collectionName}Put`
     const data = args.input
     const id  = args._key
-    return genericHelper.fetchMutation(backendURL,foxxMountPoint, endPoint,'put',customerKpiPutAfterMutationHandler, data, id)
+    return genericHelper.fetchMutation(backendURL,foxxMountPoint, endPoint,'put',custKpiFormulaPutAfterMutationHandler, data, id)
   }
 
-  function customerKpiPutAfterMutationHandler(serverResponse){
+  function custKpiFormulaPutAfterMutationHandler(serverResponse){
     // Do something here if needed
     return serverResponse
   }
 
-  function customerKpiPatch(root, args, context) {
+  function custKpiFormulaPatch(root, args, context) {
     const backendURL = context.backendURL
     const foxxMountPoint = context.foxxServMountPoints.custKpiFormula
     const endPoint = `${collectionName}Patch`
     const data = args.input
     const id  = args._key
-    return genericHelper.fetchMutation(backendURL,foxxMountPoint, endPoint,'patch',customerKpiPatchAfterMutationHandler, data, id)
+    return genericHelper.fetchMutation(backendURL,foxxMountPoint, endPoint,'patch',custKpiFormulaPatchAfterMutationHandler, data, id)
   }
 
-  function customerKpiPatchAfterMutationHandler(serverResponse){
+  function custKpiFormulaPatchAfterMutationHandler(serverResponse){
     // Do something here if needed
     return serverResponse
   }
 
-  function customerKpiDeleteFull(root, args, context) {
+  function custKpiFormulaDeleteFull(root, args, context) {
     const backendURL = context.backendURL
     const foxxMountPoint = context.foxxServMountPoints.generic
     const endPoint = `${context.foxxServGenericEndPoints.DocumentByKeyDeleteFull}/${collectionName}`
     const data = undefined //args.input
     const id  = args._key
-    return genericHelper.fetchMutation(backendURL,foxxMountPoint, endPoint,'delete',customerKpiDeleteFullAfterMutationHandler, data, id)
+    return genericHelper.fetchMutation(backendURL,foxxMountPoint, endPoint,'delete',custKpiFormulaDeleteFullAfterMutationHandler, data, id)
   }
 
-  function customerKpiDeleteFullAfterMutationHandler(serverResponse){
+  function custKpiFormulaDeleteFullAfterMutationHandler(serverResponse){
     // Do something here if needed
     return serverResponse
   }
 
-  function customerKpiDeleteLogical(root, args, context) {
+  function custKpiFormulaDeleteLogical(root, args, context) {
     const backendURL = context.backendURL
     const foxxMountPoint = context.foxxServMountPoints.generic
     const endPoint = `${context.foxxServGenericEndPoints.DocumentByKeyDeleteLogical}/${collectionName}`
     const data = undefined // args.input
     const id  = args._key
-    return genericHelper.fetchMutation(backendURL,foxxMountPoint, endPoint,'delete',customerKpiDeleteLogicalAfterMutationHandler, data, id)
+    return genericHelper.fetchMutation(backendURL,foxxMountPoint, endPoint,'delete',custKpiFormulaDeleteLogicalAfterMutationHandler, data, id)
   }
 
-  function customerKpiDeleteLogicalAfterMutationHandler(serverResponse){
+  function custKpiFormulaDeleteLogicalAfterMutationHandler(serverResponse){
     // Do something here if needed
     return serverResponse
   }
 
 module.exports = {
   post,
-  customerKpiPost,
-  customerKpiPut,
-  customerKpiPatch,
-  customerKpiDeleteFull,
-  customerKpiDeleteLogical
+  custKpiFormulaPost,
+  custKpiFormulaPut,
+  custKpiFormulaPatch,
+  custKpiFormulaDeleteFull,
+  custKpiFormulaDeleteLogical
 }

@@ -1,0 +1,8 @@
+#import 'ember-gui/gql/fragments/custKpiFormula/custKpiFormulaFields'
+
+mutation custKpiFormulaPut($key: ID!, $input: CustKpiFormulaInput!){
+  custKpiFormulaPut(_key: $key, input: $input)
+    {
+      ...custKpiFormulaFields
+  }
+}

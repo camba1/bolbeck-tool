@@ -1,0 +1,23 @@
+<article class="listing">
+  <h4>
+    {{#link-to "custKpiFormulas.show" custKpiFormula._key class=custKpiFormula._key}}
+      {{custKpiFormula.name}}
+    {{/link-to}}
+  </h4>
+  <div class="detail key">
+    <span>Key:</span> {{custKpiFormula._key}}
+  </div>
+  <div class="detail formula">
+    <span>Formula:</span> {{custKpiFormula.formula}}
+  </div>
+  <div class="detail type">
+    <span>Type:</span> {{custKpiFormula.type}}
+  </div>
+  <div class="detail validityDate">
+    <span>Validity Date:</span> {{custKpiFormula.validityDate}}
+  </div>
+  <div class="detail calculationOrder">
+    <span>Calculation Order:</span> {{custKpiFormula.calculationOrder}}
+  </div>
+</article>
+{{yield}}

@@ -1,0 +1,10 @@
+query custKpiFormulas {
+  custKpiFormulas {
+      _key,
+      name,
+      formula,
+      type,
+      validityDate,
+      calculationOrder
+    }
+}

@@ -1,0 +1,13 @@
+#import 'ember-gui/gql/fragments/custKpiFormula/custKpiFormulaFields'
+
+query custKpiFormula($_key: ID!) {
+  custKpiFormula(_key: $_key) {
+    ...custKpiFormulaFields
+    # _key,
+    # name,
+    # formula,
+    # type,
+    # validityDate,
+    # calculationOrder
+    }
+  }

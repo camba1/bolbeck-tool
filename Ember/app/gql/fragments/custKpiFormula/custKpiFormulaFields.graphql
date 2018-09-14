@@ -1,0 +1,8 @@
+fragment custKpiFormulaFields on CustKpiFormula {
+    _key,
+    name,
+    formula,
+    type,
+    validityDate,
+    calculationOrder
+  }

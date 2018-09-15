@@ -26,6 +26,10 @@
     <label class="control-label" for="custKpiFormulacalculationOrder">Calculation Order: </label>
     {{input id="custKpiFormulacalculationOrder" type="number" value = model.calculationOrder}}
   </div>
-  <button class="btn btn-primary" {{action "saveNewData"}}>Save</button>
+  {{#if model.__typename}}
+    <button class="btn btn-primary" {{action "updateData"}}>Update</button>
+  {{else}}
+    <button class="btn btn-primary" {{action "saveNewData"}}>Save</button>
+  {{/if}}
   {{#link-to "custKpiFormulas" class="btn btn-primary"}}Cancel{{/link-to}}
 </div>

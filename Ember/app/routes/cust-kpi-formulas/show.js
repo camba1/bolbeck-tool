@@ -3,10 +3,14 @@ import Route from '@ember/routing/route';
 import { RouteQueryManager } from 'ember-apollo-client';
 import query from 'ember-gui/gql/queries/custKpiFormula/custKpiFormula';
 import mutation from 'ember-gui/gql/mutations/custKpiFormula/custKpiFormulaPut';
+import mutationDeleteFull from 'ember-gui/gql/mutations/custKpiFormula/custKpiFormulaDeleteFull';
+import queryParent from 'ember-gui/gql/queries/custKpiFormula/custKpiFormulas';
+// import { inject as service } from "@ember/service";
 
 
 
 export default Route.extend(RouteQueryManager,{
+    // apollo: service(),
   model(params) {
     let variables = { _key: params.key };
     return  this.get('apollo').watchQuery({ query, variables }, "custKpiFormula");
@@ -42,6 +46,38 @@ export default Route.extend(RouteQueryManager,{
 
         }
       }, "custKpiFormula")
+    },
+    deleteData(){
+      //Copy the model and remove the __typename property
+      let currentModel = this.modelFor(this.routeName)[0];
+      let input = JSON.parse(JSON.stringify(currentModel));
+      let key = currentModel._key;
+      //Set the variables
+      let variables = { key };
+      //Update the backend
+      return this.get("apollo").mutate({mutation: mutationDeleteFull, variables,
+        update: (store, mutationResult) => {
+          //update the local store
+          //Set the variables, not how this matches the actual variable in the mutation
+          let updateVars = { _key: key };
+          //Get the existing query from the store and replace the data
+          //note the try catch is the only way to check if the query in
+          //already in the store;
+          try {
+            // Finf record in the store for the parent query  and remove it
+            //so user does not manually have to refresh
+            const data = store.readQuery({ query: queryParent });  
+            var index = data.custKpiFormulas.map(x =>  x._key ).indexOf(key);
+            data.custKpiFormulas.splice(index, 1);
+            //Update the store
+            store.writeQuery({ query: queryParent, data})
+          } catch (e) {
+            // Do nothing
+          }
+
+        }
+      })
+
     }
   }
 

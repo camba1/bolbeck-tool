@@ -77,9 +77,30 @@ function removeRecordFromSelection(currentStore, selectionQuery, recordKey, objT
 
 }
 
+
+function addRecordFromSelection(currentStore, selectionQuery, newData, objToUpdateName){
+  //Get the existing query from the store and and the new record
+  //note the try catch is the only way to check if the query in
+  //already in the store;
+  try {
+    // Find the store for the parent query  and add it
+    //so user does not manually have to refresh
+    const data = currentStore.readQuery({ query: selectionQuery });
+    data[objToUpdateName].unshift(newData);
+    //Update the store
+    currentStore.writeQuery({ query: selectionQuery, data})
+  } catch (e) {
+    // Do nothing
+  }
+
+}
+
+
+
 export default  {
   updateRecordFromDetail,
   updateRecordFromSelection,
   removeRecordFromDetail,
-  removeRecordFromSelection
+  removeRecordFromSelection,
+  addRecordFromSelection
 }

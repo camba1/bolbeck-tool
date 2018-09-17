@@ -54,13 +54,14 @@ export default Route.extend(RouteQueryManager,{
     deleteData(){
       //Copy the model and remove the __typename property
       let currentModel = this.modelFor(this.routeName)[0];
-      let input = JSON.parse(JSON.stringify(currentModel));
+      //let input = JSON.parse(JSON.stringify(currentModel));
       let key = currentModel._key;
       //Set the variables
       let variables = { key };
       //Update the backend
       return this.get("apollo").mutate({mutation: mutationDeleteFull, variables,
-        update: (store, mutationResult) => {
+        //update: (store, mutationResult) => {
+        update: (store) => {
           //update the local store
           //Set the variables, not how this matches the actual variable in the mutation
           // let updateVars = { _key: key };
@@ -93,9 +94,9 @@ export default Route.extend(RouteQueryManager,{
 
         }
       })
-      // .then( () => {
-      //   this.transitionTo('custKpiFormulas');
-      // })
+      .then( () => {
+        this.transitionTo('custKpiFormulas');
+      })
 
     }
   }

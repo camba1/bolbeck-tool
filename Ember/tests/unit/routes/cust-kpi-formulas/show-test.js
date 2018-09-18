@@ -1,11 +1,11 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 
-module('Unit | Route | custKpiFormula/show', function(hooks) {
+module('Unit | Route | custKpiFormulas/show', function(hooks) {
   setupTest(hooks);
 
   test('it exists', function(assert) {
-    let route = this.owner.lookup('route:cust-kpi-formula/show');
+    let route = this.owner.lookup('route:cust-kpi-formulas/show');
     assert.ok(route);
   });
 });

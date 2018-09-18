@@ -1,4 +1,5 @@
 
+
 function updateRecordFromDetail(currentStore, detailQuery, recordKey, updatedData, objToUpdateName){
   //update the local store
   //Set the variables, not how this matches the actual variable in the mutation
@@ -40,7 +41,7 @@ function updateRecordFromSelection(currentStore, selectionQuery, recordKey, upda
 
 //// TODO: write the patch function for partial updates
 function patchRecordFromDetail(){
-  let i = 1;
+  
 }
 
 function removeRecordFromDetail(currentStore, detailQuery, recordKey, objToUpdateName){
@@ -102,5 +103,6 @@ export default  {
   updateRecordFromSelection,
   removeRecordFromDetail,
   removeRecordFromSelection,
-  addRecordFromSelection
+  addRecordFromSelection,
+  patchRecordFromDetail
 }

@@ -6,10 +6,11 @@ import mutationUpdate from 'ember-gui/gql/mutations/custKpiFormula/custKpiFormul
 import queryParent from 'ember-gui/gql/queries/custKpiFormula/custKpiFormulas';
 import UpdateStore from 'ember-gui/gql/gqlHelpers/updateStore';
 
+
 export default Route.extend({
   apollo: service(),
   model() {
-    return  Ember.Object.create({});
+    return  EmberObject.create({});
   },
   actions: {
     saveNewData() {
@@ -19,7 +20,7 @@ export default Route.extend({
         update: (store, mutationResult) => {
           //Since this is a locally created record, the store for the detail screen does not need to be updated
           // we just need to update the local model with the data from the mutation result
-          Ember.setProperties(currentModel, mutationResult.data.custKpiFormulaPost);
+          currentModel.setProperties( mutationResult.data.custKpiFormulaPost);
           //We do however need to update the selection screen so that the user does not need to refresh
           UpdateStore.addRecordFromSelection(store, queryParent, mutationResult.data.custKpiFormulaPost, "custKpiFormulas")
         }

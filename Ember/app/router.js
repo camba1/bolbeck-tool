@@ -7,7 +7,7 @@ const Router = EmberRouter.extend({
 });
 
 Router.map(function() {
-  this.route('custKpiFormulas', function() {
+  this.route('cust-kpi-formulas', function() {
     this.route('show', { path: '/:key' });
     this.route('new');
   });

@@ -95,7 +95,7 @@ export default Route.extend(RouteQueryManager,{
         }
       })
       .then( () => {
-        this.transitionTo('custKpiFormulas');
+        this.transitionTo('cust-kpi-formulas');
       })
 
     }

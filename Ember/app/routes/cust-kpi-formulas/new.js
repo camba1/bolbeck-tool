@@ -13,8 +13,8 @@ export default Route.extend({
     return  EmberObject.create({});
   },
   actions: {
-    saveNewData() {
-      let currentModel = this.modelFor(this.routeName);
+    saveNewData(custKpiFormula) {
+      let currentModel = custKpiFormula; //this.modelFor(this.routeName);
       let variables = { input: currentModel };
       return this.get("apollo").mutate({ mutation, variables,
         update: (store, mutationResult) => {

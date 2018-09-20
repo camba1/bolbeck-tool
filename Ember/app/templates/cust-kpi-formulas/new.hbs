@@ -2,34 +2,34 @@
 
   <div class="detail key">
     <label class="control-label" for="custKpiFormulaKey">Key: </label>
-    {{input id="custKpiFormulaKey" type="text" value = model._key}}
+    {{input id="custKpiFormulaKey" class="modelKey" type="text" value = model._key}}
   </div>
   <div class="detail custKpiFormulaName">
     <!-- <span>Name:</span> {{input type="text" value=custKpiFormula.name disabled=true}} -->
     <label class="control-label" for="custKpiFormulaName">Name: </label>
-    {{input id="custKpiFormulaName" type="text" value = model.name }}
+    {{input id="custKpiFormulaName" class="modelName" type="text" value = model.name }}
   </div>
   <div class="detail custKpiFormulaformula">
     <label class="control-label" for="custKpiFormulaformula">Formula: </label>
-    {{input id="custKpiFormulaformula" type="text" value = model.formula }}
+    {{input id="custKpiFormulaformula" class="modelFormula" type="text" value = model.formula }}
   </div>
   <div class="detail custKpiFormulatype">
     <label class="control-label" for="custKpiFormulatype">Type: </label>
-    {{input id="custKpiFormulatype" type="text" value = model.type}}
+    {{input id="custKpiFormulatype" class="modelType" type="text" value = model.type}}
   </div>
   <div class="detail custKpiFormulavalidityDate">
     <label class="control-label" for="custKpiFormulavalidityDate">Validity Date: </label>
-    {{input id="custKpiFormulavalidityDate" type="date" value = model.validityDate}}
+    {{input id="custKpiFormulavalidityDate" class="modelValidityDate" type="date" value = model.validityDate}}
   </div>
   <div class="detail custKpiFormulacalculationOrder">
     <!-- <span>Calculation Order:</span> {{custKpiFormula.calculationOrder}} -->
     <label class="control-label" for="custKpiFormulacalculationOrder">Calculation Order: </label>
-    {{input id="custKpiFormulacalculationOrder" type="number" value = model.calculationOrder}}
+    {{input id="custKpiFormulacalculationOrder" class="modelCalculationOrder" type="number" value = model.calculationOrder}}
   </div>
   {{#if model.__typename}}
-    <button class="btn btn-primary btn-sm" {{action "updateData"}}>Update</button>
+    <button class="btn btn-primary btn-sm updateDataBtn" {{action "updateData"}}>Update</button>
   {{else}}
-    <button class="btn btn-primary btn-sm" {{action "saveNewData" model}}>Save</button>
+    <button class="btn btn-primary btn-sm saveNewDataBtn" {{action "saveNewData" model}}>Save</button>
   {{/if}}
   {{#link-to "cust-kpi-formulas" class="btn btn-primary btn-sm"}}Cancel{{/link-to}}
 </div>

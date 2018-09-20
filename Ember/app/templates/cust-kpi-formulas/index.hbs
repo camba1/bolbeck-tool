@@ -1,5 +1,5 @@
-{{#link-to "cust-kpi-formulas.new" class="btn btn-primary btn-sm"}}New{{/link-to}}
-<button class="btn btn-secondary btn-sm" {{action "refreshData"}}>Refresh</button>
+{{#link-to "cust-kpi-formulas.new" class="btn btn-primary btn-sm newBtn"}}New{{/link-to}}
+<button class="btn btn-secondary btn-sm refreshBtn" {{action "refreshData"}}>Refresh</button>
 {{#each model as |custKpiFormulaRow| }}
   {{cust-kpi-formula-listing custKpiFormula = custKpiFormulaRow}}
 {{/each}}

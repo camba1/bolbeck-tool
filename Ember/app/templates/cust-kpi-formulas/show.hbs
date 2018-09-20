@@ -28,13 +28,13 @@
         {{input id="custKpiFormulacalculationOrder" type="number" value=custKpiFormula.calculationOrder}}
       </div>
     {{/with}}
-    <button class="btn btn-primary" {{action "updateData"}}>Update</button>
-    <button class="btn btn-secondary" {{action "deleteData"}}>Delete</button>
+    <button class="btn btn-primary btn-sm" {{action "updateData"}}>Update</button>
+    <button class="btn btn-secondary btn-sm" {{action "deleteData"}}>Delete</button>
   {{else}}
     <div class="detail noData">
       No data found. Record may have been deleted by another user
     </div>
     <br>
   {{/if}}
-  {{#link-to "cust-kpi-formulas" class="btn btn-primary"}}Back{{/link-to}}
+  {{#link-to "cust-kpi-formulas" class="btn btn-primary btn-sm"}}Back{{/link-to}}
 </div>

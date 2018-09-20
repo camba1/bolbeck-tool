@@ -27,5 +27,11 @@ export default Route.extend(RouteQueryManager,{
   model(){
     return this.get('apollo').watchQuery({ query }, "custKpiFormulas");
 
+  },
+  actions: {
+    refreshData() {
+      return this.get('apollo').query({ query , fetchPolicy: "network-only" }, "custKpiFormulas")
+      .catch(error => alert(error));
+    }
   }
 });

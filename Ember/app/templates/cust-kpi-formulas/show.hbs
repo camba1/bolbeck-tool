@@ -2,39 +2,39 @@
 <div class="jumbo show-listing">
   {{#if model }}
     {{#with model.firstObject as |custKpiFormula|}}
-    <div class="detail key">
+      <div class="detail key">
       <span>Key:</span> {{custKpiFormula._key}}
       </div>
       <div class="detail custKpiFormulaName">
         <!-- <span>Name:</span> {{input type="text" value=custKpiFormula.name disabled=true}} -->
         <label class="control-label" for="custKpiFormulaName">Name: </label>
-        {{input id="custKpiFormulaName" type="text" value=custKpiFormula.name}}
+        {{input id="custKpiFormulaName" class="modelName" type="text" value=custKpiFormula.name}}
       </div>
       <div class="detail custKpiFormulaformula">
         <label class="control-label" for="custKpiFormulaformula">Formula: </label>
-        {{input id="custKpiFormulaformula" type="text" value=custKpiFormula.formula}}
+        {{input id="custKpiFormulaformula" class="modelFormula" type="text" value=custKpiFormula.formula}}
       </div>
       <div class="detail custKpiFormulatype">
         <label class="control-label" for="custKpiFormulatype">Type: </label>
-        {{input id="custKpiFormulatype" type="text" value=custKpiFormula.type}}
+        {{input id="custKpiFormulatype" class="modelType" type="text" value=custKpiFormula.type}}
       </div>
       <div class="detail custKpiFormulavalidityDate">
         <label class="control-label" for="custKpiFormulavalidityDate">Validity Date: </label>
-        {{input id="custKpiFormulavalidityDate" type="date" value=custKpiFormula.validityDate}}
+        {{input id="custKpiFormulavalidityDate" class="modelValidityDate" type="date" value=custKpiFormula.validityDate}}
       </div>
       <div class="detail custKpiFormulacalculationOrder">
         <!-- <span>Calculation Order:</span> {{custKpiFormula.calculationOrder}} -->
         <label class="control-label" for="custKpiFormulacalculationOrder">Calculation Order: </label>
-        {{input id="custKpiFormulacalculationOrder" type="number" value=custKpiFormula.calculationOrder}}
+        {{input id="custKpiFormulacalculationOrder" class="modelCalculationOrder" type="number" value=custKpiFormula.calculationOrder}}
       </div>
     {{/with}}
-    <button class="btn btn-primary btn-sm" {{action "updateData"}}>Update</button>
-    <button class="btn btn-secondary btn-sm" {{action "deleteData"}}>Delete</button>
+    <button class="btn btn-primary btn-sm updateDataBtn" {{action "updateData"}}>Update</button>
+    <button class="btn btn-secondary btn-sm deleteDataBtn" {{action "deleteData"}}>Delete</button>
   {{else}}
     <div class="detail noData">
       No data found. Record may have been deleted by another user
     </div>
     <br>
   {{/if}}
-  {{#link-to "cust-kpi-formulas" class="btn btn-primary btn-sm"}}Back{{/link-to}}
+  {{#link-to "cust-kpi-formulas" class="btn btn-primary btn-sm backBtn"}}Back{{/link-to}}
 </div>

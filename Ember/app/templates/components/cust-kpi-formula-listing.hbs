@@ -1,3 +1,33 @@
+  <table class="table table-hover table-bordered table-sm">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>key</th>
+        <th>Formula</th>
+        <th>Type</th>
+        <th>Validity Date</th>
+        <th>Calculation Order</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each custKpiFormula as |custKpiFormulaRow| }}
+        <tr>
+          <td>
+            {{#link-to "cust-kpi-formulas.show" custKpiFormulaRow._key class="tr custKpiFormulaRow._key"}}
+              {{custKpiFormulaRow.name}}
+            {{/link-to}}
+          </td>
+          <td>{{custKpiFormulaRow._key}}</td>
+          <td>{{custKpiFormulaRow.formula}}</td>
+          <td>{{custKpiFormulaRow.type}}</td>
+          <td>{{custKpiFormulaRow.validityDate}}</td>
+          <td>{{custKpiFormulaRow.calculationOrder}}</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+
+  <!--
 <article class="listing">
   <h4>
     {{#link-to "cust-kpi-formulas.show" custKpiFormula._key class="custKpiFormula._key"}}
@@ -19,5 +49,6 @@
   <div class="detail calculationOrder">
     <span>Calculation Order:</span> {{custKpiFormula.calculationOrder}}
   </div>
-</article>
+</article> -->
+
 {{yield}}

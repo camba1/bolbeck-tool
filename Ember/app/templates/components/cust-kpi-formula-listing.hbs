@@ -1,4 +1,4 @@
-  <table class="table table-hover table-bordered table-sm">
+  <table class="table table-hover table-bordered table-sm listing">
     <thead>
       <tr>
         <th>Name</th>
@@ -9,19 +9,19 @@
         <th>Calculation Order</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody class='mybody'>
       {{#each custKpiFormula as |custKpiFormulaRow| }}
-        <tr>
+        <tr class="myrow">
           <td>
-            {{#link-to "cust-kpi-formulas.show" custKpiFormulaRow._key class="tr custKpiFormulaRow._key"}}
+            {{#link-to "cust-kpi-formulas.show" custKpiFormulaRow._key class="name"}}
               {{custKpiFormulaRow.name}}
             {{/link-to}}
           </td>
-          <td>{{custKpiFormulaRow._key}}</td>
-          <td>{{custKpiFormulaRow.formula}}</td>
-          <td>{{custKpiFormulaRow.type}}</td>
-          <td>{{custKpiFormulaRow.validityDate}}</td>
-          <td>{{custKpiFormulaRow.calculationOrder}}</td>
+          <td class="key">{{custKpiFormulaRow._key}}</td>
+          <td class="formula">{{custKpiFormulaRow.formula}}</td>
+          <td class="type">{{custKpiFormulaRow.type}}</td>
+          <td class="validityDate">{{custKpiFormulaRow.validityDate}}</td>
+          <td class="calculationOrder">{{custKpiFormulaRow.calculationOrder}}</td>
         </tr>
       {{/each}}
     </tbody>

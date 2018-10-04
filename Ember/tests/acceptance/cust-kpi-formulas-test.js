@@ -50,23 +50,28 @@ module('Acceptance | cust kpi formulas', function(hooks) {
 
     assert.equal(currentURL(), '/cust-kpi-formulas', 'Transition to selection page');
     await settled();
-    
+
     //The new record should be the first in the listing on the store
     let selectionModel = this.owner.lookup('route:cust-kpi-formulas').modelFor('cust-kpi-formulas.index');
     assert.equal(selectionModel.length > 0, true, 'The selection screen model has data: '.concat(selectionModel.length));
     assert.equal(findAll('.listing').length > 0, true, 'We have the data showing '.concat(findAll('.listing').length));
-    let keyFoundinDoc = find('.detail.key').innerText.split(' ')
-                              .reduce((total, x) => {
-                              total = ((x == document._key) ? total + 1 : total); return total
-                              } , 0);
 
-    assert.equal(keyFoundinDoc, 1, 'The document that was inserted in first place');
-    // assert.ok(find('.formula').innerText.includes(documentUpdate.formula), 'The document that was updated with the correct formula');
-    let formulaFoundinDoc = find('.detail.formula').innerText.split(' ')
-                              .reduce((total, x) => {
-                              total = ((x == documentUpdate.formula) ? total + 1 : total); return total
-                              } , 0);
-    assert.equal(formulaFoundinDoc, 1, 'The document was updated with the correct formula');
+    let rows = this.element.querySelector('.table .mybody').rows;
+    let key = rows[0].getElementsByClassName('key')[0].textContent;
+    let formula = rows[0].getElementsByClassName('formula')[0].textContent
+    // let keyFoundinDoc = find('.detail.key').innerText.split(' ')
+    //                           .reduce((total, x) => {
+    //                           total = ((x == document._key) ? total + 1 : total); return total
+    //                           } , 0);
+    //
+    // assert.equal(keyFoundinDoc, 1, 'The document that was inserted in first place');
+      assert.equal(key, document._key, 'The document that was inserted in first place');
+    // let formulaFoundinDoc = find('.detail.formula').innerText.split(' ')
+    //                           .reduce((total, x) => {
+    //                           total = ((x == documentUpdate.formula) ? total + 1 : total); return total
+    //                           } , 0);
+    // assert.equal(formulaFoundinDoc, 1, 'The document was updated with the correct formula');
+    assert.equal(formula, documentUpdate.formula, 'The document was updated with the correct formula');
 //  });
 
 //  test('visiting /cust-kpi-formulas/show', async function(assert) {

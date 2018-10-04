@@ -37,8 +37,6 @@ module('Integration | Component | cust-kpi-formula-listing', function(hooks) {
   // });
 
   test('should display Kpi formula details', async function(assert) {
-    // await render(hbs`{{cust-kpi-formula-listing custKpiFormula=custKpiFormula}}`);
-    //textContent
     await render(hbs`{{cust-kpi-formula-listing custKpiFormula = custKpiFormula}}`)
     let rows = this.element.querySelector('.table .mybody').rows;
     let key = rows[0].getElementsByClassName('key')[0].textContent;

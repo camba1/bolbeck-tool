@@ -39,11 +39,11 @@ function status(response) {
       })
     }
 
-  function fetchQuery(backendURL,foxxMountPoint,endPoint,afterGetHandler){
+  function fetchQuery(backendURL,foxxMountPoint,endPoint,afterGetHandler, args = undefined){
     return fetch(buildURL(backendURL,foxxMountPoint,endPoint))
       .then(status)
       .then(json)
-      .then(data => afterGetHandler(data) )
+      .then(data => afterGetHandler(data, args) )
       .catch(function(error) { console.log(`Request failed when trying to reach ${endPoint}`, error) })
   }
 

@@ -20,13 +20,23 @@ function custKpiFormulas(root, args, context) {
   const backendURL = context.backendURL
   const foxxMountPoint = context.foxxServMountPoints.generic
   const endPoint = `${context.foxxServGenericEndPoints.CollectionGet}/${collectionName}`
-  return genericHelper.fetchQuery(backendURL,foxxMountPoint,endPoint,custKpiFormulasAfterGetHandler)
+  return genericHelper.fetchQuery(backendURL,foxxMountPoint,endPoint,custKpiFormulasAfterGetHandler, args)
   //return fetch(genericHelper.buildURL(backendURL,foxxMountPoint,endPoint)).then(res => res.json())
   //// return fetch(`${backendURL}/${foxxMountPoint}/genericCollectionGet/${collectionName}`).then(res => res.json())
 }
 
-var custKpiFormulasAfterGetHandler = (serverResponse) => {
+var custKpiFormulasAfterGetHandler = (serverResponse,args) => {
 //Do something here if needed
+//here we can manipulate the repsonse before it is sent back to the client. Or we could have
+//asked the db to filter the data before
+if (args.name) {
+  let matchLength = args.name.length;
+  for (let i = serverResponse.length-1; i >= 0; i--) {
+      if (serverResponse[i].name.substring(0, matchLength) != args.name) {
+          serverResponse.splice(i, 1);
+      }
+  }
+}
     return serverResponse
 }
 

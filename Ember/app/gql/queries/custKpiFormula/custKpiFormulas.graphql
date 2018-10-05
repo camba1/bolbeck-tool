@@ -1,5 +1,5 @@
-query custKpiFormulas {
-  custKpiFormulas {
+query custKpiFormulas($name: String) {
+  custKpiFormulas(name: $name) {
       _key,
       name,
       formula,

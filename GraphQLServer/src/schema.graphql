@@ -6,7 +6,7 @@
 type Query {
   info: String!
   feed: [Link!]!
-  custKpiFormulas: [CustKpiFormula]
+  custKpiFormulas(name: String): [CustKpiFormula]
   custKpiFormula(_key: ID!): [CustKpiFormula],
   custKpiFormulaFieldByKey(_key: ID!, fieldName: String!): [custKpiFormulaField],
   genericDocumentsGet(collectionName: String!): [genericDocument] ,

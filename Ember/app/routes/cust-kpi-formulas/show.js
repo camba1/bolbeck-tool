@@ -23,6 +23,13 @@ export default Route.extend(RouteQueryManager,{
       let input = JSON.parse(JSON.stringify(currentModel));
       let key = input._key;
       delete input.__typename;
+
+      //Get the parent variables so we can update the parent query
+      let parentVariables = this.modelFor('cust-kpi-formulas.index') ?
+                            this.modelFor('cust-kpi-formulas.index')._apolloObservable.variables :
+                            null;
+      //let parentName = this.controllerFor('cust-kpi-formulas.index').get('name');
+
       //Set the variables
       let variables = { key, input};
       //Update the backend
@@ -30,7 +37,8 @@ export default Route.extend(RouteQueryManager,{
         update: (store, mutationResult) => {
 
           UpdateStore.updateRecordFromDetail(store, query, key, mutationResult.data.custKpiFormulaPut,"custKpiFormula")
-          UpdateStore.updateRecordFromSelection(store, queryParent, key, mutationResult.data.custKpiFormulaPut, "custKpiFormulas")
+          //UpdateStore.updateRecordFromSelection(store, queryParent, key, mutationResult.data.custKpiFormulaPut, "custKpiFormulas")
+          UpdateStore.updateRecordFromSelection(store, queryParent, key, mutationResult.data.custKpiFormulaPut, "custKpiFormulas", parentVariables)
           // //update the local store
           // //Set the variables, not how this matches the actual variable in the mutation
           // let updateVars = { _key: key };
@@ -56,6 +64,11 @@ export default Route.extend(RouteQueryManager,{
       let currentModel = this.modelFor(this.routeName)[0];
       //let input = JSON.parse(JSON.stringify(currentModel));
       let key = currentModel._key;
+
+      //Get the parent variables so we can update the parent query
+      let parentVariables = this.modelFor('cust-kpi-formulas.index') ?
+                            this.modelFor('cust-kpi-formulas.index')._apolloObservable.variables :
+                            null;
       //Set the variables
       let variables = { key };
       //Update the backend
@@ -75,7 +88,7 @@ export default Route.extend(RouteQueryManager,{
           //   // Do nothing
           // }
           UpdateStore.removeRecordFromDetail(store, query, key, "custKpiFormula")
-          UpdateStore.removeRecordFromSelection(store, queryParent, key, "custKpiFormulas")
+          UpdateStore.removeRecordFromSelection(store, queryParent, key, "custKpiFormulas", parentVariables)
 
           // //Get the existing query from the store and replace the data
           // //note the try catch is the only way to check if the query in

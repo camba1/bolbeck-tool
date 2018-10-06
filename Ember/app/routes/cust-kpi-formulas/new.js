@@ -15,6 +15,10 @@ export default Route.extend({
   actions: {
     saveNewData(custKpiFormula) {
       let currentModel = custKpiFormula; //this.modelFor(this.routeName);
+      //Get the parent variables so we can update the parent query
+      let parentVariables = this.modelFor('cust-kpi-formulas.index') ?
+                            this.modelFor('cust-kpi-formulas.index')._apolloObservable.variables :
+                            null;
       let variables = { input: currentModel };
       return this.get("apollo").mutate({ mutation, variables,
         update: (store, mutationResult) => {
@@ -22,7 +26,7 @@ export default Route.extend({
           // we just need to update the local model with the data from the mutation result
           currentModel.setProperties( mutationResult.data.custKpiFormulaPost);
           //We do however need to update the selection screen so that the user does not need to refresh
-          UpdateStore.addRecordFromSelection(store, queryParent, mutationResult.data.custKpiFormulaPost, "custKpiFormulas")
+          UpdateStore.addRecordFromSelection(store, queryParent, mutationResult.data.custKpiFormulaPost, "custKpiFormulas", parentVariables)
         }
      }, "custKpiFormula")
       // .then( () => {
@@ -36,6 +40,10 @@ export default Route.extend({
       let input = JSON.parse(JSON.stringify(currentModel));
       let key = input._key;
        delete input.__typename;
+       //Get the parent variables so we can update the parent query
+       let parentVariables = this.modelFor('cust-kpi-formulas.index') ?
+                             this.modelFor('cust-kpi-formulas.index')._apolloObservable.variables :
+                             null;
       //Set the variables
       let variables = { key, input };
       //Update the backend
@@ -43,7 +51,7 @@ export default Route.extend({
         update: (store, mutationResult) => {
           //We still have the local object bound to the screen, so not need to update the store for that
           //just update the store for the selection screen
-          UpdateStore.updateRecordFromSelection(store, queryParent, key, mutationResult.data.custKpiFormulaPut, "custKpiFormulas")
+          UpdateStore.updateRecordFromSelection(store, queryParent, key, mutationResult.data.custKpiFormulaPut, "custKpiFormulas", parentVariables)
         }
       }, "custKpiFormula")
     }

@@ -43,9 +43,9 @@ export default Route.extend(RouteQueryManager,{
   actions: {
     refreshData(name) {
       //return this.get('apollo').query({ query , fetchPolicy: "network-only" }, "custKpiFormulas")
-      let variables
+      //let variables
       if (name) {
-         variables = { name }
+         //variables = { name }
          this.controllerFor(this.routeName).set('qname',name)
       } else {
         this.controllerFor(this.routeName).set('qname',null)

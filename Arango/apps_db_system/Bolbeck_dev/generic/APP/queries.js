@@ -80,6 +80,7 @@ var genericDocumentByKeyLogicallyDelete = function (collection, key) {
   }
 }
 
+//TODO: Remove loop since .save handles arrays since version 3.2
 var genericDocumentPost =  (collection, documents) => {
   const multiple = Array.isArray(documents);
   const arrayofDocuments = multiple ? documents : [documents];

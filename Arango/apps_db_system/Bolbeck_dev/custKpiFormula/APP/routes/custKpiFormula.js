@@ -11,7 +11,7 @@ module.exports = router;
 const queriedb = require('../queries');
 //const joiSchema = require('../schema');
 const keySchema = joi.string().required()
-                  .description('The key of the document to be modified');
+                  .description('The key of the document to be accessed');
 
 var generic = module.context.dependencies.generic;
 

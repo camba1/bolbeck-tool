@@ -3,6 +3,7 @@
   "version": "0.0.1-dev",
   "description": "Customer KPIs formula service",
   "author": "Juan Peredo, Bolbeck LLC",
+  "license": "GNU GPL",
   "engines": {
     "arangodb": "^3.3.0"
   },
@@ -15,5 +16,6 @@
       "multiple":false
     }
   },
-  "main": "index.js"
+  "main": "main.js",
+  "tests": "test/**/*.js"
 }

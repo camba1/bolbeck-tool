@@ -1,0 +1,25 @@
+{
+    "name": "product",
+    "version": "0.0.1-dev",
+    "description": "Returns information related to products",
+    "engines": {
+        "arangodb": "^3.3.0"
+    },
+    "author": "Juan Peredo",
+    "license": "GNU GPL",
+    "main": "main.js",
+    "scripts": {
+        "setup": "scripts/setup.js",
+        "teardown": "scripts/teardown.js"
+    },
+    "dependencies": {
+      "generic": {
+        "name": "@generic/generic",
+        "version": "^0.0.1",
+        "description": "Generic collection get",
+        "required": false,
+        "multiple":false
+      }
+    },
+    "tests": "test/**/*.js"
+}

@@ -22,9 +22,5 @@ module.exports = {
   fromClient(obj) {
     // Implement incoming transformations here
     return obj;
-  },
-  fromClientDelete(key) {
-    //Implement incoming validations here
-    return key;
   }
 };

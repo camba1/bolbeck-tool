@@ -104,7 +104,8 @@ router.get('/productGet/:key/productHierarchyGet', (req, res) => {
              Defaults to 1 if not specified
           `))
 .response(ModelProductHierarchy, 'Hierarchy for given product')
-.summary('Retrieve the hierarchy')
+.summary('Retrieve the hierarchy for product')
 .description(dd`
-          Retrieve the hierarchy for the given product document
+          Retrieve the hierarchy for the given product document.
+          Data can be searched outbound (children) or inbound (parents)
           `);

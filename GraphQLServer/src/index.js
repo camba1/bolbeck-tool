@@ -7,6 +7,8 @@ const { GraphQLServer } = require('graphql-yoga')
 const Query = require('./resolver/query')
 const Mutation = require('./resolver/mutation')
 const configRepository = require('./configRepository')
+const typeDefs = require('./schema')
+
 const backendURL = configRepository.backendURL
 const foxxServMountPoints = configRepository.foxxServMountPoints
 const foxxServGenericEndPoints = configRepository.foxxServGenericEndPoints
@@ -123,7 +125,8 @@ const resolvers = {
 
 // Server setup and start
 const server = new GraphQLServer({
-  typeDefs: './src/schema.graphql',
+  //typeDefs: './src/schema.graphql',
+  typeDefs,
   resolvers,
   context: {
     myLinkObj :  links,

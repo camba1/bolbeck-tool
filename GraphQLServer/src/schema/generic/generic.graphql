@@ -1,0 +1,24 @@
+# This defines the GraphQL schema
+# the exclamation point indicates mandatory field
+# [link!]! indicates that server will always return an object and that
+# object will always have a link type inside
+
+
+type Query {
+  genericDocumentsGet(collectionName: String!): [genericDocument] ,
+  genericDocumentGet(collectionName: String!, _key: ID!): [genericDocument],
+  genericDocumentFieldByKey(collectionName: String!,_key: ID!, fieldName: String!): [genericFieldByKey]
+}
+
+# type Mutation { }
+
+type genericFieldByKey {
+  _key: ID!,
+  fieldName: String!,
+  fieldValue: String
+}
+
+type genericDocument {
+  _key: ID!,
+  name: String
+}

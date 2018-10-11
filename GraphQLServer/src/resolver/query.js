@@ -78,5 +78,6 @@ module.exports = {
   custKpiFormulas,
   custKpiFormula,
   custKpiFormulaFieldByKey,
-  ...require('./genericQuery')
+  ...require('./genericQuery'),
+  ...require('./product/query')
 }

@@ -96,7 +96,7 @@ router.get('/productGet/:key/productHierarchyGet', (req, res) => {
   res.send(documentHierachy);
 }, 'listHierarchy')
 .pathParam('key', keySchema)
-.queryParam('direction', joi.string().required().description(dd`
+.queryParam('direction', joi.string().lowercase().valid('inbound', 'outbound').required().description(dd`
             Direction of traversal from given product (inbound/outbound)
 `))
 .queryParam('maxDepth', joi.number().integer().description(dd`

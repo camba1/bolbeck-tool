@@ -1,3 +1,3 @@
 'use strict';
 
-module.context.use('/product',require('./routes/product') , 'product');
+module.context.use('/',require('./routes/product') , 'product');

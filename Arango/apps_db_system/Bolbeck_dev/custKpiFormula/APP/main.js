@@ -1,3 +1,3 @@
 'use strict';
 
-module.context.use('/custKpiFormula',require('./routes/custKpiFormula') , 'custKpiFormula');
+module.context.use('/',require('./routes/custKpiFormula') , 'custKpiFormula');

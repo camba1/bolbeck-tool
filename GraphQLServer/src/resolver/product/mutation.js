@@ -1,7 +1,7 @@
 'use strict'
 
 const fetch = require('node-fetch')
-const genericHelper = require('./genericHelper');
+const genericHelper = require('../generic/genericHelper');
 const collectionName = 'product'
 
 
@@ -77,7 +77,6 @@ const collectionName = 'product'
   }
 
 module.exports = {
-  post,
   productPost,
   productPut,
   productPatch,

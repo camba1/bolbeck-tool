@@ -37,10 +37,19 @@ var traverseEdgeCollectionWithValidDates = function(sourceDocumentKeyFieldValue,
                  AND p.edges[*].validThru ALL >= ${validFrom}
         ${returnAqlLiteral}`
         );
-  } else {
+  } else if (traversaldirection.toLowerCase() == 'inbound'){
     documents = db._query(aql`
           FOR v, e, p IN 1..${maxTraversalDepth}
           INBOUND ${sourceDocumentId}
+                   ${edgeCollectionToTraverse}
+                   FILTER p.edges[*].validFrom ALL <= ${validThru}
+                   AND p.edges[*].validThru ALL >= ${validFrom}
+          ${returnAqlLiteral}`
+          );
+  } else {
+    documents = db._query(aql`
+          FOR v, e, p IN 1..${maxTraversalDepth}
+          ANY ${sourceDocumentId}
                    ${edgeCollectionToTraverse}
                    FILTER p.edges[*].validFrom ALL <= ${validThru}
                    AND p.edges[*].validThru ALL >= ${validFrom}

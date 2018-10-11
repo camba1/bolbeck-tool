@@ -96,8 +96,8 @@ router.get('/productGet/:key/productHierarchyGet', (req, res) => {
   res.send(documentHierachy);
 }, 'listHierarchy')
 .pathParam('key', keySchema)
-.queryParam('direction', joi.string().lowercase().valid('inbound', 'outbound').required().description(dd`
-            Direction of traversal from given product (inbound/outbound)
+.queryParam('direction', joi.string().lowercase().valid('inbound', 'outbound', 'any').required().description(dd`
+            Direction of traversal from given product (inbound/outbound/any)
 `))
 .queryParam('maxDepth', joi.number().integer().description(dd`
              Maximum number of levels to traverse

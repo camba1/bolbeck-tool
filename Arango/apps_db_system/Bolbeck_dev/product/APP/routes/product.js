@@ -6,13 +6,12 @@ const joi = require('joi');
 const db = require('@arangodb').db;
 
 module.exports = router;
-
-const queriedb = require('../queries/prodHierarchy');
+var generic = module.context.dependencies.generic;
 
 const keySchema = joi.string().required()
                   .description('The key of the document to be accessed');
 
-var generic = module.context.dependencies.generic;
+
 
 
 //  UPDATE THESE
@@ -21,16 +20,13 @@ const Model = require('../models/product');
 const ModelPatch = require('../models/productPatch');
 const collection = generic.genericCollectionObjectGet('product');
 
+const queriedb = require('../queries/prodHierarchy');
+const ModelProductHierarchy = require('../models/prodHierarchy');
+
 //
 
 // ROUTES
 
-// router.get('hello-world's,function (req,res) {
-//   res.send('Hello World');
-// })
-// .response(['text/plain'], 'A generic Greeting.')
-// .summary('Generic Greeting')
-// .description('Prints a generic Greeting.');
 
 //TODO: Fix this so we can send arrays again
 router.post('/productPost',  (req, res) => {
@@ -81,9 +77,9 @@ router.patch('/productPatch/:key', (req, res) => {
           and returns the updated document.
           `);
 
-const ModelProductHierarchy = require('../models/productHierarchy');
 
-router.get('/productGet/:key/productHierarchyGet', (req, res) => {
+
+router.get('/productGet/:key/prodHierarchyGet', (req, res) => {
   const documentKey = req.pathParams.key;
   const collectionHierarchy = generic.genericCollectionObjectGet('prodParentOf');
   const vf = new Date('2000-01-01');

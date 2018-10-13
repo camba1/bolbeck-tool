@@ -1,0 +1,23 @@
+type Query {
+  prodHierachy(input: traversalInput!): [prodHierarchy]
+}
+
+type prodHierarchy {
+  _key: ID!,
+  name: String!
+  hierarchyLevel: String!
+  type: String!
+  validFrom: String!
+  validThru: String!
+  eFrom: String!,
+  eTo: String!,
+  e_key: String!,
+  eValidFrom: String!,
+  eValidThru: String!
+}
+
+input traversalInput {
+  _key: ID!,
+  direction: String!,
+  maxDepth: Int
+}

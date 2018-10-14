@@ -1,3 +1,8 @@
+/**
+ * Merges and exposes to the application all GraphQl queries. Notee that
+ * since they are all merge as one, they must all have unique names
+ * @module resolver/query
+ */
 module.exports = {
   ...require('./customer/custKpiFormula/query'),
   ...require('./generic/genericQuery'),

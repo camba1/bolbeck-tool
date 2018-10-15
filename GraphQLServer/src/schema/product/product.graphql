@@ -1,18 +1,18 @@
 
 type Query {
-  products(name: String): [product]
-  product(_key: ID!): [product]
+  products(name: String): [Product]
+  product(_key: ID!): [Product]
 }
 
 type Mutation {
-  productPost(input: productInput!):product!
-  productPut(_key: ID!, input: productInput!):product!
-  productPatch(_key: ID!, input: productPatchInput!):product!
+  productPost(input: ProductInput!):Product!
+  productPut(_key: ID!, input: ProductInput!):Product!
+  productPatch(_key: ID!, input: ProductPatchInput!):Product!
   productDeleteLogical(_key: ID!):Boolean
   productDeleteFull(_key: ID!):Boolean
 }
 
-type product {
+type Product {
   _key: ID,
   name: String!
   hierarchyLevel: String!
@@ -21,7 +21,7 @@ type product {
   validThru: String!
 }
 
-input productInput {
+input ProductInput {
   _key: ID,
   name: String!
   hierarchyLevel: String!
@@ -30,7 +30,7 @@ input productInput {
   validThru: String!
 }
 
-input productPatchInput {
+input ProductPatchInput {
   _key: ID,
   name: String
   hierarchyLevel: String

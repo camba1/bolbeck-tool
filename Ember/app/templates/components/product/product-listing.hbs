@@ -13,7 +13,7 @@
     {{#each product as |productRow| }}
       <tr class="myrow">
         <td>
-          {{#link-to "products.show" productRow._key class="name"}}
+          {{#link-to "products.show.show-detail" productRow._key class="name"}}
             {{productRow.name}}
           {{/link-to}}
         </td>

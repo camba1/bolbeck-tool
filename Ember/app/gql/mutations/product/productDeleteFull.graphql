@@ -1,0 +1,3 @@
+mutation productDeleteFull($key: ID!){
+  productDeleteFull(_key: $key)
+}

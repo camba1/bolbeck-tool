@@ -1,8 +1,8 @@
 import Route from '@ember/routing/route';
 import { RouteQueryManager } from 'ember-apollo-client';
 import query from 'ember-gui/gql/queries/product/product';
-//import mutation from 'ember-gui/gql/mutations/product/productPut';
-// import mutationDeleteFull from 'ember-gui/gql/mutations/product/productDeleteFull';
+import mutation from 'ember-gui/gql/mutations/product/productPut';
+import mutationDeleteFull from 'ember-gui/gql/mutations/product/productDeleteFull';
 import queryParent from 'ember-gui/gql/queries/product/products';
 import UpdateStore from 'ember-gui/gql/gqlHelpers/updateStore';
 
@@ -28,14 +28,14 @@ export default Route.extend(RouteQueryManager,{
       //Set the variables
       let variables = { key, input};
       //Update the backend
-      // return this.get("apollo").mutate({mutation, variables,
-      //   update: (store, mutationResult) => {
-      //
-      //     UpdateStore.updateRecordFromDetail(store, query, key, mutationResult.data.productPut,"product")
-      //     UpdateStore.updateRecordFromSelection(store, queryParent, key, mutationResult.data.productPut, "products", parentVariables)
-      //
-      //   }
-      // }, "product")
+      return this.get("apollo").mutate({mutation, variables,
+        update: (store, mutationResult) => {
+
+          UpdateStore.updateRecordFromDetail(store, query, key, mutationResult.data.productPut,"product")
+          UpdateStore.updateRecordFromSelection(store, queryParent, key, mutationResult.data.productPut, "products", parentVariables)
+
+        }
+      }, "product")
     },
     deleteData(){
       //Copy the model and remove the __typename property
@@ -49,16 +49,15 @@ export default Route.extend(RouteQueryManager,{
       //Set the variables
       let variables = { key };
       //Update the backend
-      // return this.get("apollo").mutate({mutation: mutationDeleteFull, variables,
-      //   //update: (store, mutationResult) => {
-      //   update: (store) => {
-      //     UpdateStore.removeRecordFromDetail(store, query, key, "product")
-      //     UpdateStore.removeRecordFromSelection(store, queryParent, key, "product", parentVariables)
-      //   }
-      // })
-      // .then( () => {
-      //   this.transitionTo('products');
-      // })
+      return this.get("apollo").mutate({mutation: mutationDeleteFull, variables,
+        update: (store) => {
+          UpdateStore.removeRecordFromDetail(store, query, key, "product")
+          UpdateStore.removeRecordFromSelection(store, queryParent, key, "product", parentVariables)
+        }
+      })
+      .then( () => {
+        this.transitionTo('products');
+      })
 
     }
   }

@@ -1,0 +1,8 @@
+#import 'ember-gui/gql/fragments/product/productFields'
+
+mutation productPut($key: ID!, $input: ProductInput!){
+  productPut(_key: $key, input: $input)
+    {
+      ...productFields
+  }
+}

@@ -2,6 +2,7 @@
   <label for="nameSearch"> Name: </label> {{input id="nameSearch" value=name}}
   <button class="btn btn-secondary btn-sm refreshBtn" {{action "refreshData" name}}>Refresh</button>
 </div>
-{{product/product-listing product = model}}
+{{product/product-listing product = filteredModel}}
+<!-- {{product/product-listing product = model}} -->
 
 {{outlet}}

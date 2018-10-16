@@ -8,7 +8,7 @@ const childCollectionName = 'prodHierarchy'
 
 // queries
 
-function prodHierachy(parent,args,context) {
+function prodHierarchy(parent,args,context) {
   const { _key, ...inputWO_key } = args.input
   const id  = _key
   const backendURL = context.backendURL
@@ -30,5 +30,5 @@ var prodHierarchyAfterGetHandler = (serverResponse) => {
 
 
 module.exports = {
-  prodHierachy
+  prodHierarchy
 }

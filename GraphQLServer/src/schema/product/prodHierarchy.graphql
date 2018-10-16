@@ -1,5 +1,5 @@
 type Query {
-  prodHierachy(input: TraversalInput!): [ProdHierarchy]
+  prodHierarchy(input: TraversalInput!): [ProdHierarchy]
 }
 
 type ProdHierarchy {

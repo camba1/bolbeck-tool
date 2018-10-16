@@ -1,0 +1,8 @@
+fragment productFields on Product {
+   _key,
+   name,
+   hierarchyLevel,
+   type,
+   validFrom,
+   validThru
+  }

@@ -11,7 +11,12 @@ Router.map(function() {
     this.route('show', { path: '/:key' });
     this.route('new');
   });
-  this.route('products');
+  this.route('products', function() {
+    this.route('show', { path: '/:key' }, function() {
+        this.route('show-detail');
+    });
+
+  });
   this.route('main')
 });
 

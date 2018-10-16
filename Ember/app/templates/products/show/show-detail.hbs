@@ -1,0 +1,42 @@
+<section>
+  <br>
+  {{#with model.firstObject as |product|}}
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card card-default">
+          <div class="card-header">Information</div>
+          <div class="card-body">
+            <!-- <div class="card-title"><h5>Information</h5></div> -->
+            <div><label for="product_Key">Key:</label>
+              {{input id="product_Key" class="product_Key" type="text" value=product._key}}
+            </div>
+            <div><label for="productName">Name:</label>
+              {{input id="productName" class="productName" type="text" value=product.name}}
+            </div>
+            <div><label for="productType">Type:</label>
+              {{input id="productType" class="productType" type="text" value=product.type}}
+            </div>
+            <div><label for="productHierachyLevel">Hierarchy Level:</label>
+              {{input id="productHierachyLevel" class="productHierachyLevel" type="text" value=product.hierarchyLevel}}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card card-default">
+          <div class="card-header">Validity</div>
+          <div class="card-body">
+            <div><label for="productValidFrom">From:</label>
+              {{input id="productValidFrom" class="productValidFrom" type="date" value=product.validFrom}}
+            </div>
+            <div><label for="productValidThru">Thru:</label>
+              {{input id="productValidThru" class="productValidThru" type="date" value=product.validThru}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
+  {{/with}}
+</section>
+{{outlet}}

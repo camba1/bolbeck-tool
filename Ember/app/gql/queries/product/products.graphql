@@ -1,0 +1,10 @@
+query products($name: String) {
+  products(name: $name) {
+    _key,
+    name,
+    hierarchyLevel,
+    type,
+    validFrom,
+    validThru
+    }
+}

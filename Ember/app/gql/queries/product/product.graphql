@@ -1,0 +1,6 @@
+#import 'ember-gui/gql/fragments/product/productFields'
+query product($_key: ID!) {
+  product(_key: $_key) {
+    ...productFields
+    }
+  }

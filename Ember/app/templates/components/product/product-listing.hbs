@@ -1,0 +1,30 @@
+<table class="table table-hover table-bordered table-sm listing">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>key</th>
+      <th>Hierarchy Level</th>
+      <th>Type</th>
+      <th>Valid From</th>
+      <th>Valid Thru</th>
+    </tr>
+  </thead>
+  <tbody class='mybody'>
+    {{#each product as |productRow| }}
+      <tr class="myrow">
+        <td>
+          {{#link-to "products.show" productRow._key class="name"}}
+            {{productRow.name}}
+          {{/link-to}}
+        </td>
+        <td class="key">{{productRow._key}}</td>
+        <td class="formula">{{productRow.hierarchyLevel}}</td>
+        <td class="type">{{productRow.type}}</td>
+        <td class="validityDate">{{productRow.validFrom}}</td>
+        <td class="calculationOrder">{{productRow.validThru}}</td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>
+
+{{yield}}

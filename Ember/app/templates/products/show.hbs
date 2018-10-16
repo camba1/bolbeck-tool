@@ -1,0 +1,34 @@
+<div>
+  {{#if model }}
+    {{#with model.firstObject as |product|}}
+      <h5>Details for {{product.name}}</h5>
+      <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <!-- <a class="nav-link active" data-toggle="tab" href="products.show.show-detail">Main</a> -->
+          {{#link-to "products.show.show-detail" class="nav-link" data-toggle="tab"}}Main{{/link-to}}
+        </li>
+        <li class="nav-item">
+          <!-- <a class="nav-link" data-toggle="tab" href="#">Hierarchy</a> -->
+          {{#link-to "products.show" class="nav-link" data-toggle="tab"}}Hierarchy{{/link-to}}
+        </li>
+        <li class="nav-item">
+          <!-- <a class="nav-link disabled" href="#">Special Packs & Displays</a> -->
+          {{#link-to "products.show" class="nav-link disabled"}}Packs & Displays{{/link-to}}
+        </li>
+        <li class="nav-item">
+          <!-- <a class="nav-link disabled" href="#">Price History</a> -->
+          {{#link-to "products.show" class="nav-link disabled"}}Price History{{/link-to}}
+        </li>
+      </ul>
+    {{/with}}
+    {{outlet}}
+    <button class="btn btn-primary btn-sm updateDataBtn" {{action "updateData"}}>Update</button>
+    <button class="btn btn-secondary btn-sm deleteDataBtn" {{action "deleteData"}}>Delete</button>
+    {{else}}
+      <div class="detail noData">
+        No data found. Record may have been deleted by another user
+      </div>
+      <br>
+    {{/if}}
+    {{#link-to "products" class="btn btn-primary btn-sm backBtn"}}Back{{/link-to}}
+</div>

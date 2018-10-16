@@ -1,0 +1,14 @@
+query prodHierarchy($input: TraversalInput!) {
+  prodHierarchy(input: $input) {
+    _key ,
+    name,
+    hierarchyLevel,
+    validFrom,
+    validThru,
+    eFrom,
+    eTo,
+    e_key,
+    eValidFrom,
+    eValidThru
+    }
+  }

@@ -12,16 +12,13 @@ export default Route.extend(RouteQueryManager,{
     let variables
     if (params.qname) {
        variables = { name: params.qname }
-    }
+    } 
     return this.get('apollo').watchQuery({ query, variables }, "products")
     .catch(error => alert(error));
   },
   actions: {
     refreshData(name) {
-      //let variables
       if (name) {
-         //variables = { name }
-         debugger
          this.controllerFor(this.routeName).set('qname',name)
       } else {
         this.controllerFor(this.routeName).set('qname',null)

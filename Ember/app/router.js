@@ -13,7 +13,8 @@ Router.map(function() {
   });
   this.route('products', function() {
     this.route('show', { path: '/:key' }, function() {
-        this.route('show-detail');
+      this.route('show-detail');
+      this.route('show-prod-hierarchy');
     });
 
   });

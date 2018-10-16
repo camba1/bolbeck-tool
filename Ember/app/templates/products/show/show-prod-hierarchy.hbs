@@ -1,0 +1,28 @@
+<table class="table table-hover table-bordered table-sm listing">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Key</th>
+      <th>Hierarchy</th>
+      <th>valid From</th>
+      <th>valid Thru</th>
+      <th>Hierarchy From</th>
+      <th>Hierarchy Thru</th>
+    </tr>
+  </thead>
+  <tbody class='mybody'>
+    {{#each model as |productRow| }}
+      <tr class="myrow">
+        <td class="name">{{productRow.name}}</td>
+        <td class="key">{{productRow._key}}</td>
+        <td class="hierarchyLevel">{{productRow.hierarchyLevel}}</td>
+        <td class="validFrom">{{productRow.validFrom}}</td>
+        <td class="validThru">{{productRow.validThru}}</td>
+        <td class="eValidFrom">{{productRow.eValidFrom}}</td>
+        <td class="eValidThru">{{productRow.eValidThru}}</td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>
+
+{{outlet}}

@@ -6,7 +6,6 @@ type ProdHierarchy {
   _key: ID!,
   name: String!
   hierarchyLevel: String!
-  type: String!
   validFrom: String!
   validThru: String!
   eFrom: String!,

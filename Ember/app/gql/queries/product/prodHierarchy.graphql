@@ -1,6 +1,7 @@
 query prodHierarchy($input: TraversalInput!) {
   prodHierarchy(input: $input) {
     _key ,
+    _id,
     name,
     hierarchyLevel,
     validFrom,

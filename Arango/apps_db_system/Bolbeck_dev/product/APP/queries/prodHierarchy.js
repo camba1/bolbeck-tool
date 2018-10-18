@@ -14,6 +14,7 @@ var traverseEdgeCollectionWithValidDates = function(sourceDocumentKeyFieldValue,
   let documents
   const sourceDocumentId = buildCollectionId(sourceDocumentKeyFieldValue, sourceCollectionName);
   const returnAqlLiteral = aql.literal(`RETURN { _key: v._key,
+                                        _id: v._id,
                                         name: v.name,
                                         validFrom: v.validFrom,
                                         validThru: v.validThru,

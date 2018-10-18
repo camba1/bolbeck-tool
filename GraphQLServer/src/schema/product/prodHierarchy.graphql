@@ -4,10 +4,11 @@ type Query {
 
 type ProdHierarchy {
   _key: ID!,
-  name: String!
-  hierarchyLevel: String!
-  validFrom: String!
-  validThru: String!
+  _id: String!,
+  name: String!,
+  hierarchyLevel: String!,
+  validFrom: String!,
+  validThru: String!,
   eFrom: String!,
   eTo: String!,
   e_key: String!,

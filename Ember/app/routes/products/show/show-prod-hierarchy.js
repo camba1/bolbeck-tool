@@ -12,9 +12,8 @@ export default Route.extend(RouteQueryManager,{
     if (params.qname) {
        variables = { name: params.qname }
     }else {
-      variables = {input: {_key: product_Key, direction: "inbound", maxDepth: 2 }}
+      variables = {input: {_key: product_Key, direction: "outbound", maxDepth: 2 }}
     }
-    debugger
     return this.get('apollo').watchQuery({ query, variables }, "prodHierarchy")
     .catch(error => alert(error));
   },

@@ -8,19 +8,19 @@ export default Component.extend({
 
   didInsertElement: function() {
     this._super();
-    debugger
     let myModel = this.model;
+     let firstNode= [];
+    //Add source node
+    firstNode.push({ group: "nodes", data: { id: "product/".concat("845303"), label: 'Ruvee Marwari Style Brooch (Red)' } })
+    let nodes = myModel.map(row => {
+      return { group: "nodes", data: { id: row._id, label: row.name } }
+    });
     let edges = myModel.map( row => {
       return { group: "edges", data: { id: row.e_key, source: row.eFrom, target: row.eTo } }
     });
-    let nodes = myModel.map(row => {
-      return { group: "nodes", data: { id: "product/".concat(row._key) } }
-    });
-    //Add source node
-    nodes.push({ group: "nodes", data: { id: "product/".concat("845303") } })
     var cy = cytoscape({
       container: $('#cy')[0],
-      elements: [...nodes, ...edges],
+      elements: [...firstNode,...nodes, ...edges],
       // elements: [ // list of graph elements to start with
       //     { // node a
       //       data: { id: 'a' }
@@ -44,7 +44,7 @@ export default Component.extend({
           {
             selector: 'node',
             style: {
-              'content': 'data(id)'
+              'label': 'data(label)'
             }
           }
         ]

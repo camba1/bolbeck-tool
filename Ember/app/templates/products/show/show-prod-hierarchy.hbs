@@ -13,7 +13,9 @@
   <tbody class='mybody'>
     {{#each model as |productRow| }}
       <tr class="myrow">
-        <td class="name">{{productRow.name}}</td>
+        <td class="name">
+          {{#link-to "products.show.show-detail" productRow._key}} {{productRow.name}} {{/link-to}}
+        </td>
         <td class="key">{{productRow._key}}</td>
         <td class="hierarchyLevel">{{productRow.hierarchyLevel}}</td>
         <td class="validFrom">{{productRow.validFrom}}</td>

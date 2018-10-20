@@ -26,5 +26,12 @@
     {{/each}}
   </tbody>
 </table>
-{{graph/cytoscape-graph model=model}}
+<div class="row">
+  <div class="col-8">
+  {{graph/cytoscape-graph model=model rootModel=productModel onNodeClicked=(action "graphNodeClicked")}}
+  </div>
+  <div class="col">
+      Hierarchy Node: {{hierarchyObject}}
+  </div>
+</div>
 {{outlet}}

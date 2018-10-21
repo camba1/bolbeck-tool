@@ -11,14 +11,16 @@
           <!-- <a class="nav-link" data-toggle="tab" href="#">Hierarchy</a> -->
           {{#link-to "products.show.show-prod-hierarchy" class="nav-link" data-toggle="tab"}}Hierarchy{{/link-to}}
         </li>
-        <li class="nav-item">
-          <!-- <a class="nav-link disabled" href="#">Special Packs & Displays</a> -->
-          {{#link-to "main" class="nav-link"}}Packs & Displays{{/link-to}}
-        </li>
-        <li class="nav-item">
-          <!-- <a class="nav-link disabled" href="#">Price History</a> -->
-          {{#link-to "main" class="nav-link"}}Price History{{/link-to}}
-        </li>
+        {{#if isSku}}
+          <li class="nav-item">
+            <!-- <a class="nav-link disabled" href="#">Special Packs & Displays</a> -->
+            {{#link-to "main" class="nav-link"}}Packs & Displays{{/link-to}}
+          </li>
+          <li class="nav-item">
+            <!-- <a class="nav-link disabled" href="#">Price History</a> -->
+            {{#link-to "main" class="nav-link"}}Price History{{/link-to}}
+          </li>
+        {{/if}}
       </ul>
     {{/with}}
     {{outlet}}

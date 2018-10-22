@@ -17,4 +17,13 @@ export default Route.extend(RouteQueryManager,{
     return this.get('apollo').watchQuery({ query, variables }, "prodHierarchy")
     .catch(error => alert(error));
   },
+  actions: {
+    didTransition() {
+      this.controller.set("showHierarchyNodeCard", true);
+      this.controller.set("showHierarchyEdgeCard", false)
+      this.controller.set("hierarchyNode", undefined);
+      this.controller.set("hierarchyEdge", undefined);
+      return true;
+    }
+  }
 });

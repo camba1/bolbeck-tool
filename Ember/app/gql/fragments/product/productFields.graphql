@@ -1,5 +1,6 @@
 fragment productFields on Product {
    _key,
+   _id,
    name,
    hierarchyLevel,
    type,

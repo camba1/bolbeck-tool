@@ -14,6 +14,7 @@ type Mutation {
 
 type Product {
   _key: ID,
+  _id: String!,
   name: String!
   hierarchyLevel: String!
   type: String!

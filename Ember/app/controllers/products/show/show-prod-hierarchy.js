@@ -2,22 +2,39 @@ import Controller, {  inject as controller }  from '@ember/controller';
 import { computed } from '@ember/object';
 
 export default Controller.extend({
-  myController: controller('products/show'),
+  productController: controller('products/show'),
   productModel: computed('model', function(){
-     return this.get('myController.model')
+     return this.get('productController.model')
    }),
-  hierarchyNode: 'test',
-  hierarchyObject: computed('hierarchyNode', function(){
-    return this.hierarchyNode;
-  }),
+  hierarchyNode: undefined,
+  hierarchyEdge: undefined,
+  hierarchyEdgeParent: 'test',
+  showHierarchyNodeCard: false,
+  showHierarchyEdgeCard: false,
  actions: {
-   graphNodeClicked(clickedNodeKey) {
-     let clickedProductNode
-     clickedProductNode = clickedNodeKey == this.productModel[0]._key ?
-        clickedProductNode = this.productModel[0] : 
-        this.model.find((product) => { return product._key == clickedNodeKey} );
-    this.set("hierarchyNode", clickedProductNode) ;
-    // let prodName = clickedProductNode.name
+   graphNodeClicked(clickedItemKey, clickType ) {
+    clickType == 'node' ? populateNodeInfo(this, clickedItemKey) :
+                          populateEdgeInfo(this,clickedItemKey)
    }
  }
 });
+
+function populateNodeInfo(thisController, clickedItemKey) {
+  let clickedItem
+  clickedItem = clickedItemKey == thisController.productModel[0]._key ?
+     thisController.productModel[0] :
+     thisController.model.find((product) => { return product._key == clickedItemKey} );
+  thisController.set("hierarchyNode", clickedItem) ;
+  thisController.set("showHierarchyNodeCard", true);
+  thisController.set("showHierarchyEdgeCard", false)
+}
+function populateEdgeInfo(thisController, clickedItemKey) {
+  let clickedItem = thisController.model.find((product) => { return product.e_key == clickedItemKey} );
+  let parentItem = clickedItem.eFrom == thisController.productModel[0]._id ?
+     thisController.productModel[0] :
+     thisController.model.find((product) => { return product._id == clickedItem.eFrom} );
+  thisController.set("hierarchyEdgeParent", parentItem);
+  thisController.set("hierarchyEdge", clickedItem) ;
+  thisController.set("showHierarchyNodeCard", false);
+  thisController.set("showHierarchyEdgeCard", true)
+}

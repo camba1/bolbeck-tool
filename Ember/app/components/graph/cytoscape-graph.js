@@ -5,10 +5,8 @@ import { scheduleOnce } from '@ember/runloop';
 /*global cytoscape*/
 export default Component.extend({
   tagName: '',
-  clickedNodeKey:{},
-  nodeClicked: function(clickedNode) {
-    this.clickedNodeKey.key= clickedNode.data('key');
-    this.onNodeClicked(clickedNode.data('key'));
+  nodeClicked: function(clickedNodeKey, clickType) {
+    this.onNodeClicked(clickedNodeKey, clickType);
   },
 
   didInsertElement: function() {
@@ -22,12 +20,17 @@ export default Component.extend({
                       key: rootModel._key,
                       }, classes: 'root' })
     let nodes = myModel.map(row => {
-      let node = { group: "nodes", data: { id: row._id, name: row.name, key: row._key } }
+      let node = { group: "nodes", data: { id: row._id,
+                    name: row.name,
+                    key: row._key } }
       row.hierarchyLevel == 'sku'? node.classes = 'sku': ''
       return node
     });
     let edges = myModel.map( row => {
-      return   { group: "edges", data: { id: row.e_key, source: row.eFrom, target: row.eTo } }
+      return   { group: "edges", data: { id: row.e_key,
+                                  source: row.eFrom,
+                                  target: row.eTo,
+                                  key: row.e_key } }
     });
     let customNodesAndEdges = [...firstNode,...nodes, ...edges];
     let customLayout = {
@@ -67,8 +70,10 @@ export default Component.extend({
        cy;
      });
      cy.on('click', 'node', (evt)=>{
-        var clickedNode = evt.target;
-        this.nodeClicked(clickedNode);
+        this.nodeClicked(evt.target.data('key'), 'node');
       });
+      cy.on('click', 'edge', (evt)=>{
+         this.nodeClicked(evt.target.data('key'),'edge');
+       });
   }
 });

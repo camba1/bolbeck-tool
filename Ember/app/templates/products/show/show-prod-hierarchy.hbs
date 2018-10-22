@@ -31,20 +31,37 @@
   {{graph/cytoscape-graph model=model rootModel=productModel onNodeClicked=(action "graphNodeClicked")}}
   </div>
   <div class="col">
+    {{#if showHierarchyNodeCard}}
     <div class="card">
       <div class="card-header">
-        Hierarchy node
+        Product
       </div>
       <div class="card-body">
-        <p>Key: {{hierarchyObject._key}}</p>
-        <p>Name: {{#link-to "products.show.show-detail" hierarchyObject._key}} {{hierarchyObject.name}} {{/link-to}} </p>
-        <p>Hierarchy Level: {{hierarchyObject.hierarchyLevel}}</p>
-        <p>Valid From: {{hierarchyObject.validFrom}}</p>
-        <p>Valid Thru: {{hierarchyObject.validThru}}</p>
-        <p>Hierarchy From: {{hierarchyObject.eValidFrom}}</p>
-        <p>Hierarchy Thru: {{hierarchyObject.eValidThru}}</p>
+        <p>Key: {{hierarchyNode._key}}</p>
+        <p>Name: {{#link-to "products.show.show-detail" hierarchyNode._key}} {{hierarchyNode.name}} {{/link-to}} </p>
+        <p>Hierarchy Level: {{hierarchyNode.hierarchyLevel}}</p>
+        <p>Valid From: {{hierarchyNode.validFrom}}</p>
+        <p>Valid Thru: {{hierarchyNode.validThru}}</p>
       </div>
     </div>
+    {{/if}}
+    {{#if showHierarchyEdgeCard}}
+    <div class="card">
+      <div class="card-header">
+        Relationship
+      </div>
+      <div class="card-body">
+        <p>Parent Key: {{hierarchyEdgeParent._key}}</p>
+        <p>Parent Name: {{#link-to "products.show.show-detail" hierarchyEdgeParent._key}}
+                        {{hierarchyEdgeParent.name}}
+                        {{/link-to}} </p>
+        <p>Child Key: {{hierarchyEdge._key}}</p>
+        <p>Child Name: {{#link-to "products.show.show-detail" hierarchyEdge._key}} {{hierarchyEdge.name}} {{/link-to}} </p>
+        <p>Hierarchy From: {{hierarchyEdge.eValidFrom}}</p>
+        <p>Hierarchy Thru: {{hierarchyEdge.eValidThru}}</p>
+      </div>
+    </div>
+    {{/if}}
   </div>
 </div>
 {{outlet}}

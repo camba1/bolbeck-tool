@@ -27,11 +27,24 @@
   </tbody>
 </table>
 <div class="row">
-  <div class="col-8">
+  <div class="col-8 border">
   {{graph/cytoscape-graph model=model rootModel=productModel onNodeClicked=(action "graphNodeClicked")}}
   </div>
   <div class="col">
-      Hierarchy Node: {{hierarchyObject}}
+    <div class="card">
+      <div class="card-header">
+        Hierarchy node
+      </div>
+      <div class="card-body">
+        <p>Key: {{hierarchyObject._key}}</p>
+        <p>Name: {{#link-to "products.show.show-detail" hierarchyObject._key}} {{hierarchyObject.name}} {{/link-to}} </p>
+        <p>Hierarchy Level: {{hierarchyObject.hierarchyLevel}}</p>
+        <p>Valid From: {{hierarchyObject.validFrom}}</p>
+        <p>Valid Thru: {{hierarchyObject.validThru}}</p>
+        <p>Hierarchy From: {{hierarchyObject.eValidFrom}}</p>
+        <p>Hierarchy Thru: {{hierarchyObject.eValidThru}}</p>
+      </div>
+    </div>
   </div>
 </div>
 {{outlet}}

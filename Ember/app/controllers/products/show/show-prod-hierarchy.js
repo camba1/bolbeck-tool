@@ -12,7 +12,12 @@ export default Controller.extend({
   }),
  actions: {
    graphNodeClicked(clickedNodeKey) {
-    this.set("hierarchyNode", clickedNodeKey) ;
+     let clickedProductNode
+     clickedProductNode = clickedNodeKey == this.productModel[0]._key ?
+        clickedProductNode = this.productModel[0] : 
+        this.model.find((product) => { return product._key == clickedNodeKey} );
+    this.set("hierarchyNode", clickedProductNode) ;
+    // let prodName = clickedProductNode.name
    }
  }
 });

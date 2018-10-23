@@ -24,6 +24,7 @@ type Product {
 
 input ProductInput {
   _key: ID,
+  _id: String,
   name: String!
   hierarchyLevel: String!
   type: String!
@@ -33,6 +34,7 @@ input ProductInput {
 
 input ProductPatchInput {
   _key: ID,
+  _id: String,
   name: String
   hierarchyLevel: String
   type: String

@@ -1,6 +1,7 @@
 import Component from '@ember/component';
 import $ from 'jquery';
 import { scheduleOnce } from '@ember/runloop';
+// import cxtmenu from 'cytoscape-menu';
 
 /*global cytoscape*/
 export default Component.extend({
@@ -59,13 +60,52 @@ export default Component.extend({
                           }
                         }
                       ];
+    let cyMenuOptions = {
+                      selector: 'node, edge',
+                       menuRadius: 60,
+                      commands: [
+                        {
+                          content: 'One',
+                          select: function(ele){
+                            console.log( 'there');
+                          }
+                        },
+                        // {
+                        //   content: 'Two',
+                        //   select: function(ele){
+                        //     console.log( 'gere' );
+                        //   },
+                        //   enabled: true
+                        // },
+                        // {
+                        //   content: 'Four',
+                        //   select: function(ele){
+                        //     console.log( 'ere' );
+                        //   }
+                        // },
+                        {
+                          content: 'Three',
+                          select: function(ele){
+                            console.log( 'everywhere' );
+                          }
+                        }
+                      ],
+                      spotlightPadding: 2,
+                      activePadding: 10,
+                      indicatorSize: 18,
+                      minSpotlightRadius: 15,
+                      maxSpotlightRadius: 25
+    };
 
     var cy = cytoscape({
       container: $('#cy')[0],
       elements: customNodesAndEdges,
-        layout: customLayout,
-        style: customStyle
+       layout: customLayout,
+       style: customStyle
       });
+
+    let menu =  cy.cxtmenu(cyMenuOptions);
+
       scheduleOnce('afterRender', this, function(){
        cy;
      });

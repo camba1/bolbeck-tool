@@ -1,36 +1,8 @@
-<table class="table table-hover table-bordered table-sm listing">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Key</th>
-      <th>Hierarchy</th>
-      <th>valid From</th>
-      <th>valid Thru</th>
-      <th>Hierarchy From</th>
-      <th>Hierarchy Thru</th>
-    </tr>
-  </thead>
-  <tbody class='mybody'>
-    {{#each model as |productRow| }}
-      <tr class="myrow">
-        <td class="name">
-          {{#link-to "products.show.show-detail" productRow._key}} {{productRow.name}} {{/link-to}}
-        </td>
-        <td class="key">{{productRow._key}}</td>
-        <td class="hierarchyLevel">{{productRow.hierarchyLevel}}</td>
-        <td class="validFrom">{{productRow.validFrom}}</td>
-        <td class="validThru">{{productRow.validThru}}</td>
-        <td class="eValidFrom">{{productRow.eValidFrom}}</td>
-        <td class="eValidThru">{{productRow.eValidThru}}</td>
-      </tr>
-    {{/each}}
-  </tbody>
-</table>
 <div class="row">
-  <div class="col-8 border">
+   <div class="col-8 border">
   {{graph/cytoscape-graph model=model rootModel=productModel onNodeClicked=(action "graphNodeClicked")}}
   </div>
-  <div class="col">
+   <div class="col">
     {{#if showHierarchyNodeCard}}
     <div class="card">
       <div class="card-header">
@@ -63,5 +35,34 @@
     </div>
     {{/if}}
   </div>
-</div>
-{{outlet}}
+ </div>
+ <br>
+<table class="table table-hover table-bordered table-sm listing">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Key</th>
+      <th>Hierarchy</th>
+      <th>valid From</th>
+      <th>valid Thru</th>
+      <th>Hierarchy From</th>
+      <th>Hierarchy Thru</th>
+    </tr>
+  </thead>
+  <tbody class='mybody'>
+    {{#each model as |productRow| }}
+      <tr class="myrow">
+        <td class="name">
+          {{#link-to "products.show.show-detail" productRow._key}} {{productRow.name}} {{/link-to}}
+        </td>
+        <td class="key">{{productRow._key}}</td>
+        <td class="hierarchyLevel">{{productRow.hierarchyLevel}}</td>
+        <td class="validFrom">{{productRow.validFrom}}</td>
+        <td class="validThru">{{productRow.validThru}}</td>
+        <td class="eValidFrom">{{productRow.eValidFrom}}</td>
+        <td class="eValidThru">{{productRow.eValidThru}}</td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>
+<!--{{outlet}} -->

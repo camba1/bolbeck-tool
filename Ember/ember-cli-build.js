@@ -20,5 +20,11 @@ module.exports = function(defaults) {
   // please specify an object with the list of modules as keys
   // along with the exports of each module as its value.
   app.import('node_modules/cytoscape/dist/cytoscape.min.js');
+  app.import('node_modules/cytoscape-cxtmenu/cytoscape-cxtmenu.js');
+  // app.import('node_modules/cytoscape-cxtmenu/cytoscape-cxtmenu.js', {
+  //   using: [
+  //     { transformation: 'amd', as: 'cytoscape-menu' }
+  //   ]
+  // });
   return app.toTree();
 };

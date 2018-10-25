@@ -13,7 +13,7 @@ export default Component.extend(ComponentQueryManager, {
     if (menuOptionName == 'expand') {
       getNewData(clickedNodeKey, this.get('apollo'), this.apolloQueryId,
                           this.queryHierarchy, this.cy,
-                          clickType, menuOptionName);
+                          clickType, menuOptionName, this.bottonHierarchyLevel);
     } else {
       this.onNodeClicked(clickedNodeKey, clickType, menuOptionName, newData);
     }
@@ -76,10 +76,11 @@ export default Component.extend(ComponentQueryManager, {
 
 
  function getNewData(sourceNodeKey, apollo, apolloQueryId,
-                    queryHierarchy, cy, clickType, menuOptionName){
+                    queryHierarchy, cy, clickType, menuOptionName,
+                    bottonHierarchyLevel){
   let variables = {input: {_key: sourceNodeKey, direction: "outbound", maxDepth: 2 }};
     return apollo.query({ query: queryHierarchy, variables }, apolloQueryId).then((result) => {
-        let nodes = addNodesToArray(result);
+        let nodes = addNodesToArray(result, bottonHierarchyLevel);
         let edges = addEdgesToArray(result);
         cy.batch(function(){
           cy.add([...nodes, ...edges]);

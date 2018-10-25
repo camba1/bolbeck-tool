@@ -13,6 +13,7 @@ export default Controller.extend({
    //Graph component controlling properties
   bottonHierarchyLevel: 'sku',
   apolloHierarchyQueryId: 'prodHierarchy',
+  expandedNodeData: [],
   //GUI controlling properties
   hierarchyQuery: queryHierarchy,
   hierarchyNode: undefined,
@@ -35,7 +36,17 @@ export default Controller.extend({
     */
    graphNodeClicked(clickedItemKey, clickType, menuOptionName, newData ) {
       if (menuOptionName) {
-        menuOptionName == 'link' ? this.transitionToRoute('products.show.show-detail',clickedItemKey): ''
+        //menuOptionName == 'link' ? this.transitionToRoute('products.show.show-detail',clickedItemKey): ''
+        switch(menuOptionName) {
+            case 'link':
+                this.transitionToRoute('products.show.show-detail',clickedItemKey)
+                break;
+            case 'afterexpand':
+                this.expandedNodeData.push(...newData);
+                break;
+            default:
+                throw 'Unknown menu option in the graph. Please contact support.'
+        }
       } else {
         clickType == 'nodes' ? populateNodeInfo(this, clickedItemKey) :
                               populateEdgeInfo(this,clickedItemKey)
@@ -51,15 +62,32 @@ export default Controller.extend({
  * @param {String} clickedItemKey Key of the item for which we need to look up product information
  */
 function populateNodeInfo(thisController, clickedItemKey) {
-  let clickedItem
-  clickedItem = clickedItemKey == thisController.productModel[0]._key ?
-     thisController.productModel[0] :
-     thisController.model.find((product) => { return product._key == clickedItemKey} );
+  let clickedItem = findItem(thisController, clickedItemKey, '_key')
   thisController.set("hierarchyNode", clickedItem) ;
   thisController.set("showHierarchyNodeCard", true);
   thisController.set("showHierarchyEdgeCard", false)
 }
-
+/**
+ * Searches the product model, the productHierarchy model and the expanded data for
+ * a particular record
+ * @param {object} thisController Page controller 
+ * @param {String} clickedItemKey Item we are looking for
+ * @param {String} searchFieldName Name of the field in the datasources where to
+ * look for the clickedItemKey
+ * @returns {object} Item found or undefined
+ */
+function findItem(thisController, clickedItemKey, searchFieldName) {
+  let clickedItem
+  if(clickedItemKey == thisController.productModel[0][searchFieldName]){//._key) {
+    clickedItem = thisController.productModel[0];
+  } else {
+    clickedItem = thisController.model.find((product) => { return product[searchFieldName]== clickedItemKey} );
+    if (!clickedItem) {
+      clickedItem = thisController.expandedNodeData.find((product) => { return product[searchFieldName] == clickedItemKey} );
+    }
+  };
+  return clickedItem
+}
 /**
  * Searches for the information of a particular edge record and its parent. Populates
  * the screen Relationship pane with the information obtained
@@ -67,10 +95,8 @@ function populateNodeInfo(thisController, clickedItemKey) {
  * @param {String} clickedItemKey Key of the item for which we need to look up hierarchy information
  */
 function populateEdgeInfo(thisController, clickedItemKey) {
-  let clickedItem = thisController.model.find((product) => { return product.e_key == clickedItemKey} );
-  let parentItem = clickedItem.eFrom == thisController.productModel[0]._id ?
-     thisController.productModel[0] :
-     thisController.model.find((product) => { return product._id == clickedItem.eFrom} );
+  let clickedItem = findItem(thisController, clickedItemKey, 'e_key')
+  let parentItem = findItem(thisController, clickedItem.eFrom, '_id')
   thisController.set("hierarchyEdgeParent", parentItem);
   thisController.set("hierarchyEdge", clickedItem) ;
   thisController.set("showHierarchyNodeCard", false);

@@ -70,7 +70,7 @@ function populateNodeInfo(thisController, clickedItemKey) {
 /**
  * Searches the product model, the productHierarchy model and the expanded data for
  * a particular record
- * @param {object} thisController Page controller 
+ * @param {object} thisController Page controller
  * @param {String} clickedItemKey Item we are looking for
  * @param {String} searchFieldName Name of the field in the datasources where to
  * look for the clickedItemKey
@@ -85,7 +85,7 @@ function findItem(thisController, clickedItemKey, searchFieldName) {
     if (!clickedItem) {
       clickedItem = thisController.expandedNodeData.find((product) => { return product[searchFieldName] == clickedItemKey} );
     }
-  };
+  }
   return clickedItem
 }
 /**

@@ -12,11 +12,14 @@ export default Component.extend(ComponentQueryManager, {
   cy : cytoscape({container: $('#cy')[0] }),
   //when the user clicks on the graph or the menus, we can forward the events
   //upstream
-  nodeClicked: function(clickedNodeKey, clickType, menuOptionName, newData) {
+  nodeClicked: function(clickedNodeKey, clickType, menuOptionName, newData, nodeOutDegree) {
     if (menuOptionName == 'expand') {
-      getNewData(clickedNodeKey, this.get('apollo'), this.apolloQueryId,
-                          this.queryHierarchy, this.cy,
-                          clickType, menuOptionName, this.bottonHierarchyLevel);
+      //Only try to expand nodes that have not been expanded before
+      if (nodeOutDegree == 0) {
+          getNewData(clickedNodeKey, this.get('apollo'), this.apolloQueryId,
+                              this.queryHierarchy, this.cy,
+                              clickType, menuOptionName, this.bottonHierarchyLevel);
+      }
     } else {
       this.onNodeClicked(clickedNodeKey, clickType, menuOptionName, newData);
     }
@@ -64,7 +67,8 @@ export default Component.extend(ComponentQueryManager, {
      this.cy.on('click', (ele, itemKey, itemGroupName, menuOptiontName, newData)=>{
          // Exec only of we called it
          if (itemKey) {
-           this.nodeClicked(itemKey, itemGroupName, menuOptiontName, newData);
+           let nodeOutDegree = ele.target.outdegree ? ele.target.outdegree(true) : 0 ;
+           this.nodeClicked(itemKey, itemGroupName, menuOptiontName, newData, nodeOutDegree);
          }
       });
      //graph events

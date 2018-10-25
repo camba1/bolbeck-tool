@@ -1,23 +1,23 @@
 import Component from '@ember/component';
 import $ from 'jquery';
 import { scheduleOnce } from '@ember/runloop';
-import query from 'ember-gui/gql/queries/product/prodHierarchy';
+// import query from 'ember-gui/gql/queries/product/prodHierarchy';
 import { ComponentQueryManager } from 'ember-apollo-client';
 // import cxtmenu from 'cytoscape-menu';
 
 /*global cytoscape*/
 export default Component.extend(ComponentQueryManager, {
   tagName: '',
-  bottonHierarchyLevel: 'sku',
-  apolloQueryId: 'prodHierarchy',
+  cy : cytoscape({container: $('#cy')[0] }),
+
   nodeClicked: function(clickedNodeKey, clickType, menuOptionName) {
     let newData
     if (menuOptionName == 'expand') {
-      newData = getNewData(clickedNodeKey, this.get('apollo'), this.apolloQueryId, this.cy);
-    }
+      newData = getNewData(clickedNodeKey, this.get('apollo'), this.apolloQueryId, this.queryHierarchy, this.cy);
+    } 
     this.onNodeClicked(clickedNodeKey, clickType, menuOptionName);
   },
-   cy : cytoscape({container: $('#cy')[0] }),
+
   didInsertElement: function() {
     this._super();
     let myModel = this.model;
@@ -31,44 +31,11 @@ export default Component.extend(ComponentQueryManager, {
     //Combine node and edges
     let customNodesAndEdges = [...firstNode,...nodes, ...edges];
     //declare graph layout
-    let customLayout = {
-                          name: 'breadthfirst'
-                        };
+    let customLayout = getGraphLayout(this.graphLayout);
     //declare graph style
-    let customStyle = [
-                        {
-                          selector: 'node',
-                          style: {
-                            'label': 'data(key)'
-                            //'font-size': 10
-                          }
-                        },
-                        {
-                          selector: 'node.root',
-                          style: {
-                            'label': 'data(name)',
-                             'shape': 'triangle',
-                             'background-color': '#6FB1FC'
-                          }
-                        },
-                        {
-                          selector: `node.${this.bottonHierarchyLevel}`,
-                          style: {
-                             'shape': 'diamond'
-                          }
-                        },
-                        {
-                          selector: 'edge',
-                          style: {
-                            'curve-style': 'bezier',
-                            'opacity': 0.667,
-                            'target-arrow-shape': 'triangle'
-                          }
-                        }
-                      ];
+    let customStyle = getGraphStyle(this.graphStyle, this.bottonHierarchyLevel);
     //build menu options
-    let menuOptions = [buildMenuOptions(`node.${this.bottonHierarchyLevel}`, false),
-                        buildMenuOptions('node.hier', true)];
+    let menuOptions = getMenuOptions(this.graphMenuOptions, `node.${this.bottonHierarchyLevel}`)
 
     //initialize graph
      this.cy = cytoscape({
@@ -87,6 +54,7 @@ export default Component.extend(ComponentQueryManager, {
       scheduleOnce('afterRender', this, function(){
        this.cy;
      });
+
      //Define events we want to track
      //Menu event
      this.cy.on('click', (ele, itemKey, itemGroupName, menuOptiontName)=>{
@@ -105,39 +73,10 @@ export default Component.extend(ComponentQueryManager, {
   }
 });
 
-function buildMenuOptions(menuSelector, enableSecondCommand){
 
-  let cyMenuCommands = [
-                            {
-                              content: 'Go',
-                              select: function(ele){
-                                ele.emit('click', [ele.data('key'), ele.group(), 'link']);
-                              }
-                            },
-                            {
-                              content: 'Exp',
-                              select: function(ele){
-                                ele.emit('click', [ele.data('key'), ele.group(), 'expand']);
-                              },
-                              enabled: enableSecondCommand
-                            }
-                        ]   ;
-  let cyMenuOptions = {
-                    selector: menuSelector,//'node.sku',//, edge',
-                    menuRadius: 60,
-                    commands: cyMenuCommands,
-                    spotlightPadding: 2,
-                    activePadding: 10,
-                    indicatorSize: 18,
-                    minSpotlightRadius: 15,
-                    maxSpotlightRadius: 25
-  };
-  return cyMenuOptions
-}
-
- function getNewData(sourceNodeKey, apollo, apolloQueryId, cy){
+ function getNewData(sourceNodeKey, apollo, apolloQueryId, queryHierarchy, cy){
   let variables = {input: {_key: sourceNodeKey, direction: "outbound", maxDepth: 2 }};
-    return apollo.query({ query, variables }, apolloQueryId).then((result) => {
+    return apollo.query({ query: queryHierarchy, variables }, apolloQueryId).then((result) => {
         let nodes = addNodesToArray(result);
         let edges = addEdgesToArray(result);
         cy.batch(function(){
@@ -176,4 +115,85 @@ function addRootNodeToArray(modelData){
                     key: modelData._key,
                   }, classes: 'root' });
   return firstNode;
+}
+
+function getGraphLayout(layoutFromParentUI) {
+  let layout = layoutFromParentUI ? layoutFromParentUI :
+                {
+                  name: 'breadthfirst'
+                };
+  return layout
+}
+
+function getGraphStyle(styleFromParentUI, bottonHierarchyLevel){
+  let customStyle = [
+                      {
+                        selector: 'node',
+                        style: {
+                          'label': 'data(key)'
+                          //'font-size': 10
+                        }
+                      },
+                      {
+                        selector: 'node.root',
+                        style: {
+                          'label': 'data(name)',
+                           'shape': 'triangle',
+                           'background-color': '#6FB1FC'
+                        }
+                      },
+                      {
+                        selector: `node.${bottonHierarchyLevel}`,
+                        style: {
+                           'shape': 'diamond'
+                        }
+                      },
+                      {
+                        selector: 'edge',
+                        style: {
+                          'curve-style': 'bezier',
+                          'opacity': 0.667,
+                          'target-arrow-shape': 'triangle'
+                        }
+                      }
+                    ];
+    let style = styleFromParentUI ? styleFromParentUI : customStyle;
+    return style
+}
+
+function getMenuOptions(menuFromParentUI, menuSelector){
+  let menuOptions = menuFromParentUI ? menuFromParentUI :
+                    [buildMenuOptions(menuSelector, false),
+                     buildMenuOptions('node.hier', true)];
+  return menuOptions
+}
+
+function buildMenuOptions(menuSelector, enableSecondCommand){
+
+  let cyMenuCommands = [
+                            {
+                              content: 'Go',
+                              select: function(ele){
+                                ele.emit('click', [ele.data('key'), ele.group(), 'link']);
+                              }
+                            },
+                            {
+                              content: 'Exp',
+                              select: function(ele){
+                                ele.emit('click', [ele.data('key'), ele.group(), 'expand']);
+                              },
+                              enabled: enableSecondCommand
+                            }
+                        ]   ;
+  let cyMenuOptions = {
+                    selector: menuSelector,//'node.sku',//, edge',
+                    menuRadius: 60,
+                    commands: cyMenuCommands,
+                    spotlightPadding: 2,
+                    activePadding: 10,
+                    indicatorSize: 18,
+                    minSpotlightRadius: 15,
+                    maxSpotlightRadius: 25
+  };
+  return cyMenuOptions
 }

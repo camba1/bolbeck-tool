@@ -1,4 +1,5 @@
 import Controller, {  inject as controller }  from '@ember/controller';
+import queryHierarchy from 'ember-gui/gql/queries/product/prodHierarchy';
 import { computed } from '@ember/object';
 
 export default Controller.extend({
@@ -6,6 +7,9 @@ export default Controller.extend({
   productModel: computed('model', function(){
      return this.get('productController.model')
    }),
+  bottonHierarchyLevel: 'sku',
+  apolloHierarchyQueryId: 'prodHierarchy',
+  hierarchyQuery: queryHierarchy,
   hierarchyNode: undefined,
   hierarchyEdge: undefined,
   hierarchyEdgeParent: undefined,

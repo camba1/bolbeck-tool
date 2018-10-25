@@ -8,13 +8,17 @@ export default Controller.extend({
    }),
   hierarchyNode: undefined,
   hierarchyEdge: undefined,
-  hierarchyEdgeParent: 'test',
+  hierarchyEdgeParent: undefined,
   showHierarchyNodeCard: false,
   showHierarchyEdgeCard: false,
  actions: {
-   graphNodeClicked(clickedItemKey, clickType ) {
-    clickType == 'node' ? populateNodeInfo(this, clickedItemKey) :
-                          populateEdgeInfo(this,clickedItemKey)
+   graphNodeClicked(clickedItemKey, clickType, menuOptionName ) {
+      if (menuOptionName) {
+        menuOptionName == 'link' ? this.transitionToRoute('products.show.show-detail',clickedItemKey): ''
+      } else {
+        clickType == 'nodes' ? populateNodeInfo(this, clickedItemKey) :
+                              populateEdgeInfo(this,clickedItemKey)
+      }
    }
  }
 });

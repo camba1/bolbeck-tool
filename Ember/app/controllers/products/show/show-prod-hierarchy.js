@@ -16,7 +16,7 @@ export default Controller.extend({
   showHierarchyNodeCard: false,
   showHierarchyEdgeCard: false,
  actions: {
-   graphNodeClicked(clickedItemKey, clickType, menuOptionName ) {
+   graphNodeClicked(clickedItemKey, clickType, menuOptionName, newData ) {
       if (menuOptionName) {
         menuOptionName == 'link' ? this.transitionToRoute('products.show.show-detail',clickedItemKey): ''
       } else {

@@ -9,13 +9,14 @@ import { ComponentQueryManager } from 'ember-apollo-client';
 export default Component.extend(ComponentQueryManager, {
   tagName: '',
   cy : cytoscape({container: $('#cy')[0] }),
-
-  nodeClicked: function(clickedNodeKey, clickType, menuOptionName) {
-    let newData
+  nodeClicked: function(clickedNodeKey, clickType, menuOptionName, newData) {
     if (menuOptionName == 'expand') {
-      newData = getNewData(clickedNodeKey, this.get('apollo'), this.apolloQueryId, this.queryHierarchy, this.cy);
-    } 
-    this.onNodeClicked(clickedNodeKey, clickType, menuOptionName);
+      getNewData(clickedNodeKey, this.get('apollo'), this.apolloQueryId,
+                          this.queryHierarchy, this.cy,
+                          clickType, menuOptionName);
+    } else {
+      this.onNodeClicked(clickedNodeKey, clickType, menuOptionName, newData);
+    }
   },
 
   didInsertElement: function() {
@@ -57,10 +58,10 @@ export default Component.extend(ComponentQueryManager, {
 
      //Define events we want to track
      //Menu event
-     this.cy.on('click', (ele, itemKey, itemGroupName, menuOptiontName)=>{
+     this.cy.on('click', (ele, itemKey, itemGroupName, menuOptiontName, newData)=>{
          // Exec only of we called it
          if (itemKey) {
-           this.nodeClicked(itemKey, itemGroupName, menuOptiontName);
+           this.nodeClicked(itemKey, itemGroupName, menuOptiontName, newData);
          }
       });
      //graph events
@@ -74,7 +75,8 @@ export default Component.extend(ComponentQueryManager, {
 });
 
 
- function getNewData(sourceNodeKey, apollo, apolloQueryId, queryHierarchy, cy){
+ function getNewData(sourceNodeKey, apollo, apolloQueryId,
+                    queryHierarchy, cy, clickType, menuOptionName){
   let variables = {input: {_key: sourceNodeKey, direction: "outbound", maxDepth: 2 }};
     return apollo.query({ query: queryHierarchy, variables }, apolloQueryId).then((result) => {
         let nodes = addNodesToArray(result);
@@ -82,8 +84,8 @@ export default Component.extend(ComponentQueryManager, {
         cy.batch(function(){
           cy.add([...nodes, ...edges]);
         });
-        var layout = cy.layout({ name: 'breadthfirst' }).run();
-
+        cy.layout({ name: 'breadthfirst' }).run();
+        cy.emit('click', [sourceNodeKey, clickType, `after${menuOptionName}`, result])
     });
 }
 

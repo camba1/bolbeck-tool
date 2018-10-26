@@ -15,6 +15,7 @@ Router.map(function() {
     this.route('show', { path: '/:key' }, function() {
       this.route('show-detail');
       this.route('show-prod-hierarchy');
+      this.route('show-price-history');
     });
 
   });

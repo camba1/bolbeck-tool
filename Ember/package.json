@@ -20,6 +20,7 @@
     "broccoli-asset-rev": "^2.7.0",
     "ember-ajax": "^3.0.0",
     "ember-apollo-client": "^1.0.5",
+    "ember-auto-import": "^1.2.14",
     "ember-cli": "~3.3.0",
     "ember-cli-app-version": "^3.0.0",
     "ember-cli-babel": "^6.6.0",
@@ -49,6 +50,10 @@
   },
   "dependencies": {
     "cytoscape": "^3.2.17",
-    "cytoscape-cxtmenu": "^3.0.1"
+    "cytoscape-cxtmenu": "^3.0.1",
+    "plotly.js-basic-dist": "^1.41.3",
+    "plotly.js-cartesian-dist": "^1.41.3",
+    "plotly.js-finance-dist": "^1.41.3",
+    "plotly.js-geo-dist": "^1.41.3"
   }
 }

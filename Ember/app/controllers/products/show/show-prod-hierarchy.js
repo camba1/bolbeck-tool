@@ -3,6 +3,10 @@ import queryHierarchy from 'ember-gui/gql/queries/product/prodHierarchy';
 import { computed } from '@ember/object';
 
 export default Controller.extend({
+  init() {
+    this._super(...arguments);
+    this.expandedNodeData = [];
+  },
   //Parent controller and model information to be used in the graph and
   // populating the page's side panels
   productController: controller('products/show'),
@@ -13,7 +17,7 @@ export default Controller.extend({
    //Graph component controlling properties
   bottonHierarchyLevel: 'sku',
   apolloHierarchyQueryId: 'prodHierarchy',
-  expandedNodeData: [],
+
   //GUI controlling properties
   hierarchyQuery: queryHierarchy,
   hierarchyNode: undefined,

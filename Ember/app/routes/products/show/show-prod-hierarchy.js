@@ -23,6 +23,7 @@ export default Route.extend(RouteQueryManager,{
       this.controller.set("showHierarchyEdgeCard", false)
       this.controller.set("hierarchyNode", undefined);
       this.controller.set("hierarchyEdge", undefined);
+      this.controller.set('expandedNodeData',[]);
       return true;
     }
   }

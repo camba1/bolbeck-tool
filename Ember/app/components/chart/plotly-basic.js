@@ -1,3 +1,5 @@
+// This component renders basic plotly charts which include:
+//scatter, bar and pie
 import Component from '@ember/component';
 import Plotly from 'plotly.js-basic-dist';
 

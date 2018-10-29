@@ -5,13 +5,10 @@ export default Controller.extend({
     this._super(...arguments);
     this.chartLayout = {title: 'Price History'};
     //this.chartOptions = {displayModeBar: false};
-    // this.basicData = [
-    //   {
-    //   x: ['2013-10-04 22:23:00', '2013-11-04 22:23:00', '2013-12-04 22:23:00'],
-    //   y: [1, 3, 6],
-    //   type: 'scatter'
-    //   }
-    // ];
-  },
-
+  }//,
+  // actions: {
+  //   chartEvent(eventName, pointsClicked){
+  //     console.log(eventName)
+  //   }
+  // }
 });

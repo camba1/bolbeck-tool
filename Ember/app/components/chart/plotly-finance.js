@@ -37,7 +37,7 @@ export default Component.extend({
         options =  {displaylogo: false,
                     responsive: true,
                     modeBarButtonsToRemove: ['sendDataToCloud']};
-      };
+      }
       removePlotlyEvents(this);
       Plotly.newPlot(this.elementId, data, layout, options).then(() => {
         setupPlotlyEvents(this)

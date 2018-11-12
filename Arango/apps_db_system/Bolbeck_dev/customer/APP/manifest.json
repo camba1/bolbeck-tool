@@ -1,0 +1,25 @@
+{
+    "name": "customer",
+    "version": "0.0.1-dev",
+    "description": "Retrieves customer data",
+    "engines": {
+        "arangodb": "^3.0.0"
+    },
+    "author": "Juan Peredo",
+    "license": "GNU GPL",
+    "main": "main.js",
+    "scripts": {
+        "setup": "scripts/setup.js",
+        "teardown": "scripts/teardown.js"
+    },
+    "dependencies": {
+      "generic": {
+        "name": "@generic/generic",
+        "version": "^0.0.1",
+        "description": "Generic collection get",
+        "required": false,
+        "multiple":false
+      }
+    },
+    "tests": "test/**/*.js"
+}

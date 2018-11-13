@@ -5,6 +5,7 @@ const joi = require('joi');
 
 const docSchema = joi.object().required().keys({
   _key: joi.string().alphanum().description('Customer Primary Key'),
+  _id: joi.string().alphanum().description('Customer internal identifiyer'),
   name: joi.string().required().description('Customer name'),
   validFrom: joi.date().min('1900-01-01').default(new Date(), 'Defaults to current date')
           .description('Customer valid from'),

@@ -78,6 +78,29 @@ router.patch('/customerPatch/:key', (req, res) => {
           `);
 
 
+//router.get('/customerGet/:collectionName', function (req, res) {
+router.get('/customerGet', function (req, res) {
+  //const collection = queriedb.genericCollectionObjectGet(req.pathParams.collectionName);
+  const documents =  generic.genericCollectionGet(collection,req.queryParams );
+  res.send(documents);
+},'list')
+//.pathParam('collectionName', collectionNameSchema)
+.response([Model], 'Documents retrieved from collection')
+.queryParam('name', joi.string().description(dd`
+              Name of the customer to retrieve `))
+.queryParam('state', joi.string().description(dd`
+             State where the customer is located
+          `))
+.queryParam('city', joi.string().description(dd`
+             City where the customer is located
+          `))
+.queryParam('_key', joi.string().description(dd`
+             Customer Primary Identifiyer
+          `))
+.summary('Retrieve collection documents')
+.description(dd`
+    Retrieve a set number of documents from the selected collection
+    `);
 
 // router.get('/customerGet/:key/prodHierarchyGet', (req, res) => {
 //   const documentKey = req.pathParams.key;

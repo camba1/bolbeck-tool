@@ -1,0 +1,59 @@
+
+type Query {
+  customers(input: customerSearchInput): [customer]
+  customer(_key: ID!): [customer]
+}
+
+type Mutation {
+  customerPost(input: customerInput!):customer!
+  customerPut(_key: ID!, input: customerInput!):customer!
+  customerPatch(_key: ID!, input: customerPatchInput!):customer!
+  customerDeleteLogical(_key: ID!):Boolean
+  customerDeleteFull(_key: ID!):Boolean
+}
+
+type customer {
+  _key: ID,
+  _id: String!,
+  name: String!,
+  validFrom: String!,
+  validThru: String!,
+  active: Int,
+  state: String,
+  city: String,
+  country: String,
+  zipcode: String
+}
+
+input customerSearchInput {
+  _key: ID,
+  name: String,
+  state: String,
+  city: String
+}
+
+input customerInput {
+  _key: ID,
+  _id: String,
+  name: String!,
+  validFrom: String,
+  validThru: String,
+  active: Int,
+  state: String,
+  city: String,
+  country: String,
+  zipcode: String
+}
+
+input customerPatchInput {
+  _key: ID,
+  _id: String,
+  name: String,
+  validFrom: String,
+  validThru: String,
+  active: Int,
+  state: String,
+  city: String,
+  country: String,
+  zipcode: String
+}

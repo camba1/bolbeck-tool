@@ -47,9 +47,10 @@ function status(response) {
       .catch(function(error) { console.log(`Request failed when trying to reach ${endPoint}`, error) })
   }
 
-  const encodeQueryParams = (p, addQuestionMark) => addQuestionMark ?
+  const encodeQueryParams = (p, addQuestionMark) => p ? addQuestionMark ?
         '?'.concat(Object.entries(p).map(kv => kv.map(encodeURIComponent).join("=")).join("&")) :
-        Object.entries(p).map(kv => kv.map(encodeURIComponent).join("=")).join("&") ;
+        Object.entries(p).map(kv => kv.map(encodeURIComponent).join("=")).join("&")
+        : "";
 
   module.exports = {
     fetchQuery,

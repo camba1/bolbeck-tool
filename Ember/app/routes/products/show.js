@@ -43,7 +43,7 @@ export default Route.extend(RouteQueryManager,{
       let key = currentModel._key;
 
       //Get the parent variables so we can update the parent query
-      let parentVariables = this.modelFor('product.index') ?
+      let parentVariables = this.modelFor('products.index') ?
                             this.modelFor('products.index')._apolloObservable.variables :
                             null;
       //Set the variables
@@ -52,7 +52,7 @@ export default Route.extend(RouteQueryManager,{
       return this.get("apollo").mutate({mutation: mutationDeleteFull, variables,
         update: (store) => {
           UpdateStore.removeRecordFromDetail(store, query, key, "product")
-          UpdateStore.removeRecordFromSelection(store, queryParent, key, "product", parentVariables)
+          UpdateStore.removeRecordFromSelection(store, queryParent, key, "products", parentVariables)
         }
       })
       .then( () => {

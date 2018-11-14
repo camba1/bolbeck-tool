@@ -1,11 +1,16 @@
-    #cy {
-      height: 600px;
-      width: 100%;
-      /* position: absolute; */
-      left: 0;
-      top: 0;
-      /* background: #000; */
-    }
-    .cxtmenu-disabled {
-				opacity: 0.333;
-			}
+#cy {
+  height: 600px;
+  width: 100%;
+  /* position: absolute; */
+  left: 0;
+  top: 0;
+  /* background: #000; */
+}
+.cxtmenu-disabled {
+		opacity: 0.333;
+	}
+
+.inputboxsized{
+     width: 100%;
+     box-sizing: border-box;
+}

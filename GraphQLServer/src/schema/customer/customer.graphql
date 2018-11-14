@@ -22,7 +22,7 @@ type customer {
   state: String,
   city: String,
   country: String,
-  zipcode: String
+  zipCode: String
 }
 
 input customerSearchInput {
@@ -42,7 +42,7 @@ input customerInput {
   state: String,
   city: String,
   country: String,
-  zipcode: String
+  zipCode: String
 }
 
 input customerPatchInput {
@@ -55,5 +55,5 @@ input customerPatchInput {
   state: String,
   city: String,
   country: String,
-  zipcode: String
+  zipCode: String
 }

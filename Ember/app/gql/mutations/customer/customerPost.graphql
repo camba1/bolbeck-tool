@@ -1,0 +1,8 @@
+#import 'ember-gui/gql/fragments/customer/customerFields'
+
+mutation customerPost($input: customerInput!){
+  customerPost(input: $input)
+    {
+      ...customerFields
+  }
+}

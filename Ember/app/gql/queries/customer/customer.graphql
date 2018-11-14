@@ -1,0 +1,6 @@
+#import 'ember-gui/gql/fragments/customer/customerFields'
+query customer($_key: ID!) {
+  customer(_key: $_key) {
+    ...customerFields
+    }
+  }

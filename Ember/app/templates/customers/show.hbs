@@ -1,0 +1,25 @@
+<div>
+  {{#if model }}
+    {{#with model.firstObject as |customer|}}
+      <h5>Details for {{customer.name}}</h5>
+      <ul class="nav nav-tabs">
+        <li class="nav-item">
+          {{#link-to "customers.show.show-detail" class="nav-link" data-toggle="tab"}}Main{{/link-to}}
+        </li>
+        <li class="nav-item">
+          <!-- {{#link-to "customers.show.show-prod-hierarchy" class="nav-link" data-toggle="tab"}}Hierarchy{{/link-to}} -->
+          {{#link-to "main" class="nav-link" data-toggle="tab"}}Invoices{{/link-to}}
+        </li>
+      </ul>
+    {{/with}}
+    {{outlet}}
+    <button class="btn btn-primary btn-sm updateDataBtn" {{action "updateData"}}>Update</button>
+    <button class="btn btn-secondary btn-sm deleteDataBtn" {{action "deleteData"}}>Delete</button>
+    {{else}}
+      <div class="detail noData">
+        No data found. Record may have been deleted by another user
+      </div>
+      <br>
+    {{/if}}
+    {{#link-to "customers" class="btn btn-primary btn-sm backBtn"}}Back{{/link-to}}
+</div>

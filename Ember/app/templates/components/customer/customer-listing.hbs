@@ -1,0 +1,30 @@
+<table class="table table-hover table-bordered table-sm listing">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>key</th>
+      <th>City</th>
+      <th>State</th>
+      <th>Valid From</th>
+      <th>Valid Thru</th>
+    </tr>
+  </thead>
+  <tbody class='mybody'>
+    {{#each customer as |customerRow| }}
+      <tr class="myrow">
+        <td>
+          {{#link-to "customers.show.show-detail" customerRow._key class="name"}}
+            {{customerRow.name}}
+          {{/link-to}}
+        </td>
+        <td class="key">{{customerRow._key}}</td>
+        <td class="formula">{{customerRow.city}}</td>
+        <td class="type">{{customerRow.state}}</td>
+        <td class="validityDate">{{customerRow.validFrom}}</td>
+        <td class="calculationOrder">{{customerRow.validThru}}</td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>
+
+{{yield}}

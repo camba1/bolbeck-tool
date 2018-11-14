@@ -1,0 +1,12 @@
+fragment customerFields on customer {
+  _key,
+  _id,
+  name,
+  validFrom,
+  validThru,
+  active,
+  state,
+  city,
+  country,
+  zipCode
+}

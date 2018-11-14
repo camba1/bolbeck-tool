@@ -20,6 +20,11 @@ Router.map(function() {
 
   });
   this.route('main')
+  this.route('customers', function() {
+    this.route('show', { path: '/:key' }, function() {
+      this.route('show-detail');
+    });
+  });
 });
 
 export default Router;

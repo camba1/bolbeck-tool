@@ -1,0 +1,8 @@
+<div>
+  <label for="nameSearch"> Name: </label> {{input id="nameSearch" value=name}}
+  <button class="btn btn-secondary btn-sm refreshBtn" {{action "refreshData" name}}>Refresh</button>
+</div>
+<!-- {{customer/customer-listing customer = filteredModel}} -->
+{{customer/customer-listing customer = model}}
+
+{{outlet}}

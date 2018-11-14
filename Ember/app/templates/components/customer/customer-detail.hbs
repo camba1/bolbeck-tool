@@ -1,0 +1,55 @@
+
+{{#with customer.firstObject as |myCustomer|}}
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card card-default">
+        <div class="card-header">Information</div>
+        <div class="card-body">
+          <!-- <div class="card-title"><h5>Information</h5></div> -->
+          <div><label for="customer_Key">Key:</label>
+            {{input id="customer_Key" class="customer_Key" type="text" value=myCustomer._key}}
+          </div>
+          <div><label for="customerName">Name:</label>
+            {{input id="customerName" class="customerName" type="text" value=myCustomer.name}}
+          </div>
+          <div><label for="customerType">Active:</label>
+            {{input id="customerType" class="customerType" type="checkbox" checked=myCustomer.active}}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card card-default">
+        <div class="card-header">Validity</div>
+        <div class="card-body">
+          <div><label for="customerValidFrom">From:</label>
+            {{input id="customerValidFrom" class="customerValidFrom" type="date" value=myCustomer.validFrom}}
+          </div>
+          <div><label for="customerValidThru">Thru:</label>
+            {{input id="customerValidThru" class="customerValidThru" type="date" value=myCustomer.validThru}}
+          </div>
+        </div>
+      </div>
+      <br>
+      <div class="card card-default">
+        <div class="card-header">Address</div>
+        <div class="card-body">
+          <div><label for="customerCity">City:</label>
+            {{input id="customerCity" class="customerCity" type="text" value=myCustomer.city}}
+          </div>
+          <div><label for="customerState">State:</label>
+            {{input id="customerState" class="customerState" type="text" value=myCustomer.state}}
+          </div>
+          <div><label for="customerZipCode">Zipcode:</label>
+            {{input id="customerZipCode" class="customerZipCode" type="text" value=myCustomer.zipCode}}
+          </div>
+          <div><label for="customerCountry">Country:</label>
+            {{input id="customerCountry" class="customerCountry" type="text" value=myCustomer.country}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+{{/with}}
+{{yield}}

@@ -1,0 +1,14 @@
+query customers($input: customerSearchInput){
+  customers(input: $input) {
+    _key,
+    _id,
+    name,
+    validFrom,
+    validThru,
+    # active,
+    state,
+    city
+    # country,
+    # zipCode
+  }
+}

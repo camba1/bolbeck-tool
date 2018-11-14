@@ -1,0 +1,3 @@
+mutation customerDeleteFull($key: ID!){
+  customerDeleteFull(_key: $key)
+}

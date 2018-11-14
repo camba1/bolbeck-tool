@@ -1,0 +1,3 @@
+mutation customerDeleteLogical($key: ID!){
+  customerDeleteLogical(_key: $key)
+}

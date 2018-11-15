@@ -6,4 +6,4 @@ Retrieves customer data
 
 Copyright (c) 2018 Juan Peredo
 
-License: Apache 2
+License: GNU GPL

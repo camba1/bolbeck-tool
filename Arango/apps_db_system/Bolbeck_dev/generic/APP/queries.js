@@ -33,7 +33,7 @@ var genericCollectionGet = function (collection, params = undefined) {
         i += 1;
       }
     });
-    console.log(customFilter);
+    // console.log(customFilter);
   };
   aqlParams['@collection'] = collection.name();
   aqlParams.g_MaxRecordsByQuery = g_MaxRecordsByQuery;
@@ -44,8 +44,8 @@ var genericCollectionGet = function (collection, params = undefined) {
     query += customFilter;
   }
   query += ' LIMIT @g_MaxRecordsByQuery RETURN entry';
-  console.log(query);
-  console.log(aqlParams);
+  // console.log(query);
+  // console.log(aqlParams);
 
   //Build query object
   const documents = db._query(query, aqlParams);

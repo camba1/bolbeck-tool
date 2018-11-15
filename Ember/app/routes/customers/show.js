@@ -4,7 +4,7 @@ import query from 'ember-gui/gql/queries/customer/customer';
 import mutation from 'ember-gui/gql/mutations/customer/customerPut';
 import mutationDeleteFull from 'ember-gui/gql/mutations/customer/customerDeleteFull';
 import queryParent from 'ember-gui/gql/queries/customer/customers';
-import UpdateStore from 'ember-gui/gql/gqlHelpers/updateStore';
+// import UpdateStore from 'ember-gui/gql/gqlHelpers/updateStore';
 import MutationHelper from 'ember-gui/gql/gqlHelpers/executeMutation';
 
 export default Route.extend(RouteQueryManager,{

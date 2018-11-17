@@ -211,3 +211,4 @@ module.exports.genericDocumentByKeyLogicallyDelete = genericDocumentByKeyLogical
 module.exports.genericDocumentPost = genericDocumentPost;
 module.exports.genericDocumentPut = genericDocumentPut;
 module.exports.genericDocumentPatch = genericDocumentPatch;
+module.exports.genericMaxRecordsByQuery = g_MaxRecordsByQuery;

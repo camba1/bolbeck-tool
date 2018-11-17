@@ -167,3 +167,4 @@ module.exports.genericDocumentByKeyLogicallyDelete = queriedb.genericDocumentByK
 module.exports.genericDocumentPost = queriedb.genericDocumentPost;
 module.exports.genericDocumentPut = queriedb.genericDocumentPut;
 module.exports.genericDocumentPatch = queriedb.genericDocumentPatch;
+module.exports.genericMaxRecordsByQuery = queriedb.genericMaxRecordsByQuery;

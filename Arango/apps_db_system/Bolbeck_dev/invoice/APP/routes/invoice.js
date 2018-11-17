@@ -110,38 +110,3 @@ router.get('/invoiceGet/:key', function (req, res) {
 .description(dd`
       Retrieve a document from the selected collection
       `);
-
-
-router.get('/invoiceByCustomerGet/:customerKey', function (req, res) {
-  let dateFrom = new Date('2000-01-01');
-  let dateThru = new Date('3000-12-31');
-  const customerKey = req.pathParams.customerKey;
-  const documents =  queriedb.getInvoicesByCustomerKey(customerKey,
-                                          dateFrom, dateThru,
-                                          req.queryParams.includeProducts,
-                                          req.queryParams.productKey);
-  res.send(documents);
-},'list')
-.response([Model], 'Documents retrieved from collection')
-.queryParam('includeProducts', joi.string()
-              .default(false, 'By default only return aggregated data')
-              .description(dd`
-              Indicates if we want to get products in the result set `))
-.queryParam('invoiceDate', joi.string().description(dd`
-             Date of the invoice
-          `))
-.queryParam('productKey', joi.string().description(dd`
-             Indicates if the results should be for invoices
-             with a specific product only
-          `))
-.summary('Retrieve collection documents')
-.description(dd`
-    Retrieve a set number of documents from the selected collection
-    `);
-    //
-    // .queryParam('includeProducts', joi.boolean()
-    //             .default(false, 'Will not return the products by default')
-    //             .description(dd`
-    //              Indicates if the api will return the products
-    //              associated with the invoice
-    //           `))

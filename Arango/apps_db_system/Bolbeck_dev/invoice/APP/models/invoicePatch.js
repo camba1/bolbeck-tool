@@ -4,24 +4,22 @@ const joi = require('joi');
 
 
 const docSchema = joi.object().required().keys({
-  invoiceDate: joi.date().min('1900-01-01').default(new Date(), 'Defaults to current date')
+  _key: joi.string().alphanum().description('invoice Primary Key'),
+  _id: joi.string().description('Invoice id'),
+  invoiceDate: joi.date().min('1900-01-01')
               .description('Date of invoicing'),
-  invoBillTo: joi.object().keys({
-        _key: joi.string().alphanum().required().description('invoBillTo Primary Key'),
-        customer_key: joi.string().alphanum().description('Customer Primary Key'),
-        customerName: joi.string().description('Customer name'),
-        customer_id: joi.string().description('Customer id'),
-  }).description('Customer related to the invoice'),
-  invoContains: joi.object().keys({
-        _key: joi.string().alphanum().required().description('invoContains Primary Key'),
-        product_key: joi.string().alphanum().description('Product key'),
-        product_id: joi.string().description('Product id'),
-        productName: joi.string().description('Product name'),
-        dateAdded: joi.date().min('1900-01-01').default(new Date(), 'Defaults to current date'),
-        unitPrice: joi.number().positive().precision(2).description('Price per unit paid by customer'),
-        quantity: joi.number().positive().integer().description('Quantity of product sold')
-          }).description('Products sold in the invoice'),
-  type: joi.string().alphanum().required().description('Product type'),
+  //totAmount: joi.number().precision(2).description('Total monetary value of the invoice'),
+  invoBillTo_key: joi.string().required().alphanum().description('invoBillTo Primary Key'),
+  customer_key: joi.string().alphanum().description('Customer Primary Key')//,
+  // products: joi.object().keys({
+  //       product_key: joi.string().alphanum().required().description('Product key'),
+  //       invoContains_key: joi.string().alphanum().required().description('invoContains Primary Key'),
+  //       dateAdded: joi.date().min('1900-01-01'),
+  //       unitPrice: joi.number().positive().precision(2).default(0, 'Defaults to zero')
+  //                 .description('Price per unit paid by customer'),
+  //       quantity: joi.number().integer().default(0, 'Defaults to zero')
+  //                 .description('Quantity of product sold')
+  //         }).description('Products sold in the invoice')
 }).unknown(); // allow additional attributes
 
 

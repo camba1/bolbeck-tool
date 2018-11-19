@@ -25,7 +25,7 @@ const queriedb = require('../queries/invoiceByCustomerKey');
 
 
 //// TODO: Add date filtering
-router.get('/invoiceByCustomerGet/:customerKey', function (req, res) {
+router.get('/invoiceByCustomerKeyGet/:customerKey', function (req, res) {
   let dateFrom = new Date('2000-01-01');
   let dateThru = new Date('3000-12-31');
   const customerKey = req.pathParams.customerKey;
@@ -36,10 +36,6 @@ router.get('/invoiceByCustomerGet/:customerKey', function (req, res) {
   res.send(documents);
 },'list')
 .response([Model], 'Documents retrieved from collection')
-.queryParam('includeProducts', joi.string()
-              .default(false, 'By default only return aggregated data')
-              .description(dd`
-              Indicates if we want to get products in the result set `))
 .queryParam('invoiceDate', joi.string().description(dd`
              Date of the invoice
           `))

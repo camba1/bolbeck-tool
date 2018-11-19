@@ -15,7 +15,6 @@ type Mutation {
 type invoice {
   _key: ID,
   _id: String!,
-  name: String!,
   invoiceDate: String!,
   totAmount: Float!,
   invoBillTo_key: String,
@@ -33,7 +32,6 @@ input invoiceSearchInput {
 input invoiceInput {
   _key: ID,
   _id: String,
-  name: String!,
   invoiceDate: String!,
   invoBillTo_key: String,
   customer_key: String
@@ -42,7 +40,6 @@ input invoiceInput {
 input invoicePatchInput {
   _key: ID,
   _id: String,
-  name: String,
   invoiceDate: String,
   invoBillTo_key: String,
   customer_key: String

@@ -1,0 +1,31 @@
+type Query {
+  invoicesByCustomerKeyGet(customerKey: String!, input: invoiceByCustomerKeyIntput): [invoicesByCustomerKey]
+}
+
+type invoicesByCustomerKey {
+  _key: ID,
+  _id: String,
+  invoiceDate: String!,
+  totAmount: Float!,
+  invoBillTo_key: String,
+  customer_key: String,
+  customer_id: String,
+  customerName: String!,
+  products: [invoiceProducts]
+}
+
+input invoiceByCustomerKeyIntput {
+  includeProducts: Boolean,
+  invoiceDate: String,
+  productKey: String
+}
+
+type invoiceProducts{
+  product_key: String,
+  product_id: String,
+  productName: String,
+  invoContains_key: ID!,
+  dateAdded: String,
+  unitPrice: Float,
+  quanty: Int
+}

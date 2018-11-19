@@ -1,0 +1,49 @@
+
+type Query {
+  invoices(input: invoiceSearchInput): [invoice]
+  invoice(_key: ID!): [invoice]
+}
+
+type Mutation {
+  invoicePost(input: invoiceInput!):invoice!
+  invoicePut(_key: ID!, input: invoiceInput!):invoice!
+  invoicePatch(_key: ID!, input: invoicePatchInput!):invoice!
+  invoiceDeleteLogical(_key: ID!):Boolean
+  invoiceDeleteFull(_key: ID!):Boolean
+}
+
+type invoice {
+  _key: ID,
+  _id: String!,
+  name: String!,
+  invoiceDate: String!,
+  totAmount: Float!,
+  invoBillTo_key: String,
+  customer_key: String,
+  customer_id: String,
+  customerName: String
+}
+
+input invoiceSearchInput {
+  _key: ID,
+  customerName: String,
+  invoiceDate: String
+}
+
+input invoiceInput {
+  _key: ID,
+  _id: String,
+  name: String!,
+  invoiceDate: String!,
+  invoBillTo_key: String,
+  customer_key: String
+}
+
+input invoicePatchInput {
+  _key: ID,
+  _id: String,
+  name: String,
+  invoiceDate: String,
+  invoBillTo_key: String,
+  customer_key: String
+}

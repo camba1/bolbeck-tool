@@ -8,5 +8,7 @@ module.exports = {
   ...require('./generic/genericQuery'),
   ...require('./product/query'),
   ...require('./product/queryProdHierarchy'),
-  ...require('./customer/customer/query')
+  ...require('./customer/customer/query'),
+  ...require('./invoice/invoice/query'),
+  ...require('./invoice/invoice/queryInvoiceByCustomerKey')
 }

@@ -7,4 +7,5 @@ module.exports = {
   ...require('./customer/custKpiFormula/mutation'),
   ...require('./product/mutation'),
   ...require('./customer/customer/mutation'),
+  ...require('./invoice/invoice/mutation')
 }

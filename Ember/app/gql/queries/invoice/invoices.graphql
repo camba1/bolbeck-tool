@@ -1,0 +1,8 @@
+query invoices($input: invoiceSearchInput){
+  invoices(input: $input) {
+    _key,
+    invoiceDate,
+    totAmount,
+    customerName
+  }
+}

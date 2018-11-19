@@ -1,0 +1,21 @@
+query invoicesByCustomerKeyGet($customerKey:String!, $input: invoiceByCustomerKeyIntput){
+  invoicesByCustomerKeyGet(customerKey: $customerKey, input: $input) {
+    _key,
+    _id,
+    invoiceDate,
+    totAmount,
+    invoBillTo_key,
+    customer_key,
+    customer_id,
+    customerName,
+    products {
+      product_key,
+      product_id,
+      productName,
+      invoContains_key,
+      dateAdded,
+      unitPrice,
+      quanty
+    }
+  }
+}

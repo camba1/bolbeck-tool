@@ -1,0 +1,10 @@
+fragment invoiceFields on invoice {
+  _key,
+  _id,
+  invoiceDate,
+  totAmount,
+  invoBillTo_key,
+  customer_key,
+  customer_id,
+  customerName
+}

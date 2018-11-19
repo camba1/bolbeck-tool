@@ -1,0 +1,31 @@
+
+{{#with invoice.firstObject as |myinvoice|}}
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card card-default">
+        <div class="card-header">Information</div>
+        <div class="card-body">
+          <span>Key:</span> {{myinvoice._key}}
+          <div><label for="customerName">Name:</label>
+            {{input id="customerName" class="customerName" type="text" value=myinvoice.customerName}}
+          </div>
+          <div><label for="invoiceDate">Amount:</label>
+            {{input id="invoiceDate" class="invoiceDate" type="number" value=myinvoice.totAmount}}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card card-default">
+        <div class="card-header">Dates</div>
+        <div class="card-body">
+          <div><label for="invoiceinvoiceDate">Invoice Date:</label>
+            {{input id="invoiceinvoiceDate" class="invoiceinvoiceDate" type="date" value=myinvoice.invoiceDate}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+{{/with}}
+{{yield}}

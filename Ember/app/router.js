@@ -25,6 +25,11 @@ Router.map(function() {
       this.route('show-detail');
     });
   });
+  this.route('invoices', function() {
+    this.route('show', { path: '/:key' },function() {
+      this.route('show-detail');
+    });
+  });
 });
 
 export default Router;

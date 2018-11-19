@@ -1,0 +1,18 @@
+<div class="row">
+  <div class="col-2">
+    {{input id="customerNameSearch" placeholder="Customer" class="inputboxsized" value=customerName}}
+    {{input id="invoiceDateSearch" placeholder="Invoice Date" class="inputboxsized" value=invoiceDate}}
+    {{input id="keySearch" placeholder="Key" class="inputboxsized" value=key}}
+    <button class="btn btn-primary btn-sm refreshBtn" {{action "refreshData" customerName key invoiceDate}}>Refresh</button>
+    <button class="btn btn-secondary btn-sm resetBtn" {{action "resetqueryParams"}}>Reset</button>
+   </div>
+  <div class="col">
+    <!-- <label for="nameSearch"> Name: </label> {{input id="nameSearch" value=name}}
+    <button class="btn btn-secondary btn-sm refreshBtn" {{action "refreshData" name}}>Refresh</button> -->
+    <!-- {{customer/customer-listing customer = filteredModel}} -->
+    {{invoice/invoice-listing invoice = model}}
+  </div>
+</div>
+
+
+{{outlet}}

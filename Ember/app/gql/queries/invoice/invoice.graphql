@@ -1,0 +1,6 @@
+#import 'ember-gui/gql/fragments/invoice/invoiceFields'
+query invoice($_key: ID!) {
+  invoice(_key: $_key) {
+    ...invoiceFields
+    }
+  }

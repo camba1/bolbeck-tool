@@ -8,6 +8,7 @@ query invoicesByCustomerKeyGet($customerKey:String!, $input: invoiceByCustomerKe
     customer_key,
     customer_id,
     customerName,
+    numberOfProds,
     products {
       product_key,
       product_id,

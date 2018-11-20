@@ -23,6 +23,8 @@ Router.map(function() {
   this.route('customers', function() {
     this.route('show', { path: '/:key' }, function() {
       this.route('show-detail');
+      this.route('show-invoice-dashboard');
+      this.route('show-invoice-explorer');
     });
   });
   this.route('invoices', function() {

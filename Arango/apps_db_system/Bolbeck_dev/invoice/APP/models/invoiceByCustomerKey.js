@@ -13,6 +13,7 @@ const docSchema = joi.object().required().keys({
   customer_key: joi.string().alphanum().required().description('Customer Primary Key'),
   customer_id: joi.string().description('Customer id'),
   customerName: joi.string().description('Customer name'),
+  numberOfProds: joi.number().integer().positive().description('Number of products in the invoice'),
   products: joi.object().keys({
         product_key: joi.string().alphanum().required().description('Product key'),
         product_id: joi.string().description('Product id'),

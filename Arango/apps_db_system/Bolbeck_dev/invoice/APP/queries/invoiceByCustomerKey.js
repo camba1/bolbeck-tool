@@ -58,7 +58,8 @@ var getInvoicesByCustomerKey = function(customer_key,
         totAmount: round(sum(prods[*].amount)*100)/100,
         customer_key: pathToBillTos.vertices[0]._key,
         customer_id: pathToBillTos.vertices[0]._id,
-        customerName: pathToBillTos.vertices[0].name
+        customerName: pathToBillTos.vertices[0].name,
+        numberOfProds: length(prods)
         ${productsInFinalReturn}
         }
     `

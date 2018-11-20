@@ -11,6 +11,7 @@ type invoicesByCustomerKey {
   customer_key: String,
   customer_id: String,
   customerName: String!,
+  numberOfProds: Int,
   products: [invoiceProducts]
 }
 

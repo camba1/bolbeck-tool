@@ -13,7 +13,6 @@ const collectionName = 'invoice'
  *@return Newly created invoice object
  */
 function invoicesByCustomerKeyGet(parent,args,context) {
-  debugger
   const id  = args.customerKey
   const backendURL = context.backendURL
   const foxxMountPoint = context.foxxServMountPoints.invoice

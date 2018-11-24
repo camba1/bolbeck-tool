@@ -45,6 +45,11 @@ export default Route.extend(RouteQueryManager,{
   }
 });
 
+/**
+ * If param has a value, return it otherwise return null
+ * @param {Object} param Value to be checked
+ * @returns {Object} param or null
+ */
 function getQueryParamValue(param){
   if (param) {
      return param

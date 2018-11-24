@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 
-
+// TODO:  Replace hardcoded data with actual data coming from db
 export default Route.extend({
     model(){
       return [{

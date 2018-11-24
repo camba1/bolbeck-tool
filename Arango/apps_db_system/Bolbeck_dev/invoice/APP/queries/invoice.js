@@ -6,6 +6,14 @@ var generic = module.context.dependencies.generic;
 
 
 //// TODO: Fix date filtering
+/**
+ * Get a list of invoices from the database
+ * @param {Date} dateFrom Bounds the time frame for which the invoices will be fetched
+ * @param {Date} dateThru Bounds the time frame for which the invoices will be fetched
+ * @param {String} invoice_key Invoice Primary key will cause the query to return a single invoice
+ * @param {String} customerName Nake of a customer for which we will retrieve invoices
+ * @returns {[Object]} List of invoices, including the total spend per invoice 
+ */
 var getInvoices = function(dateFrom, dateThru, invoice_key, customerName){
 
   if (!(dateFrom instanceof Date) || !(dateThru instanceof Date)){

@@ -5,6 +5,15 @@ const invalidKeysMsg = 'Either the invoice or the customer key must be provided'
 var generic = module.context.dependencies.generic;
 
 //// TODO: Add date filtering
+/**
+ * Gets invoices for a given customer primary key.
+ * @param {String} customer_key Customer Primary key
+ * @param {Date} dateFrom Bounds the time frame for which the invoices will be fetched
+ * @param {Date} dateThru Bounds the time frame for which the invoices will be fetched
+ * @param {Boolean} includeProducts Indicates if the query should also return the products for each invoice
+ * @param {String} product_key Product Primary Key. If present, return invoices containing this product only
+ * @returns {[Object]} Returns list of invoices for customer and optionaly their products
+ */
 var getInvoicesByCustomerKey = function(customer_key,
                                             dateFrom, dateThru,
                                             includeProducts = false,

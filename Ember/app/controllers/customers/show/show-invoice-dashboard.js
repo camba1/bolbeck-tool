@@ -1,19 +1,19 @@
 import Controller from '@ember/controller';
 import { computed } from '@ember/object';
-import { sort } from '@ember/object/computed';
+//import { sort } from '@ember/object/computed';
 
 export default Controller.extend({
   init() {
     this._super(...arguments);
     this.chartLayout = {title: 'Invoice Dashboard',
                           bargap: 0.03,
-                          grid: {rows: 3,
-                                  columns: 1,
+                          grid: {rows: 2,
+                                  columns: 2,
                                   pattern: 'independent'
                                 },
-                          xaxis3: {
-                                  title: 'Date'
-                                  },
+                        //  xaxis3: {
+                          //        title: 'Date'
+                            //      },
                           yaxis: {
                                   title: 'Amount'
                                 },
@@ -21,6 +21,9 @@ export default Controller.extend({
                                   title: 'No. of Prods'
                                 },
                           yaxis3: {
+                                  title: 'Amount'
+                                },
+                          yaxis4: {
                                   title: 'Amount'
                                 },
                         }
@@ -33,10 +36,11 @@ export default Controller.extend({
       let totAmount = model.map(a => a.totAmount );
       let numberOfProds = model.map(a => a.numberOfProds);
       let key = model.map(a => a._key );
-      debugger;
-      let dateRange = [addDays(invoiceDate[0], -1), addDays(invoiceDate[invoiceDate.length - 1], 1)]
-      let binRange = [new Date(dateRange[0].getFullYear()-1 ,11,31), new Date(dateRange[1].getFullYear(), 11,31)]
-      let yRange = [totAmount.reduce((a, b) => Math.min(a, b)) -1, totAmount.reduce((a, b) => Math.max(a, b))+ 1]
+      // debugger;
+      let saleOrReturn = model.map(a => (a.totAmount >= 0) ? "Sale" : "Return" );
+      // let dateRange = [addDays(invoiceDate[0], -1), addDays(invoiceDate[invoiceDate.length - 1], 1)]
+      // let binRange = [new Date(dateRange[0].getFullYear()-1 ,11,31), new Date(dateRange[1].getFullYear(), 11,31)]
+      // let yRange = [totAmount.reduce((a, b) => Math.min(a, b)) -1, totAmount.reduce((a, b) => Math.max(a, b))+ 1]
 
       let seriesOne = {
                         x: invoiceDate,
@@ -67,7 +71,19 @@ export default Controller.extend({
                         type: "histogram",
                         name: "Tot. Amount"
                       }
-       let data = [seriesOne, seriesTwo,seriesThree]
+
+        let seriesFour = {
+                          histfunc: "sum",
+                          type: "histogram",
+                          x: saleOrReturn,
+                          y: totAmount,
+                          xaxis: 'x4',
+                          yaxis: 'y4',
+                          name: "Tot. Amount by type"//,
+                          //marker: { color: ['purple', 'red'] }
+                          }
+
+       let data = [seriesOne, seriesTwo, seriesThree,  seriesFour]
       //let data = [seriesThree]
       return data
     } else {
@@ -79,8 +95,8 @@ export default Controller.extend({
     }
   }),
 });
-function addDays(date, days) {
-  var result = new Date(date);
-  result.setDate(result.getDate() + days);
-  return result;
-}
+// function addDays(date, days) {
+//   var result = new Date(date);
+//   result.setDate(result.getDate() + days);
+//   return result;
+// }

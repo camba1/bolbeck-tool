@@ -1,31 +1,95 @@
-{{chart/plotly-finance
-  chartData=chartDatas
-  chartLayout=chartLayout
-  chartOptions = chartOptions
-}}
 <br/>
-<table class="table table-hover table-bordered table-sm listing">
-  <thead>
-    <tr>
-      <th>Customer</th>
-      <th>key</th>
-      <th>Invoice Date</th>
-      <th>Amount</th>
-    </tr>
-  </thead>
-  <tbody class='mybody'>
-    {{#each model as |invoiceRow| }}
-      <tr class="myrow">
-        <td>
-          {{#link-to "invoices.show.show-detail" invoiceRow._key class="customerName"}}
-            {{invoiceRow.customerName}}
-          {{/link-to}}
-        </td>
-        <td class="key">{{invoiceRow._key}}</td>
-        <td class="formula">{{invoiceRow.invoiceDate}}</td>
-        <td class="type">{{invoiceRow.totAmount}}</td>
-      </tr>
-    {{/each}}
-  </tbody>
-</table>
+<div class="container bg-light">
+  <!-- <br/>
+  <div class="page-header">
+    <h4 class="page-title">
+      Invoice Dashboard
+    </h4>
+  </div> -->
+  <br/>
+  <div class="row">
+    <div class="col-md">
+      <div class="card">
+        <div class="card-body text-center">
+            <div class="h1 m-0">{{model.length}}</div>
+            <div class="text-muted mb-4">Number of Invoices</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md">
+      <div class="card">
+        <div class="card-body text-center">
+            <div class="h1 m-0">{{numberOfProds}}</div>
+            <div class="text-muted mb-4">Number of Products Sold</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md">
+      <div class="card">
+        <div class="card-body text-center">
+            <div class="h1 m-0">${{totAmount}}</div>
+            <div class="text-muted mb-4">Net Sales Amount</div>
+        </div>
+      </div>
+    </div>
+  </div>
+<br/>
+<div class="row">
+  <div class="col-md">
+    {{chart/plotly-finance
+      chartData=chartDatas
+      chartLayout=chartLayout
+      chartOptions = chartOptions
+    }}
+  </div>
+</div>
+<br/>
+<div class="row">
+  <div class="col-md">
+    <div class="card">
+      <div class="card-body text-center">
+          <div class="h5 m-0">{{totSalesInv}}</div>
+          <div class="text-muted mb-6">Sales</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md">
+    <div class="card">
+      <div class="card-body text-center ">
+          <div class="h5 m-0 {{if showReturnWarn 'text-warning'}} {{if showReturnDang 'text-danger'}}">{{totReturnsInv}}</div>
+          <div class="text-muted mb-6">Returns</div>
+      </div>
+    </div>
+  </div>
+</div>
+<br/>
+<div class="row">
+    <div class="col-md">
+      <table class="table table-hover table-bordered table-sm bg-white listing">
+        <thead>
+          <tr>
+            <th>Customer</th>
+            <th>key</th>
+            <th>Invoice Date</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody class='mybody'>
+          {{#each model as |invoiceRow| }}
+            <tr class="myrow">
+                <td class="customerName">{{invoiceRow.customerName}}</td>
+              <td>
+                {{#link-to "invoices.show.show-detail" invoiceRow._key class="key"}}
+                  {{invoiceRow._key}}
+                {{/link-to}}
+              </td>
+              <td class="formula">{{invoiceRow.invoiceDate}}</td>
+              <td class="type">{{invoiceRow.totAmount}}</td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
 {{outlet}}

@@ -8,6 +8,7 @@ type invoicesByCustomerKey {
   invoiceDate: String!,
   totAmount: Float!,
   invoBillTo_key: String,
+  invoBillTo_id: String,
   customer_key: String,
   customer_id: String,
   customerName: String!,

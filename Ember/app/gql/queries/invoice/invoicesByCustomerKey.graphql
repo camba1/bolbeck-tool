@@ -15,6 +15,7 @@ query invoicesByCustomerKeyGet($customerKey:String!, $input: invoiceByCustomerKe
       product_id,
       productName,
       invoContains_key,
+      invoContains_id,
       dateAdded,
       unitPrice,
       quanty

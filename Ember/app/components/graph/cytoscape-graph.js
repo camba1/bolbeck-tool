@@ -170,7 +170,8 @@ function addRootNodeToArray(modelData){
 function getGraphLayout(layoutFromParentUI) {
   let layout = layoutFromParentUI ? layoutFromParentUI :
                 {
-                  name: 'breadthfirst'
+                  name: 'breadthfirst',
+                  directed: true
                 };
   return layout
 }

@@ -27,6 +27,7 @@ type invoiceProducts{
   product_id: String,
   productName: String,
   invoContains_key: ID!,
+  invoContains_id: String,
   dateAdded: String,
   unitPrice: Float,
   quanty: Int

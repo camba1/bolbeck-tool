@@ -35,6 +35,7 @@ var getInvoicesByCustomerKey = function(customer_key,
                        product_id: products._id,
                        productName: products.name,
                        invoContains_key: e._key,
+                       invoContains_id: e._id,
                        dateAdded: e.dateAdded,
                        unitPrice: e.unitPrice,
                        quanty: e.quantity, `;

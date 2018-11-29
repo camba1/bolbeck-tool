@@ -5,6 +5,7 @@ query invoicesByCustomerKeyGet($customerKey:String!, $input: invoiceByCustomerKe
     invoiceDate,
     totAmount,
     invoBillTo_key,
+    invoBillTo_id,
     customer_key,
     customer_id,
     customerName,

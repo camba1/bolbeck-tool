@@ -5,78 +5,107 @@ import { ComponentQueryManager } from 'ember-apollo-client';
 
 /*global cytoscape*/
 export default Component.extend(ComponentQueryManager, {
+  init() {
+    this._super(...arguments);
+    this.graphLayouts = [{value: 'cose', label:'Cose' },
+                   {value: 'breadthfirst', label: 'Breadth First' },
+                   {value: 'circle', label: 'Circle'},
+                   {value: 'concentric', label: 'Concentric'},
+                   {value: 'grid', label: 'Grid'},
+                   {value: 'random', label: 'Random'}];
+  },
   tagName: '',
+  selectedLayout: null,
+  prevLayout: null,
+  getLayout: name => Promise.resolve( layouts[ name ] ),
   //We need a global instance of the graph so that we can manipulate it later
   cy : cytoscape({container: $('#cy')[0] }),
-  //when the user clicks on the graph or the menus, we can forward the events
-  //upstream
+
+  // when the user clicks on the graph or the menus, we can forward the events
+  // upstream
   nodeClicked: function(clickedNodeKey, clickType, menuOptionName, newData, nodeOutDegree) {
-    if (menuOptionName == 'expand') {
-      //Only try to expand nodes that have not been expanded before
-      if (nodeOutDegree == 0) {
-          getNewData(clickedNodeKey, this.get('apollo'), this.apolloQueryId,
-                              this.queryHierarchy, this.cy,
-                              clickType, menuOptionName, this.bottonHierarchyLevel);
-      }
-    } else {
+    // if (menuOptionName == 'expand') {
+    //   //Only try to expand nodes that have not been expanded before
+    //   if (nodeOutDegree == 0) {
+    //       getNewData(clickedNodeKey, this.get('apollo'), this.apolloQueryId,
+    //                           this.queryHierarchy, this.cy,
+    //                           clickType, menuOptionName, this.bottonHierarchyLevel);
+    //   }
+    // } else {
       this.onNodeClicked(clickedNodeKey, clickType, menuOptionName, newData);
-    }
+    // }
   },
 
   didInsertElement: function() {
     this._super();
-    let myModel = this.model;
-    let rootModel = this.rootModel[0];
+    // let myModel = this.model;
+    // let rootModel = this.rootModel[0];
     // //Add source node
-    let firstNode = addRootNodeToArray(rootModel);
+    // let firstNode = addRootNodeToArray(rootModel);
     //Add all other nodes
-    let nodes = addNodesToArray(myModel, this.bottonHierarchyLevel);
+    let nodes = this.nodes;
     //Add the relationship edges
-    let edges = addEdgesToArray(myModel);
+    let edges = this.edges;
     //Combine node and edges
-    let customNodesAndEdges = [...firstNode,...nodes, ...edges];
+    // let customNodesAndEdges = [...firstNode,...nodes, ...edges];
+    let customNodesAndEdges = [...nodes, ...edges];
     //declare graph layout
-    let customLayout = getGraphLayout(this.graphLayout);
+    let customLayout = this.graphLayout;
     //declare graph style
-    let customStyle = getGraphStyle(this.graphStyle, this.bottonHierarchyLevel);
+    let customStyle = this.graphStyle;
     //build menu options
-    let menuOptions = getMenuOptions(this.graphMenuOptions, `node.${this.bottonHierarchyLevel}`)
-
+    //let menuOptions = getMenuOptions(this.graphMenuOptions, `node.${this.bottonHierarchyLevel}`)
     //initialize graph
      this.cy = cytoscape({
       container: $('#cy')[0],
       elements: customNodesAndEdges,
-       layout: customLayout,
-       style: customStyle
+      layout: customLayout,
+      style: customStyle
       });
 
       //initialize graph menus
-      if (menuOptions) {
-          menuOptions.forEach((option) => { this.cy.cxtmenu(option) });
-      }
-
-      //schedule for rendering
-      scheduleOnce('afterRender', this, function(){
-       this.cy;
-     });
-
-     //Define events we want to track
-     //Menu event
-     this.cy.on('click', (ele, itemKey, itemGroupName, menuOptiontName, newData)=>{
-         // Exec only of we called it
-         if (itemKey) {
-           let nodeOutDegree = ele.target.outdegree ? ele.target.outdegree(true) : 0 ;
-           this.nodeClicked(itemKey, itemGroupName, menuOptiontName, newData, nodeOutDegree);
-         }
-      });
-     //graph events
+  //     if (menuOptions) {
+  //         menuOptions.forEach((option) => { this.cy.cxtmenu(option) });
+  //     }
+  //
+  //     //schedule for rendering
+  //     scheduleOnce('afterRender', this, function(){
+  //      this.cy;
+  //    });
+  //
+  //    //Define events we want to track
+  //    //Menu event
+  //    this.cy.on('click', (ele, itemKey, itemGroupName, menuOptiontName, newData)=>{
+  //        // Exec only of we called it
+  //        if (itemKey) {
+  //          let nodeOutDegree = ele.target.outdegree ? ele.target.outdegree(true) : 0 ;
+  //          this.nodeClicked(itemKey, itemGroupName, menuOptiontName, newData, nodeOutDegree);
+  //        }
+  //     });
+  //    //graph events
      this.cy.on('click', 'node', (evt)=>{
-        this.nodeClicked(evt.target.data('key'), evt.target.group());
+        this.nodeClicked(evt.target.data('key'), evt.target.group(), evt.target.data('type') ) ;
       });
       this.cy.on('click', 'edge', (evt)=>{
-         this.nodeClicked(evt.target.data('key'),evt.target.group());
+         this.nodeClicked(evt.target.data('key'),evt.target.group(), evt.target.data('type'));
        });
+  },
+  actions: {
+    restyle(){
+    let prevLayout = this.prevLayout;
+    if( prevLayout ){
+        prevLayout.stop();
+      }
+
+      let layout = prevLayout = this.cy.layout( {name: this.selectedLayout} );
+
+      return layout.run().promiseOn('layoutstop');
+    },
+    setselectedLayout(selected){
+      this.set('selectedLayout',selected)
+    }
   }
+
 });
 
 /**
@@ -95,35 +124,35 @@ export default Component.extend(ComponentQueryManager, {
  * @param {String} bottomHierarchyLevel string indicating the lowest level of the hierarchy, passed
  * into the component in parameter bottonHierarchyLevel. Used to properly attach nodes to graph
  */
- function getNewData(sourceNodeKey, apollo, apolloQueryId,
-                    queryHierarchy, cy, clickType, menuOptionName,
-                    bottonHierarchyLevel){
-  let variables = {input: {_key: sourceNodeKey, direction: "outbound", maxDepth: 2 }};
-    return apollo.query({ query: queryHierarchy, variables }, apolloQueryId).then((result) => {
-        let nodes = addNodesToArray(result, bottonHierarchyLevel);
-        let edges = addEdgesToArray(result);
-        cy.batch(function(){
-          cy.add([...nodes, ...edges]);
-        });
-        cy.layout({ name: 'breadthfirst' }).run();
-        cy.emit('click', [sourceNodeKey, clickType, `after${menuOptionName}`, result])
-    });
-}
+//  function getNewData(sourceNodeKey, apollo, apolloQueryId,
+//                     queryHierarchy, cy, clickType, menuOptionName,
+//                     bottonHierarchyLevel){
+//   let variables = {input: {_key: sourceNodeKey, direction: "outbound", maxDepth: 2 }};
+//     return apollo.query({ query: queryHierarchy, variables }, apolloQueryId).then((result) => {
+//         let nodes = addNodesToArray(result, bottonHierarchyLevel);
+//         let edges = addEdgesToArray(result);
+//         cy.batch(function(){
+//           cy.add([...nodes, ...edges]);
+//         });
+//         cy.layout({ name: 'breadthfirst' }).run();
+//         cy.emit('click', [sourceNodeKey, clickType, `after${menuOptionName}`, result])
+//     });
+// }
 
 /**
  * Adds the  relationship edges to the array of values that will be used to populate the graph.
  * @param {object} modelData Contains info for the nodes. Must include e_key, eFrom & eTo
  * @returns {object} nodes ready to be attached to the graph dataset.
  */
-function addEdgesToArray(modelData){
-  let edges = modelData.map( row => {
-    return   { group: "edges", data: { id: row.e_key,
-                                source: row.eFrom,
-                                target: row.eTo,
-                                key: row.e_key } }
-  });
-  return edges
-}
+// function addEdgesToArray(modelData){
+//   let edges = modelData.map( row => {
+//     return   { group: "edges", data: { id: row.e_key,
+//                                 source: row.eFrom,
+//                                 target: row.eTo,
+//                                 key: row.e_key } }
+//   });
+//   return edges
+// }
 
 /**
  * Adds the  nodes to the array of values that will be used to populate the graph.
@@ -133,16 +162,16 @@ function addEdgesToArray(modelData){
  * @param {object} modelData Contains info for the nodes. Must include id, name & _key
  * @returns {object} nodes ready to be attached to the graph dataset.
  */
- function addNodesToArray(modelData, bottonHierarchyLevel){
-  let nodes = modelData.map(row => {
-      let node = { group: "nodes", data: { id: row._id,
-                    name: row.name,
-                    key: row._key } }
-      node.classes = row.hierarchyLevel == bottonHierarchyLevel ? bottonHierarchyLevel: 'hier'
-      return node
-    });
-    return nodes
-}
+//  function addNodesToArray(modelData, bottonHierarchyLevel){
+//   let nodes = modelData.map(row => {
+//       let node = { group: "nodes", data: { id: row._id,
+//                     name: row.name,
+//                     key: row._key } }
+//       node.classes = row.hierarchyLevel == bottonHierarchyLevel ? bottonHierarchyLevel: 'hier'
+//       return node
+//     });
+//     return nodes
+// }
 
 /**
  * Adds the root node to the array of values that will be used to populate the graph.
@@ -151,27 +180,27 @@ function addEdgesToArray(modelData){
  * @param {object} modelData Contains info for the root node. Must include id, name & _key
  * @returns {object} node ready to be attached to the graph dataset.
  */
-function addRootNodeToArray(modelData){
-  let firstNode= [];
-  firstNode.push({ group: "nodes", data: { id: modelData._id,
-                    name: modelData.name,
-                    key: modelData._key,
-                  }, classes: 'root' });
-  return firstNode;
-}
+// function addRootNodeToArray(modelData){
+//   let firstNode= [];
+//   firstNode.push({ group: "nodes", data: { id: modelData._id,
+//                     name: modelData.name,
+//                     key: modelData._key,
+//                   }, classes: 'root' });
+//   return firstNode;
+// }
 
 /**
  * Gets the layout to be used by the graph
  * @param {object} layoutFromParentUI Layout passed by parent UI in parameter graphLayout
  * @returns {object} Parent layout if available,  default layout otherwise
  */
-function getGraphLayout(layoutFromParentUI) {
-  let layout = layoutFromParentUI ? layoutFromParentUI :
-                {
-                  name: 'breadthfirst'
-                };
-  return layout
-}
+// function getGraphLayout(layoutFromParentUI) {
+//   let layout = layoutFromParentUI ? layoutFromParentUI :
+//                 {
+//                   name: 'breadthfirst'
+//                 };
+//   return layout
+// }
 /**
  * Build the graph style by using either a graph style passed by the parent UI in the parameter
  * 'graphStyle' or uses a default graph style
@@ -181,41 +210,41 @@ function getGraphLayout(layoutFromParentUI) {
  * into the component in parameter bottonHierarchyLevel
  * @returns {object} Style ready to attach to the menu
  */
-function getGraphStyle(styleFromParentUI, bottonHierarchyLevel){
-  let customStyle = [
-                      {
-                        selector: 'node',
-                        style: {
-                          'label': 'data(key)'
-                          //'font-size': 10
-                        }
-                      },
-                      {
-                        selector: 'node.root',
-                        style: {
-                          'label': 'data(name)',
-                           'shape': 'triangle',
-                           'background-color': '#6FB1FC'
-                        }
-                      },
-                      {
-                        selector: `node.${bottonHierarchyLevel}`,
-                        style: {
-                           'shape': 'diamond'
-                        }
-                      },
-                      {
-                        selector: 'edge',
-                        style: {
-                          'curve-style': 'bezier',
-                          'opacity': 0.667,
-                          'target-arrow-shape': 'triangle'
-                        }
-                      }
-                    ];
-    let style = styleFromParentUI ? styleFromParentUI : customStyle;
-    return style
-}
+// function getGraphStyle(styleFromParentUI, bottonHierarchyLevel){
+//   let customStyle = [
+//                       {
+//                         selector: 'node',
+//                         style: {
+//                           'label': 'data(key)'
+//                           //'font-size': 10
+//                         }
+//                       },
+//                       {
+//                         selector: 'node.root',
+//                         style: {
+//                           'label': 'data(name)',
+//                            'shape': 'triangle',
+//                            'background-color': '#6FB1FC'
+//                         }
+//                       },
+//                       {
+//                         selector: `node.${bottonHierarchyLevel}`,
+//                         style: {
+//                            'shape': 'diamond'
+//                         }
+//                       },
+//                       {
+//                         selector: 'edge',
+//                         style: {
+//                           'curve-style': 'bezier',
+//                           'opacity': 0.667,
+//                           'target-arrow-shape': 'triangle'
+//                         }
+//                       }
+//                     ];
+//     let style = styleFromParentUI ? styleFromParentUI : customStyle;
+//     return style
+// }
 
 /**
  * Gets the menu options to be attached to the ctxMenu. It can either use the default

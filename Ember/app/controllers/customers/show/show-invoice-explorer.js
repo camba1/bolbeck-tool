@@ -2,6 +2,30 @@ import Controller from '@ember/controller';
 import { computed } from '@ember/object';
 
 export default Controller.extend({
+  init() {
+    this._super(...arguments);
+    this.graphStyle = [
+                  {
+                    selector: 'node.invo',
+                    style: {
+                      'label': 'data(key)',
+                      'background-color': '#7a45ae'
+                      //'font-size': 10
+                    }
+                  },
+                  {
+                    selector: 'node.prod',
+                    style: {
+                      'label': 'data(key)',
+                      //'font-size': 10
+                      'background-color': '#6574cd'
+                    }
+                  }
+              ],
+    this.graphLayout = {
+                    name: 'cose'
+                  }
+  },
   selectedNode: undefined,
   edges: computed('model', function() {
     if (this.get('model')) {
@@ -22,43 +46,6 @@ export default Controller.extend({
        return [...invCustNodes,...invProdNodes];
     }
   }),
-  graphStyle: [
-                {
-                  selector: 'node.invo',
-                  style: {
-                    'label': 'data(key)',
-                    'background-color': '#7a45ae'
-                    //'font-size': 10
-                  }
-                },
-                {
-                  selector: 'node.prod',
-                  style: {
-                    'label': 'data(key)',
-                    //'font-size': 10
-                    'background-color': '#6574cd'
-                  }
-                }//,
-                // {
-                //   selector: 'node.cust',
-                //   style: {
-                //     'label': 'data(name)',
-                //      'shape': 'diamond',
-                //      'background-color': '#e74c3c'
-                //   }
-                // }//,
-                //{
-                  // selector: 'edge',
-                  // style: {
-                  //   'curve-style': 'bezier',
-                  //   'opacity': 0.667,
-                  //  'target-arrow-shape': 'triangle'
-                  //}
-              //  }
-            ],
-  graphLayout: {
-                  name: 'cose'
-                },
   actions: {
     /**
      * Controls actions bubbled up from the graph component and calls the functions
@@ -246,7 +233,7 @@ function findItem(currentModel, clickedItemKey, searchFieldName, searchLevel, is
  * @param {object} thisController Controller of the page used to get the product hierarhcy model
  * @param {String} clickedItemKey Key of the item for which we need to look up hierarchy information
  */
-function populateEdgeInfo(thisController, clickedItemKey, clickItemType) {
+function populateEdgeInfo(thisController, clickedItemKey) { //, clickItemType) {
   let currentModel = thisController.model
   let parentItem = findItem(currentModel, clickedItemKey,'invoContains_key', 1 )
   let dependentItem = parentItem[0] ? findItem(parentItem[0].products,

@@ -48,7 +48,7 @@ export default Component.extend({
           }
         }else if (nlpDoc.has('#Deleteitem')) {
           let afterModule = nlpDoc.after(mySearchPattern);
-          let id = afterModule.values();
+        //  let id = afterModule.values();
       //    this.set("nlpText", "") ;
           let myClone = nlpDoc.clone();
           myClone.insertAt(0, 'system');

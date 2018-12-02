@@ -15,15 +15,11 @@ export default Route.extend(RouteQueryManager,{
     variables = {customerKey : customerKey, input: { includeProducts: true }}
     return this.get('apollo').watchQuery({ query, variables }, "invoicesByCustomerKeyGet")
     .catch(error => alert(error));
-  }//,
-  // actions: {
-  //   didTransition() {
-  //     this.controller.set("showHierarchyNodeCard", true);
-  //     this.controller.set("showHierarchyEdgeCard", false)
-  //     this.controller.set("hierarchyNode", undefined);
-  //     this.controller.set("hierarchyEdge", undefined);
-  //     this.controller.set('expandedNodeData',[]);
-  //     return true;
-  //   }
-  // }
+  },
+  actions: {
+    didTransition() {
+      this.controller.set("selectedNode", true);
+      return true;
+    }
+  }
 });

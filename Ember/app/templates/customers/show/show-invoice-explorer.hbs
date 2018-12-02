@@ -16,16 +16,42 @@
         <div class="card-header">
           Invoice
         </div>
-        <div class="card-body">
-          Test
+        <div class="card-body py-1">
+          <ul class="list-group list-group-flush py-0">
+            {{#each selectedNode as |selectedInvoice|}}
+              <li class="list-group-item py-0">
+                  <div class="small mb-0">
+                    {{#link-to "invoices.show.show-detail" selectedInvoice._key class="key"}}
+                      {{selectedInvoice._key}}
+                    {{/link-to}}
+                  </div>
+                  <span class="small">{{selectedInvoice.invoiceDate}} -
+                  ${{selectedInvoice.totAmount}}</span>
+                </li>
+            {{/each}}
+          </ul>
         </div>
       </div>
-      <div class="card">
+      <div class="card" >
         <div class="card-header">
           Products
         </div>
-        <div class="card-body">
-          Test 2
+        <div class="card-body py-1">
+          <ul class="list-group list-group-flush py-0 addscroll">
+          {{#each selectedNode as |selectedInvoice|}}
+            {{#each selectedInvoice.products as |selectedProduct|}}
+            <li class="list-group-item py-0">
+              <div class="small"><b>{{selectedProduct.productName}}</b></div>
+              <span class="small">
+                ({{#link-to "products.show.show-detail" selectedProduct.product_key}}
+                  {{selectedProduct.product_key}}
+                {{/link-to}}) -
+                ${{selectedProduct.unitPrice}}
+                x{{selectedProduct.quanty}} </span>
+              </li>
+            {{/each}}
+          {{/each}}
+          </ul>
         </div>
       </div>
     </div>
@@ -45,12 +71,17 @@
         <tbody class='mybody'>
           {{#each model as |invoiceRow| }}
             <tr class="myrow">
-              <td>
+              <td class="customerName">{{invoiceRow.customerName}}</td>
+              <!-- <td>
                 {{#link-to "invoices.show.show-detail" invoiceRow._key class="customerName"}}
                   {{invoiceRow.customerName}}
                 {{/link-to}}
-              </td>
-              <td class="key">{{invoiceRow._key}}</td>
+              </td> -->
+              <td>
+                {{#link-to "invoices.show.show-detail" invoiceRow._key class="key"}}
+                  {{invoiceRow._key}}
+                {{/link-to}}
+                </td>
               <td class="formula">{{invoiceRow.invoiceDate}}</td>
               <td class="type">{{invoiceRow.totAmount}}</td>
             </tr>

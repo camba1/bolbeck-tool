@@ -14,3 +14,8 @@
      width: 100%;
      box-sizing: border-box;
 }
+
+.addscroll {
+  max-height: 400px;
+  overflow-y: auto;
+}

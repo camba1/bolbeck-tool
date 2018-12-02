@@ -3,8 +3,6 @@ import { computed } from '@ember/object';
 
 export default Controller.extend({
   selectedNode: undefined,
-  selectedEdge: undefined,
-  selectedEdgeParent: undefined,
   edges: computed('model', function() {
     if (this.get('model')) {
       let model = this.get('model');
@@ -184,18 +182,36 @@ function getInvProductNodes(model){
 function populateNodeInfo(thisController, clickedItemKey, clickItemType) {
   let searchLevel = 0;
   let searchFieldName = "";
+  let clickedItem = [];
   if (clickItemType == 'invo') {
     searchLevel = 0;
     searchFieldName = 'invoBillTo_key';
+    clickedItem = findItem(thisController.model, clickedItemKey, searchFieldName, searchLevel)
+
   } else {
     searchLevel = 1;
     searchFieldName = 'product_key';
+    let parentItem = findItem(thisController.model, clickedItemKey, searchFieldName, searchLevel)
+    searchLevel = 0;
+    let dependentItem = parentItem[0] ? findItem(parentItem[0].products,
+                                                  clickedItemKey,
+                                                   'product_key', 0) : []
+
+    clickedItem = parentItem.map(a => {return {_key: a._key,
+                                              invoiceDate: a.invoiceDate,
+                                              totAmount: a.totAmount } });
+
+     clickedItem[0].products =  clickedItem[0] ? dependentItem : [];
   }
-  let clickedItem = findItem(thisController.model, clickedItemKey, searchFieldName, searchLevel)
+
   thisController.set("selectedNode", clickedItem) ;
+
+
   // thisController.set("showHierarchyNodeCard", true);
   // thisController.set("showHierarchyEdgeCard", false)
 }
+
+
 /**
  * Searches the product model, the productHierarchy model and the expanded data for
  * a particular record
@@ -232,12 +248,14 @@ function findItem(currentModel, clickedItemKey, searchFieldName, searchLevel, is
  */
 function populateEdgeInfo(thisController, clickedItemKey, clickItemType) {
   let currentModel = thisController.model
-  let clickedItem = findItem(currentModel, clickedItemKey,'invoContains_key', 1 )
-  let dependentItem = clickedItem[0] ? findItem(clickedItem[0].products,
+  let parentItem = findItem(currentModel, clickedItemKey,'invoContains_key', 1 )
+  let dependentItem = parentItem[0] ? findItem(parentItem[0].products,
                                                 clickedItemKey,
                                                  'invoContains_key', 0) : []
-  thisController.set("selectedEdgeParent", clickedItem);
-  thisController.set("selectedEdge", dependentItem) ;
-  // thisController.set("showHierarchyNodeCard", false);
-  // thisController.set("showHierarchyEdgeCard", true)
+  let clickedItem = parentItem.map(a =>
+                                 {return {_key: a._key,
+                                         invoiceDate: a.invoiceDate,
+                                         totAmount: a.totAmount } });
+  clickedItem[0].products =  clickedItem[0] ? dependentItem : [];
+  thisController.set("selectedNode", clickedItem) ;
 }

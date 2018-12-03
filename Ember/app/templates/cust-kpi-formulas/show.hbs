@@ -28,13 +28,23 @@
         {{input id="custKpiFormulacalculationOrder" class="modelCalculationOrder" type="number" value=custKpiFormula.calculationOrder}}
       </div>
     {{/with}}
-    <button class="btn btn-primary btn-sm updateDataBtn" {{action "updateData"}}>Update</button>
-    <button class="btn btn-secondary btn-sm deleteDataBtn" {{action "deleteData"}}>Delete</button>
+    <button class="btn btn-primary btn-sm updateDataBtn py-0" {{action "updateData"}}> {{fa-icon 'save'}} <div class='small'>update </div></button>
+    <button class="btn btn-secondary btn-sm deleteDataBtn py-0" {{action "deleteData"}}> {{fa-icon 'archive'}} <div class='small'>delete </div></button>
   {{else}}
     <div class="detail noData">
       No data found. Record may have been deleted by another user
     </div>
     <br>
   {{/if}}
-  {{#link-to "cust-kpi-formulas" class="btn btn-primary btn-sm backBtn"}}Back{{/link-to}}
+  {{#link-to "cust-kpi-formulas" class="btn btn-primary btn-sm backBtn py-0"}} {{fa-icon 'arrow-alt-circle-left'}} <div class='small'>Back </div> {{/link-to}}
 </div>
+<!-- {{button/update-delete model = model 
+  onUpdateData=(action "updateData")
+  onDeleteData=(action "deleteData")
+}} -->
+<!-- <button class="btn btn-primary btn-sm updateDataBtn" {{action "updateData"}}>Update </button>
+<button class="btn btn-secondary btn-sm deleteDataBtn" {{action "deleteData"}}>Delete </button>
+{{#link-to "cust-kpi-formulas" class="btn btn-primary btn-sm backBtn"}}Back  {{/link-to}}<br/>
+<button class="btn btn-primary btn-sm updateDataBtn" {{action "updateData"}}>Update {{fa-icon 'save'}}</button>
+<button class="btn btn-secondary btn-sm deleteDataBtn" {{action "deleteData"}}>Delete {{fa-icon 'archive'}}</button> -->
+<!-- {{#link-to "cust-kpi-formulas" class="btn btn-primary btn-sm backBtn"}}Back {{fa-icon 'arrow-alt-circle-left'}} {{/link-to}} -->

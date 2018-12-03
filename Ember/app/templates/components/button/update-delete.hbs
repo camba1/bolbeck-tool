@@ -1,0 +1,11 @@
+{{#if model }}
+  <button class="btn btn-primary btn-sm updateDataBtn py-0" {{action "updateParentData"}}> {{fa-icon 'save'}} <div class='small'>update </div></button>
+  <button class="btn btn-secondary btn-sm deleteDataBtn py-0" {{action "deleteParentData"}}> {{fa-icon 'archive'}} <div class='small'>delete </div></button>
+{{else}}
+<div class="detail noData">
+  No data found. Record may have been deleted by another user
+</div>
+<br>
+{{/if}}
+{{#link-to "cust-kpi-formulas" class="btn btn-primary btn-sm backBtn py-0"}} {{fa-icon 'arrow-alt-circle-left'}} <div class='small'>Back </div> {{/link-to}}
+{{yield}}

@@ -27,7 +27,20 @@ module.exports = function(environment) {
       // Optionally, set the credentials property of the Fetch Request interface
       // to control when a cookie is sent:
       // requestCredentials: 'same-origin', // other choices: 'include', 'omit'
-    }
+    },
+    fontawesome: {
+        icons: {
+          'free-solid-svg-icons': [
+                                    'stroopwafel',
+                                    'save',
+                                    'archive',
+                                    'trash-alt',
+                                    'arrow-alt-circle-left',
+                                    'link',
+                                    'expand-arrows-alt'
+                                   ]
+        }
+      }
   };
 
   if (environment === 'development') {

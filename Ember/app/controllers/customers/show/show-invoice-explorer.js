@@ -4,11 +4,12 @@ import { computed } from '@ember/object';
 export default Controller.extend({
   init() {
     this._super(...arguments);
+  //  this.graphNodesAndEdges = [],
     this.graphStyle = [
                   {
                     selector: 'node.invo',
                     style: {
-                      'label': 'data(key)',
+                      'label': 'data(name)',
                       'background-color': '#7a45ae'
                       //'font-size': 10
                     }
@@ -20,6 +21,14 @@ export default Controller.extend({
                       //'font-size': 10
                       'background-color': '#6574cd'
                     }
+                  },
+                  {
+                    selector: 'node.prodGroup',
+                    style: {
+                      'label': 'data(name)',
+                      //'font-size': 10
+                      'background-color': '#C3C3E5'
+                    }
                   }
               ],
     this.graphLayout = {
@@ -27,24 +36,20 @@ export default Controller.extend({
                   }
   },
   selectedNode: undefined,
-  edges: computed('model', function() {
-    if (this.get('model')) {
-      let model = this.get('model');
-      let invProdEdges = getInvProductEdges(model);
-      // let invCustEdges = getInvCustEdges(model);
-      // return [...invCustEdges,...invProdEdges];
-      return invProdEdges;
+  graphGroupMode: 'none',
+  nodesAndEdges: computed('model', function() {
+    if (this.graphGroupMode == "none") {
+      if (this.get('model')) {
+        let model = this.get('model');
+        let invCustNodes = getInvCustNodes(model)
+        let prodNodesAndEdges = getProdNodesAndEdges(model)
+        //this.set('graphNodesAndEdges', [...invCustNodes, ...prodNodesAndEdges])
+        return [...invCustNodes, ...prodNodesAndEdges]
+      }
+    } else {
+        return getGroupedInvProdNodesEdges(this)
     }
-  }),
-  nodes: computed('model', function() {
-    if (this.get('model')) {
-      let model = this.get('model');
-      let invProdNodes = getInvProductNodes(model);
-      let invCustNodes = getInvCustNodes(model);
-      // let custNode = getCustNode(model);
-      // return [...custNode,...invCustNodes,...invProdNodes];
-       return [...invCustNodes,...invProdNodes];
-    }
+
   }),
   actions: {
     /**
@@ -79,8 +84,11 @@ export default Controller.extend({
   }
 });
 
-function getInvProductEdges(model){
-  let result = []
+
+function getProdNodesAndEdges(model){
+  let edges = []
+  let nodes = []
+  let prodIds = []
   var invoiceId = ""
   let product = {}
   for  (let invoiceIdx in model) {
@@ -88,28 +96,32 @@ function getInvProductEdges(model){
     for (let productIdx in model[invoiceIdx].products) {
       product = model[invoiceIdx].products[productIdx]
       if (typeof(product) == 'object') {
-      result.push({ group: "edges", data: {id: product.invoContains_id,
+        //Add product edges
+        edges.push({ group: "edges", data: {id: product.invoContains_id,
                                           source: invoiceId,
                                           target: product.product_id,
                                           key: product.invoContains_key,
                                           type: 'invoProd'
                                          }
                   })
+        // Add unique product nodes
+        if (!prodIds.includes(product.product_id)){
+          prodIds.push(product.product_id)
+          nodes.push({ group: "nodes",
+                        data: {id: product.product_id,
+                              name: product.product_key,
+                              key: product.product_key,
+                              type: 'prod'
+                              },
+                        classes: 'prod'
+
+                      })
+        }
       }
     }
   }
-  return result;
+  return [...nodes, ...edges];
 }
-
-// function getInvCustEdges(model){
-//   return model.map(a => {return { group: "edges", data: { id: a.invoBillTo_id,
-//                                                   source: a.customer_id,
-//                                                   target: a._id,
-//                                                   key: a.invoBillTo_key
-//                                                   }
-//                                   }
-//                           })
-// }
 
 function getInvCustNodes(model){
   return model.map(a => {return { group: "nodes",
@@ -124,40 +136,96 @@ function getInvCustNodes(model){
                           })
 }
 
-function getInvProductNodes(model){
-  let result = []
-  let prodIds = []
-  //var invoiceKey = ""
-  let product = {}
-  for  (let invoiceIdx in model) {
-    //invoiceKey = model[invoiceIdx]._key
-    for (let productIdx in model[invoiceIdx].products) {
-      product = model[invoiceIdx].products[productIdx]
-      if (typeof(product) == 'object' && !prodIds.includes(product.product_id)){
-        prodIds.push(product.product_id)
-        result.push({ group: "nodes",
-                      data: {id: product.product_id,
-                            name: product.product_key,
-                            key: product.product_key,
-                            type: 'prod'
-                            },
-                      classes: 'prod'
 
-                    })
+function getGroupedInvProdNodesEdges(thisController) {
+  if (thisController.get('model')) {
+    let model = thisController.get('model');
+
+
+    let prodMap = new Map();
+    var key = ""
+    var newValue = ""
+    var currInvoiceid = ""
+    //Create map product -> Invoice(s)
+    model.forEach( function(invoice) {
+      if (invoice.products) {
+        currInvoiceid = invoice._id
+        invoice.products.forEach( function(product) {
+          key = product.product_id
+          if (prodMap.has(key)) {
+            //make sure we do not add it twice
+             let oldVal = prodMap.get(key).split(",")
+             if (!oldVal.includes(currInvoiceid)) {
+               newValue = prodMap.get(key) + "," + currInvoiceid
+               prodMap.set(key, newValue )
+             }
+            //prodMap.get(key).push(currInvoiceid)
+          } else {
+            prodMap.set(key, currInvoiceid)
+          }
+        })
+      }
+    })
+    //incert the mapping to group invoices that have product
+    let invMap = new Map();
+    for (var [oldKey, oldValue] of prodMap) {
+      if (invMap.has(oldValue)){
+        // newValue = invMap.get(oldValue).push(oldKey)
+        // invMap.set(oldvalue, newValue)
+        invMap.get(oldValue).push(oldKey)
+      } else {
+        invMap .set(oldValue, [oldKey])
       }
     }
+    //return invMap
+    //Build the object to use with graph
+    let invNodes = getInvCustNodes(model);
+    let productNodes = [];
+    let invProdEdges = [];
+    var i = 0;
+    const group = "G"
+    var currentGroupId = ""
+    for (var [invoiceListString, productListArray] of invMap) {
+        currentGroupId = `${group}${i}`;
+        productNodes.push({ group: "nodes",
+                      data: {id: currentGroupId,
+                            name: `${productListArray.length} prds`,
+                            key: currentGroupId,
+                            type: 'prodGroup',
+                            products: productListArray
+                            },
+                      classes: 'prodGroup'
+                    })
+        invoiceListString.split(",").map(invoiceId => {
+          invProdEdges.push({ group: "edges", data: {id: `${currentGroupId}${invoiceId}`,
+                                              source: invoiceId,
+                                              target: currentGroupId,
+                                              key: `${currentGroupId}${invoiceId}`,
+                                              type: 'invoProd'
+                                             }
+                      })
+        })
+        i++;
+    }
+    let returnVal = [...invNodes, ...productNodes, ...invProdEdges]
+    //thisController.set('graphNodesAndEdges', returnVal)
+    return returnVal
+
+
   }
-  return result;
 }
 
-// function getCustNode(model){
-//   let firstNode= [];
-//   let firstItemInModel = model[0];
-//   firstNode.push({ group: "nodes", data: { id: firstItemInModel.customer_id,
-//                     name: firstItemInModel.customerName,
-//                     key: firstItemInModel.customer_key,
-//                   }, classes: 'cust' });
-//   return firstNode;
+// function populateNodeInfoFromGroup(thisController, clickedItemKey, clickItemType){
+//   let searchLevel = 1;
+//   let searchFieldName = "";
+//   let foundItems = [];
+//   let clickedItem = [];
+//   searchFieldName = "target";
+//   foundItems = findItem(thisController.nodesAndEdges, clickedItemKey, searchFieldName, searchLevel)
+//   searchFieldName = "key";
+//   foundItems = findItem(thisController.nodesAndEdges, clickedItemKey, searchFieldName, searchLevel)
+//   let products = (foundItems) ? foundItems : [];
+//   thisController.set("selectedNode", clickedItem) ;
 // }
 
 /**
@@ -193,9 +261,6 @@ function populateNodeInfo(thisController, clickedItemKey, clickItemType) {
 
   thisController.set("selectedNode", clickedItem) ;
 
-
-  // thisController.set("showHierarchyNodeCard", true);
-  // thisController.set("showHierarchyEdgeCard", false)
 }
 
 
@@ -208,14 +273,16 @@ function populateNodeInfo(thisController, clickedItemKey, clickItemType) {
  * look for the clickedItemKey
  * @returns {object} Item found or undefined
  */
-function findItem(currentModel, clickedItemKey, searchFieldName, searchLevel, isRecursion = false) {
+function findItem(currentModel, clickedItemKey, searchFieldName, searchLevel,
+                  isRecursion = false, childModelField = 'products') {
   let clickedItems;
   if (searchLevel <= 0) {
     clickedItems = currentModel.find((item) => { return item[searchFieldName]== clickedItemKey} ) ;
   } else {
     let modelsFound = [];
     currentModel.forEach( function(childModel) {
-        let item = findItem(childModel.products, clickedItemKey, searchFieldName, searchLevel - 1, true);
+        let item = findItem(childModel[childModelField], clickedItemKey, searchFieldName,
+                            searchLevel - 1, true, childModelField);
         if ( item ) {
           modelsFound.push(childModel);
         }

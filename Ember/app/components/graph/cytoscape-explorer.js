@@ -43,12 +43,20 @@ export default Component.extend(ComponentQueryManager, {
     // //Add source node
     // let firstNode = addRootNodeToArray(rootModel);
     //Add all other nodes
-    let nodes = this.nodes;
+    let customNodesAndEdges = [];
+    if (this.nodesAndEdges) {
+      customNodesAndEdges = this.nodesAndEdges
+     }
+    else {
+      customNodesAndEdges = [...this.nodes, ...this.edges];
+    }
+
+    // let nodes = this.nodes;
     //Add the relationship edges
-    let edges = this.edges;
+    // let edges = this.edges;
     //Combine node and edges
     // let customNodesAndEdges = [...firstNode,...nodes, ...edges];
-    let customNodesAndEdges = [...nodes, ...edges];
+    // let customNodesAndEdges = [...nodes, ...edges];
     //declare graph layout
     let customLayout = this.graphLayout;
     //declare graph style

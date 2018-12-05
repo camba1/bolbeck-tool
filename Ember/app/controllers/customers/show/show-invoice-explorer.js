@@ -151,7 +151,7 @@ function getGroupedInvProdNodesEdges(thisController) {
       if (invoice.products) {
         currInvoiceid = invoice._id
         invoice.products.forEach( function(product) {
-          key = product.product_id
+          key = product.product_key
           if (prodMap.has(key)) {
             //make sure we do not add it twice
              let oldVal = prodMap.get(key).split(",")
@@ -215,18 +215,57 @@ function getGroupedInvProdNodesEdges(thisController) {
   }
 }
 
-// function populateNodeInfoFromGroup(thisController, clickedItemKey, clickItemType){
-//   let searchLevel = 1;
-//   let searchFieldName = "";
-//   let foundItems = [];
-//   let clickedItem = [];
-//   searchFieldName = "target";
-//   foundItems = findItem(thisController.nodesAndEdges, clickedItemKey, searchFieldName, searchLevel)
-//   searchFieldName = "key";
-//   foundItems = findItem(thisController.nodesAndEdges, clickedItemKey, searchFieldName, searchLevel)
-//   let products = (foundItems) ? foundItems : [];
-//   thisController.set("selectedNode", clickedItem) ;
-// }
+function populateNodeInfoFromGroup(thisController, clickedItemKey, clickItemType){
+  let searchLevel = 0;
+  let searchFieldName = "";
+  let products = [];
+  let clickedItem = [];
+  searchFieldName = "key";
+  let prodsReturn = [];
+
+  thisController.nodesAndEdges.some( function(childModel) {
+    if (childModel.group == "nodes" && childModel.data.key == clickedItemKey){
+      products = childModel.data.products;
+      return true
+    }
+    return false
+  })
+  if (products){
+    searchLevel = 1;
+    searchFieldName = 'product_key';
+    let invoices = findItem(thisController.model, products[0], searchFieldName, searchLevel)
+    clickedItem = invoices.map(a => {return {_key: a._key,
+                                              invoiceDate: a.invoiceDate,
+                                              totAmount: a.totAmount } });
+    let foundProds = [];
+    let index = 0;
+
+    invoices.forEach( function(invoice){
+      invoice.products.forEach(function(invProduct) {
+        if (products.includes(invProduct.product_key)) {
+          if (foundProds.includes(invProduct.product_key)) {
+            index = foundProds.indexOf(invProduct.product_key);
+            prodsReturn[index].quanty += invProduct.quanty;
+            prodsReturn[index].totamount += invProduct.quanty * invProduct.unitPrice;
+            prodsReturn[index].unitPrice = (prodsReturn[index].quanty !=0) ?
+                            prodsReturn[index].totamount / prodsReturn[index].quanty : 0 ;
+          } else {
+            foundProds.push(invProduct.product_key)
+            prodsReturn.push({ product_key: invProduct.product_key,
+                                productName: invProduct.productName,
+                                unitPrice: invProduct.unitPrice,
+                                quanty: invProduct.quanty,
+                                totamount: invProduct.quanty * invProduct.unitPrice
+            })
+          }
+        }
+      })
+    })
+  }
+
+  if (clickedItem[0]) {clickedItem[0].products = prodsReturn};
+  return clickedItem
+}
 
 /**
  * Searches for the information of a particular node record. Populates
@@ -243,7 +282,7 @@ function populateNodeInfo(thisController, clickedItemKey, clickItemType) {
     searchFieldName = 'invoBillTo_key';
     clickedItem = findItem(thisController.model, clickedItemKey, searchFieldName, searchLevel)
 
-  } else {
+  } else if (clickItemType == 'prod') {
     searchLevel = 1;
     searchFieldName = 'product_key';
     let parentItem = findItem(thisController.model, clickedItemKey, searchFieldName, searchLevel)
@@ -257,6 +296,8 @@ function populateNodeInfo(thisController, clickedItemKey, clickItemType) {
                                               totAmount: a.totAmount } });
 
      clickedItem[0].products =  clickedItem[0] ? dependentItem : [];
+  } else {
+    clickedItem = populateNodeInfoFromGroup(thisController, clickedItemKey, clickItemType)
   }
 
   thisController.set("selectedNode", clickedItem) ;

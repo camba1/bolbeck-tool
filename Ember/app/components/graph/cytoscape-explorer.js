@@ -106,8 +106,9 @@ export default Component.extend(ComponentQueryManager, {
       }
 
       let layout = prevLayout = this.cy.layout( {name: this.selectedLayout} );
-
-      return layout.run().promiseOn('layoutstop');
+      if (layout) {
+        return layout.run().promiseOn('layoutstop');
+      }
     },
     setselectedLayout(selected){
       this.set('selectedLayout',selected)

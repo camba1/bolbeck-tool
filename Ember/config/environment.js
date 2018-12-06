@@ -31,13 +31,13 @@ module.exports = function(environment) {
     fontawesome: {
         icons: {
           'free-solid-svg-icons': [
-                                    'stroopwafel',
                                     'save',
                                     'archive',
                                     'trash-alt',
                                     'arrow-alt-circle-left',
                                     'link',
-                                    'expand-arrows-alt'
+                                    'expand-arrows-alt',
+                                    'bars'
                                    ]
         }
       }

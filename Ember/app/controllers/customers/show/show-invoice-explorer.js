@@ -33,7 +33,33 @@ export default Controller.extend({
               ],
     this.graphLayout = {
                     name: 'cose'
-                  }
+                  },
+    this.graphMenuOptions = [
+          {menuSelector:"node.prodGroup",
+           menuItems: [ {content:"Exp",
+                        dataReturnField: "id",
+                        menuItemId: "expand"},
+                        {content:"Hide",
+                        dataReturnField: "id",
+                        menuItemId: "hide"}
+                        ] },
+          {menuSelector:"node.invo",
+           menuItems: [ {content:"Go",
+                        dataReturnField: "id",
+                        menuItemId: "link"},
+                        {content:"Hide",
+                        dataReturnField: "id",
+                        menuItemId: "hide"}
+                          ] },
+          {menuSelector:"node.prod",
+           menuItems: [ {content:"Go",
+                        dataReturnField: "id",
+                        menuItemId: "link"},
+                        {content:"Hide",
+                        dataReturnField: "id",
+                        menuItemId: "hide"}
+                        ] }
+          ]
   },
   selectedNode: undefined,
   graphGroupMode: 'none',
@@ -80,7 +106,21 @@ export default Controller.extend({
          clickType == 'nodes' ? populateNodeInfo(this, clickedItemKey, clickItemType) :
                                populateEdgeInfo(this, clickedItemKey, clickItemType)
        // }
-    }
+    },
+    graphMenuClicked(clickedItemKey, clickType, clickItemType, menuOptionName ) {
+      let key = clickedItemKey.substring(clickedItemKey.indexOf('/')+1);
+       switch(menuOptionName) {
+           case 'link':
+               let mainObject = (clickItemType == 'prod') ? 'products' : 'invoices'
+               this.transitionToRoute(`${mainObject}.show.show-detail`,key)
+               break;
+           case 'expand':
+               alert('expand')
+               break;
+           default:
+               throw 'Unknown menu option in the graph. Please contact support.'
+       }
+    },
   }
 });
 
@@ -215,7 +255,7 @@ function getGroupedInvProdNodesEdges(thisController) {
   }
 }
 
-function populateNodeInfoFromGroup(thisController, clickedItemKey, clickItemType){
+function populateNodeInfoFromGroup(thisController, clickedItemKey){ //}, clickItemType){
   let searchLevel = 0;
   let searchFieldName = "";
   let products = [];
@@ -263,7 +303,7 @@ function populateNodeInfoFromGroup(thisController, clickedItemKey, clickItemType
     })
   }
 
-  if (clickedItem[0]) {clickedItem[0].products = prodsReturn};
+  if (clickedItem[0]) {clickedItem[0].products = prodsReturn}
   return clickedItem
 }
 

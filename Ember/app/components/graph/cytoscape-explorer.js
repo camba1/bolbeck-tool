@@ -13,6 +13,9 @@ export default Component.extend(ComponentQueryManager, {
                    {value: 'concentric', label: 'Concentric'},
                    {value: 'grid', label: 'Grid'},
                    {value: 'random', label: 'Random'}];
+    this.graphGroupings= [{value: 'none', label: 'None'},
+                          {value: 'prod', label: 'Products'},
+                          {value: 'sharedProd', label: 'Shared products'}]
   },
   tagName: '',
   selectedLayout: null,
@@ -23,26 +26,15 @@ export default Component.extend(ComponentQueryManager, {
 
   // when the user clicks on the graph or the menus, we can forward the events
   // upstream
-  nodeClicked: function(clickedNodeKey, clickType, menuOptionName, newData, nodeOutDegree) {
-    // if (menuOptionName == 'expand') {
-    //   //Only try to expand nodes that have not been expanded before
-    //   if (nodeOutDegree == 0) {
-    //       getNewData(clickedNodeKey, this.get('apollo'), this.apolloQueryId,
-    //                           this.queryHierarchy, this.cy,
-    //                           clickType, menuOptionName, this.bottonHierarchyLevel);
-    //   }
-    // } else {
-      this.onNodeClicked(clickedNodeKey, clickType, menuOptionName, newData);
-    // }
+  nodeClicked: function(clickedNodeKey, clickType, clickItemType) {
+      this.onNodeClicked(clickedNodeKey, clickType, clickItemType);
+  },
+  menuClicked: function(clickedNodeKey, clickType, clickItemType, menuOptionName, nodeOutDegree) {
+      this.onMenuClicked(clickedNodeKey, clickType, clickItemType, menuOptionName);
   },
 
   didInsertElement: function() {
     this._super();
-    // let myModel = this.model;
-    // let rootModel = this.rootModel[0];
-    // //Add source node
-    // let firstNode = addRootNodeToArray(rootModel);
-    //Add all other nodes
     let customNodesAndEdges = [];
     if (this.nodesAndEdges) {
       customNodesAndEdges = this.nodesAndEdges
@@ -50,19 +42,12 @@ export default Component.extend(ComponentQueryManager, {
     else {
       customNodesAndEdges = [...this.nodes, ...this.edges];
     }
-
-    // let nodes = this.nodes;
-    //Add the relationship edges
-    // let edges = this.edges;
-    //Combine node and edges
-    // let customNodesAndEdges = [...firstNode,...nodes, ...edges];
-    // let customNodesAndEdges = [...nodes, ...edges];
     //declare graph layout
     let customLayout = this.graphLayout;
     //declare graph style
     let customStyle = this.graphStyle;
     //build menu options
-    //let menuOptions = getMenuOptions(this.graphMenuOptions, `node.${this.bottonHierarchyLevel}`)
+    let menuOptions = getMenuOptions(this.graphMenuOptions)
     //initialize graph
      this.cy = cytoscape({
       container: $('#cy')[0],
@@ -72,24 +57,24 @@ export default Component.extend(ComponentQueryManager, {
       });
 
       //initialize graph menus
-  //     if (menuOptions) {
-  //         menuOptions.forEach((option) => { this.cy.cxtmenu(option) });
-  //     }
-  //
-  //     //schedule for rendering
-  //     scheduleOnce('afterRender', this, function(){
-  //      this.cy;
-  //    });
-  //
-  //    //Define events we want to track
-  //    //Menu event
-  //    this.cy.on('click', (ele, itemKey, itemGroupName, menuOptiontName, newData)=>{
-  //        // Exec only of we called it
-  //        if (itemKey) {
-  //          let nodeOutDegree = ele.target.outdegree ? ele.target.outdegree(true) : 0 ;
-  //          this.nodeClicked(itemKey, itemGroupName, menuOptiontName, newData, nodeOutDegree);
-  //        }
-  //     });
+      if (menuOptions) {
+          menuOptions.forEach((option) => { this.cy.cxtmenu(option) });
+      }
+
+      //schedule for rendering
+      scheduleOnce('afterRender', this, function(){
+       this.cy;
+     });
+
+     //Define events we want to track
+     //Menu event
+     this.cy.on('click', (ele, itemKey, itemGroupName, itemType, menuOptiontName)=>{
+         // Exec only of we called it
+         if (itemKey) {
+           let nodeOutDegree = ele.target.outdegree ? ele.target.outdegree(true) : 0 ;
+           this.menuClicked(itemKey, itemGroupName, itemType, menuOptiontName, nodeOutDegree);
+         }
+      });
   //    //graph events
      this.cy.on('click', 'node', (evt)=>{
         this.nodeClicked(evt.target.data('key'), evt.target.group(), evt.target.data('type') ) ;
@@ -265,10 +250,11 @@ export default Component.extend(ComponentQueryManager, {
  * to the bottom of the hierarchy. Not use for customer menu options
  * @returns {object} menuOptions ready to be attached to the menu
  */
-function getMenuOptions(menuFromParentUI, menuSelector){
-  let menuOptions = menuFromParentUI ? menuFromParentUI :
-                    [buildMenuOptions(menuSelector, false),
-                     buildMenuOptions('node.hier', true)];
+function getMenuOptions(menuBuildingBlocks){
+  let menuOptions = [];
+  if (menuBuildingBlocks) {
+    menuOptions = menuBuildingBlocks.map(menuBuildingBlock => { return buildMenuOptions(menuBuildingBlock)} )
+  }
   return menuOptions
 }
 /**
@@ -282,32 +268,30 @@ function getMenuOptions(menuFromParentUI, menuSelector){
  * @param {Boolean} enableSecondCommand Indicates wether the expand option should be enabled
  * @returns {object} cyMenuOptions Configured menu options ready to be attached to the menu
  */
-function buildMenuOptions(menuSelector, enableSecondCommand){
+function buildMenuOptions(menuBuildingBlock){
 
-  let cyMenuCommands = [
-                            {
-                              content: 'Go',
-                              select: function(ele){
-                                ele.emit('click', [ele.data('key'), ele.group(), 'link']);
-                              }
-                            },
-                            {
-                              content: 'Exp',
-                              select: function(ele){
-                                ele.emit('click', [ele.data('key'), ele.group(), 'expand']);
-                              },
-                              enabled: enableSecondCommand
-                            }
-                        ]   ;
-  let cyMenuOptions = {
-                    selector: menuSelector,//'node.sku',//, edge',
-                    menuRadius: 60,
-                    commands: cyMenuCommands,
-                    spotlightPadding: 2,
-                    activePadding: 10,
-                    indicatorSize: 18,
-                    minSpotlightRadius: 15,
-                    maxSpotlightRadius: 25
-  };
-  return cyMenuOptions
+  let cyMenuCommands = menuBuildingBlock.menuItems.map(menuItem => {
+                                      return  {
+                                            content: menuItem.content,
+                                            select: function(ele){
+                                                ele.emit('click',
+                                                [ele.data(`${menuItem.dataReturnField}`),
+                                                ele.group(),
+                                                ele.data('type'),
+                                                `${menuItem.menuItemId}`]);
+                                              }
+                                          }
+                                        })
+    let cyMenuOptions = {
+                      selector: menuBuildingBlock.menuSelector,//'node.sku',//, edge',
+                      menuRadius: 60,
+                      commands: cyMenuCommands,
+                      spotlightPadding: 2,
+                      activePadding: 10,
+                      indicatorSize: 18,
+                      minSpotlightRadius: 15,
+                      maxSpotlightRadius: 25
+    };
+    return cyMenuOptions
+
 }

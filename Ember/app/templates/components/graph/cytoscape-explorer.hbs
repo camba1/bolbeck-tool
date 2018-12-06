@@ -1,24 +1,35 @@
-<div class="container bg-white" >
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="inputGroupSelect01">Layout</label>
-            </div>
-            <select class="custom-select" onchange={{action "setselectedLayout" value="target.value" }}>
-              <!-- <option value="random">Random</option>
-              <option value="grid">Grid</option>
-              <option value="circle">Circle</option>
-              <option value="concentric">Concentric</option>
-              <option value="cose">Cose</option>
-              <option value="breadthfirst">Breadthfirst</option> -->
-              {{#each graphLayouts as |layoutOption| }}
-                <option value={{layoutOption.value}}>{{layoutOption.label}}</option>
-              {{/each}}
-            </select>
-            <div class="input-group-append">
-              <button class="btn btn-outline-secondary" type="button" {{action "restyle"}}>Restyle</button>
-            </div>
-          </div>
-          <!-- <button type="button" class="btn btn-outline-secondary btn-sm">Restyle</button> -->
+<div class="container bg-white py-0 px-2" >
+    <button class="btn btn-link p-0" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+      {{fa-icon 'bars'}}
+    </button>
+  <div class="collapse" id="collapseExample">
+    <div class="card card-body">
+      <div class="input-group my-1">
+        <div class="input-group-prepend">
+          <label class="input-group-text" for="inputGroupSelect01">Layout</label>
+        </div>
+        <select class="custom-select" onchange={{action "setselectedLayout" value="target.value" }}>
+          {{#each graphLayouts as |layoutOption| }}
+            <option value={{layoutOption.value}}>{{layoutOption.label}}</option>
+          {{/each}}
+        </select>
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary" type="button" {{action "restyle"}}>Restyle</button>
+        </div>
+      </div>
+      <div class="input-group mb-1">
+        <div class="input-group-prepend">
+          <label class="input-group-text" for="inputGroupSelect02">Groups</label>
+        </div>
+        <select class="custom-select" onchange={{action "setselectedLayout" value="target.value" }}>
+          {{#each graphGroupings as |groupOption| }}
+            <option value={{groupOption.value}}>{{groupOption.label}}</option>
+          {{/each}}
+        </select>
+      </div>
+    </div>
+  </div>
+
   <div id="cy"></div>
 </div>
 {{yield}}

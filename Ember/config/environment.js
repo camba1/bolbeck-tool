@@ -37,7 +37,10 @@ module.exports = function(environment) {
                                     'arrow-alt-circle-left',
                                     'link',
                                     'expand-arrows-alt',
-                                    'bars'
+                                    'bars',
+                                    'minus-square',
+                                    `plus-square`,
+                                    'lightbulb'
                                    ]
         }
       }

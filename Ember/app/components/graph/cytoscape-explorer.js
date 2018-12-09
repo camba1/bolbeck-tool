@@ -1,6 +1,6 @@
 import Component from '@ember/component';
 import $ from 'jquery';
-import { scheduleOnce } from '@ember/runloop';
+import { scheduleOnce, next } from '@ember/runloop';
 import { ComponentQueryManager } from 'ember-apollo-client';
 
 /*global cytoscape*/
@@ -19,6 +19,7 @@ export default Component.extend(ComponentQueryManager, {
   },
   tagName: '',
   selectedLayout: null,
+  selectedGroup: null,
   prevLayout: null,
   getLayout: name => Promise.resolve( layouts[ name ] ),
   //We need a global instance of the graph so that we can manipulate it later
@@ -35,13 +36,11 @@ export default Component.extend(ComponentQueryManager, {
 
   didInsertElement: function() {
     this._super();
-    let customNodesAndEdges = [];
-    if (this.nodesAndEdges) {
-      customNodesAndEdges = this.nodesAndEdges
-     }
-    else {
-      customNodesAndEdges = [...this.nodes, ...this.edges];
-    }
+    //set the layout and group in the properties associated with the layout drop downs
+    this.selectedLayout = this.graphLayout.name
+    this.selectedGroup = this.graphGroupMode
+    //Load data obtained from parent
+    let customNodesAndEdges = getNodesAndEdgesForGraph(this.nodesAndEdges, this.nodes, this.edges)
     //declare graph layout
     let customLayout = this.graphLayout;
     //declare graph style
@@ -85,53 +84,61 @@ export default Component.extend(ComponentQueryManager, {
   },
   actions: {
     restyle(){
-    let prevLayout = this.prevLayout;
-    if( prevLayout ){
-        prevLayout.stop();
-      }
+      //reload data if needed
+      Promise.resolve(reLoadData(this)).then(function() {
+        //Setup the style
+        let prevLayout = this.prevLayout;
+        if( prevLayout ){
+            prevLayout.stop();
+          }
 
-      let layout = prevLayout = this.cy.layout( {name: this.selectedLayout} );
-      if (layout) {
-        return layout.run().promiseOn('layoutstop');
-      }
+          let layout = prevLayout = this.cy.layout( {name: this.selectedLayout} );
+          if (layout) {
+            return layout.run().promiseOn('layoutstop');
+          }
+      }.bind(this) )
+      //restyle the graph
+
     },
     setselectedLayout(selected){
       this.set('selectedLayout',selected)
+    },
+    setSelectedGroup(selected){
+      this.set('selectedGroup',selected)
     }
   }
 
 });
 
-/**
- * Get data from the DB when the user wants to expand a new node (Expand option on ctxMenu)
- * Then, add the data to nodes and edges of the graph (dups are ignored) and trigger
- * an afterexpand event that can be handled upstream
- * @param {String} sourceNodeKey key of the node that the user requested to expand
- * @param {object} apollo refrence to the apollo service used to get the data from backend
- * @param {String} apolloQueryId Identifier used by apollo to pull the data
- * @param {object} queryHierarchy gql query object used to pull the data
- * @param {object} cy reference to the graph to which we need to add the new dataset
- * @param {String} clickType indicates wether the user clicked on nodes or edges. Will be forwarded
- * upstream to help any additional preocessing
- * @param {String} menuOptionName Indicates which menu option the user clicked. Will be forwarded
- * upstream to help any additional preocessing
- * @param {String} bottomHierarchyLevel string indicating the lowest level of the hierarchy, passed
- * into the component in parameter bottonHierarchyLevel. Used to properly attach nodes to graph
- */
-//  function getNewData(sourceNodeKey, apollo, apolloQueryId,
-//                     queryHierarchy, cy, clickType, menuOptionName,
-//                     bottonHierarchyLevel){
-//   let variables = {input: {_key: sourceNodeKey, direction: "outbound", maxDepth: 2 }};
-//     return apollo.query({ query: queryHierarchy, variables }, apolloQueryId).then((result) => {
-//         let nodes = addNodesToArray(result, bottonHierarchyLevel);
-//         let edges = addEdgesToArray(result);
-//         cy.batch(function(){
-//           cy.add([...nodes, ...edges]);
-//         });
-//         cy.layout({ name: 'breadthfirst' }).run();
-//         cy.emit('click', [sourceNodeKey, clickType, `after${menuOptionName}`, result])
-//     });
-// }
+
+ function reLoadData(thisComponent){
+   if (thisComponent.selectedGroup != thisComponent.graphGroupMode) {
+     Promise.resolve( thisComponent.set('graphGroupMode',thisComponent.selectedGroup)).then( function() {
+                     let customNodesAndEdges = getNodesAndEdgesForGraph(thisComponent.nodesAndEdges,
+                                                                       thisComponent.nodes,
+                                                                       thisComponent.edges)
+                     // so new eles are offscreen
+                     thisComponent.cy.zoom(0.001);
+                     thisComponent.cy.pan({ x: -9999999, y: -9999999 });
+
+                     // replace eles
+                     thisComponent.cy.elements().remove();
+                     thisComponent.cy.add( customNodesAndEdges );
+                   }.bind(thisComponent) );
+   }
+ }
+
+
+ function getNodesAndEdgesForGraph(nodesAndEdges,nodes,edges){
+   let customNodesAndEdges = [];
+   if (nodesAndEdges) {
+     customNodesAndEdges = nodesAndEdges
+    }
+   else {
+     customNodesAndEdges = [...nodes, ...edges];
+   }
+   return customNodesAndEdges
+}
 
 /**
  * Adds the  relationship edges to the array of values that will be used to populate the graph.

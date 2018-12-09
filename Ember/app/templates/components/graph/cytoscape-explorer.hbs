@@ -21,7 +21,7 @@
         <div class="input-group-prepend">
           <label class="input-group-text" for="inputGroupSelect02">Groups</label>
         </div>
-        <select class="custom-select" onchange={{action "setselectedLayout" value="target.value" }}>
+        <select class="custom-select" onchange={{action "setSelectedGroup" value="target.value" }}>
           {{#each graphGroupings as |groupOption| }}
             <option value={{groupOption.value}}>{{groupOption.label}}</option>
           {{/each}}

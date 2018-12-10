@@ -3,6 +3,8 @@ import $ from 'jquery';
 import { scheduleOnce, next } from '@ember/runloop';
 import { ComponentQueryManager } from 'ember-apollo-client';
 
+
+
 /*global cytoscape*/
 export default Component.extend(ComponentQueryManager, {
   init() {
@@ -20,7 +22,9 @@ export default Component.extend(ComponentQueryManager, {
   tagName: '',
   selectedLayout: null,
   selectedGroup: null,
+  nodesHighlighted: false,
   prevLayout: null,
+  cyUndoRedo : null,
   getLayout: name => Promise.resolve( layouts[ name ] ),
   //We need a global instance of the graph so that we can manipulate it later
   cy : cytoscape({container: $('#cy')[0] }),
@@ -60,19 +64,27 @@ export default Component.extend(ComponentQueryManager, {
           menuOptions.forEach((option) => { this.cy.cxtmenu(option) });
       }
 
+      var cyViewUtilities = this.cy.viewUtilities({
+                         neighbor: function(node){
+                             return node.closedNeighborhood();
+                         },
+                         neighborSelectTime: 1000
+                     });
+
+
+     this.cyUndoRedo = this.cy.undoRedo();
+     this.cyUndoRedo.action("thickenBorder", thickenBorder, thinBorder);
+     this.cyUndoRedo.action("thinBorder", thinBorder, thickenBorder);
+
       //schedule for rendering
       scheduleOnce('afterRender', this, function(){
        this.cy;
      });
 
      //Define events we want to track
-     //Menu event
+     //Menu events
      this.cy.on('click', (ele, itemKey, itemGroupName, itemType, menuOptiontName)=>{
-         // Exec only of we called it
-         if (itemKey) {
-           let nodeOutDegree = ele.target.outdegree ? ele.target.outdegree(true) : 0 ;
-           this.menuClicked(itemKey, itemGroupName, itemType, menuOptiontName, nodeOutDegree);
-         }
+       runMenuOptionClick(this, ele, itemKey, itemGroupName, itemType, menuOptiontName)
       });
   //    //graph events
      this.cy.on('click', 'node', (evt)=>{
@@ -111,6 +123,8 @@ export default Component.extend(ComponentQueryManager, {
 });
 
 
+// #region data loading
+
  function reLoadData(thisComponent){
    if (thisComponent.selectedGroup != thisComponent.graphGroupMode) {
      Promise.resolve( thisComponent.set('graphGroupMode',thisComponent.selectedGroup)).then( function() {
@@ -139,113 +153,9 @@ export default Component.extend(ComponentQueryManager, {
    }
    return customNodesAndEdges
 }
+// #endregion
 
-/**
- * Adds the  relationship edges to the array of values that will be used to populate the graph.
- * @param {object} modelData Contains info for the nodes. Must include e_key, eFrom & eTo
- * @returns {object} nodes ready to be attached to the graph dataset.
- */
-// function addEdgesToArray(modelData){
-//   let edges = modelData.map( row => {
-//     return   { group: "edges", data: { id: row.e_key,
-//                                 source: row.eFrom,
-//                                 target: row.eTo,
-//                                 key: row.e_key } }
-//   });
-//   return edges
-// }
-
-/**
- * Adds the  nodes to the array of values that will be used to populate the graph.
- * The bottom of the hierarchy node will have a different class (denoted by the bottomHierarchyLevel
- * parameter passed from the parent UI) than the rest of the data nodes which will have class 'hier'
- * to allow custom style
- * @param {object} modelData Contains info for the nodes. Must include id, name & _key
- * @returns {object} nodes ready to be attached to the graph dataset.
- */
-//  function addNodesToArray(modelData, bottonHierarchyLevel){
-//   let nodes = modelData.map(row => {
-//       let node = { group: "nodes", data: { id: row._id,
-//                     name: row.name,
-//                     key: row._key } }
-//       node.classes = row.hierarchyLevel == bottonHierarchyLevel ? bottonHierarchyLevel: 'hier'
-//       return node
-//     });
-//     return nodes
-// }
-
-/**
- * Adds the root node to the array of values that will be used to populate the graph.
- * The root node will have a different class ('root') than the rest of the data nodes
- * to allow custom style
- * @param {object} modelData Contains info for the root node. Must include id, name & _key
- * @returns {object} node ready to be attached to the graph dataset.
- */
-// function addRootNodeToArray(modelData){
-//   let firstNode= [];
-//   firstNode.push({ group: "nodes", data: { id: modelData._id,
-//                     name: modelData.name,
-//                     key: modelData._key,
-//                   }, classes: 'root' });
-//   return firstNode;
-// }
-
-/**
- * Gets the layout to be used by the graph
- * @param {object} layoutFromParentUI Layout passed by parent UI in parameter graphLayout
- * @returns {object} Parent layout if available,  default layout otherwise
- */
-// function getGraphLayout(layoutFromParentUI) {
-//   let layout = layoutFromParentUI ? layoutFromParentUI :
-//                 {
-//                   name: 'breadthfirst'
-//                 };
-//   return layout
-// }
-/**
- * Build the graph style by using either a graph style passed by the parent UI in the parameter
- * 'graphStyle' or uses a default graph style
- * @param {object} styleFromParentUI Style passed by the parent UI in the parameter
- * 'graphStyle'
- * @param {String} bottomHierarchyLevel string indicating the lowest level of the hierarchy, passed
- * into the component in parameter bottonHierarchyLevel
- * @returns {object} Style ready to attach to the menu
- */
-// function getGraphStyle(styleFromParentUI, bottonHierarchyLevel){
-//   let customStyle = [
-//                       {
-//                         selector: 'node',
-//                         style: {
-//                           'label': 'data(key)'
-//                           //'font-size': 10
-//                         }
-//                       },
-//                       {
-//                         selector: 'node.root',
-//                         style: {
-//                           'label': 'data(name)',
-//                            'shape': 'triangle',
-//                            'background-color': '#6FB1FC'
-//                         }
-//                       },
-//                       {
-//                         selector: `node.${bottonHierarchyLevel}`,
-//                         style: {
-//                            'shape': 'diamond'
-//                         }
-//                       },
-//                       {
-//                         selector: 'edge',
-//                         style: {
-//                           'curve-style': 'bezier',
-//                           'opacity': 0.667,
-//                           'target-arrow-shape': 'triangle'
-//                         }
-//                       }
-//                     ];
-//     let style = styleFromParentUI ? styleFromParentUI : customStyle;
-//     return style
-// }
+// #region  cxtMenu functions
 
 /**
  * Gets the menu options to be attached to the ctxMenu. It can either use the default
@@ -300,5 +210,94 @@ function buildMenuOptions(menuBuildingBlock){
                       maxSpotlightRadius: 25
     };
     return cyMenuOptions
-
 }
+
+function parentMenuOption (ele, itemKey, itemGroupName, itemType, menuOptiontName, thisComponent) {
+  // Exec only of we called it
+  if (itemKey) {
+    let nodeOutDegree = ele.target.outdegree ? ele.target.outdegree(true) : 0 ;
+    thisComponent.menuClicked(itemKey, itemGroupName, itemType, menuOptiontName, nodeOutDegree);
+  }
+}
+
+function runMenuOptionClick(thisComponent, ele, itemKey, itemGroupName, itemType, menuOptiontName) {
+  // Exec only of we called it
+  if (itemKey) {
+     switch (menuOptiontName) {
+       case "hLight":
+         highLightNeighbors(thisComponent.cy, thisComponent.cyUndoRedo, thisComponent);
+         break;
+       case "hide":
+         hideSelectedNodes(thisComponent.cy);
+         break
+       case "show":
+         showAdjecentNodes(thisComponent.cy)
+         break
+       default:
+         //Push the item up to the parent
+         parentMenuOption (ele, itemKey, itemGroupName, itemType, menuOptiontName, thisComponent);
+     }
+  }
+}
+
+// #endregion
+
+// #region hide show highlight
+// Increase border width to show nodes with hidden neighbors
+function thickenBorder(eles){
+  eles.forEach(function( ele ){
+    var defaultBorderWidth = Number(ele.css("border-width").substring(0,ele.css("border-width").length-2));
+    ele.css("border-width", defaultBorderWidth + 2);
+  });
+  eles.data("thickBorder", true);
+  return eles;
+}
+// Decrease border width when hidden neighbors of the nodes become visible
+function thinBorder(eles){
+  eles.forEach(function( ele ){
+    var defaultBorderWidth = Number(ele.css("border-width").substring(0,ele.css("border-width").length-2));
+    ele.css("border-width", defaultBorderWidth - 2);
+  });
+  eles.removeData("thickBorder");
+  return eles;
+}
+
+function highLightNeighbors (cy, cyUndoRedo, thisComponent) {
+    if(!thisComponent.nodesHighlighted && cy.$(":selected").length > 0) {
+        thisComponent.set('nodesHighlighted', true);
+        cyUndoRedo.do("highlightNeighbors", cy.$(":selected"));
+    } else {
+      thisComponent.set('nodesHighlighted', false);
+      removeHighLights (cyUndoRedo)
+    }
+}
+
+function removeHighLights (cyUndoRedo) {
+    cyUndoRedo.do("removeHighlights");
+}
+
+function hideSelectedNodes(cy){
+    var actions = [];
+    var nodesToHide = cy.$(":selected").add(cy.$(":selected").nodes().descendants());
+    var nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes().intersection(nodesToHide);
+    actions.push({name: "thinBorder", param: nodesWithHiddenNeighbor});
+    actions.push({name: "hide", param: nodesToHide});
+    nodesWithHiddenNeighbor = nodesToHide.neighborhood(":visible")
+        .nodes().difference(nodesToHide).difference(cy.nodes("[thickBorder]"));
+    actions.push({name: "thickenBorder", param: nodesWithHiddenNeighbor});
+    cy.undoRedo().do("batch", actions);
+}
+
+function showAdjecentNodes(cy) {
+    var hiddenEles = cy.$(":selected").neighborhood().filter(':hidden');
+    var actions = [];
+    var nodesWithHiddenNeighbor = (hiddenEles.neighborhood(":visible").nodes("[thickBorder]"))
+        .difference(cy.edges(":hidden").difference(hiddenEles.edges().union(hiddenEles.nodes().connectedEdges())).connectedNodes());
+    actions.push({name: "thinBorder", param: nodesWithHiddenNeighbor});
+    actions.push({name: "show", param: hiddenEles.union(hiddenEles.parent())});
+    nodesWithHiddenNeighbor = hiddenEles.nodes().edgesWith(cy.nodes(":hidden").difference(hiddenEles.nodes()))
+        .connectedNodes().intersection(hiddenEles.nodes());
+    actions.push({name: "thickenBorder", param: nodesWithHiddenNeighbor});
+    cy.undoRedo().do("batch", actions);
+}
+// #endregion

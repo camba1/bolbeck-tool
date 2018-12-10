@@ -21,6 +21,8 @@ module.exports = function(defaults) {
   // along with the exports of each module as its value.
   app.import('node_modules/cytoscape/dist/cytoscape.min.js');
   app.import('node_modules/cytoscape-cxtmenu/cytoscape-cxtmenu.js');
+  app.import('node_modules/cytoscape-undo-redo/cytoscape-undo-redo.js');
+  app.import('node_modules/cytoscape-view-utilities/cytoscape-view-utilities.js');
   // app.import('node_modules/cytoscape-cxtmenu/cytoscape-cxtmenu.js', {
   //   using: [
   //     { transformation: 'amd', as: 'cytoscape-menu' }

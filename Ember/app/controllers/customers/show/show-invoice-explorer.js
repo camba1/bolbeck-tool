@@ -36,6 +36,12 @@ export default Controller.extend({
                       //'font-size': 10
                       'background-color': '#C3C3E5'
                     }
+                  },
+                  {
+                    selector: "node:selected",
+                    style: {
+                      "background-color": "#7ABA7A",
+                    }
                   }
               ],
     this.graphLayout = {
@@ -79,10 +85,10 @@ export default Controller.extend({
                         menuItemId: "hide"},
                         {content:`${plusIcon}`,
                         dataReturnField: "id",
-                        menuItemId: "hide"},
+                        menuItemId: "show"},
                         {content:`${hLightIcon}`,
                         dataReturnField: "id",
-                        menuItemId: "hide"}
+                        menuItemId: "hLight"}
                         ] }
           ]
   },

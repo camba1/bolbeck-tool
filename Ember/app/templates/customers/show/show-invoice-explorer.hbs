@@ -15,8 +15,9 @@
     </div>
     <div class="col-md">
       <div class="card">
-        <div class="card-header">
+        <div class="card-header d-flex justify-content-between align-items-center">
           Invoice
+          <span class="badge badge-info">{{selectedNode.length}}</span>
         </div>
         <div class="card-body py-1">
           <ul class="list-group list-group-flush py-0">
@@ -35,8 +36,9 @@
         </div>
       </div>
       <div class="card" >
-        <div class="card-header">
+        <div class="card-header d-flex justify-content-between align-items-center">
           Products
+          <span class="badge badge-info">{{selectedNodeProdCount}}</span>
         </div>
         <div class="card-body py-1">
           <ul class="list-group list-group-flush py-0 addscroll">

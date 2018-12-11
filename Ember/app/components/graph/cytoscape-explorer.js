@@ -22,9 +22,10 @@ export default Component.extend(ComponentQueryManager, {
   tagName: '',
   selectedLayout: null,
   selectedGroup: null,
-  nodesHighlighted: false,
+  nodesHidden: false,
   prevLayout: null,
   cyUndoRedo : null,
+  cyViewUtilities: null,
   getLayout: name => Promise.resolve( layouts[ name ] ),
   //We need a global instance of the graph so that we can manipulate it later
   cy : cytoscape({container: $('#cy')[0] }),
@@ -64,12 +65,12 @@ export default Component.extend(ComponentQueryManager, {
           menuOptions.forEach((option) => { this.cy.cxtmenu(option) });
       }
 
-      var cyViewUtilities = this.cy.viewUtilities({
-                         neighbor: function(node){
-                             return node.closedNeighborhood();
-                         },
-                         neighborSelectTime: 1000
-                     });
+      this.cyViewUtilities = this.cy.viewUtilities({
+                               neighbor: function(node){
+                                   return node.closedNeighborhood();
+                               },
+                               neighborSelectTime: 1000
+                             });
 
 
      this.cyUndoRedo = this.cy.undoRedo();
@@ -117,6 +118,12 @@ export default Component.extend(ComponentQueryManager, {
     },
     setSelectedGroup(selected){
       this.set('selectedGroup',selected)
+    },
+    showAllNodes(){
+      showAllHiddenNodes(this.cy, this.cyUndoRedo, this)
+    },
+    areaZoom(){
+      zoomToArea(this.cyViewUtilities)
     }
   }
 
@@ -228,10 +235,10 @@ function runMenuOptionClick(thisComponent, ele, itemKey, itemGroupName, itemType
          highLightNeighbors(thisComponent.cy, thisComponent.cyUndoRedo, thisComponent);
          break;
        case "hide":
-         hideSelectedNodes(thisComponent.cy);
+         hideSelectedNodes(thisComponent.cy, thisComponent);
          break
        case "show":
-         showAdjecentNodes(thisComponent.cy)
+         showAdjecentNodes(thisComponent.cy, thisComponent)
          break
        default:
          //Push the item up to the parent
@@ -242,12 +249,14 @@ function runMenuOptionClick(thisComponent, ele, itemKey, itemGroupName, itemType
 
 // #endregion
 
-// #region hide show highlight
+// #region hide show highlight zoom
 // Increase border width to show nodes with hidden neighbors
 function thickenBorder(eles){
   eles.forEach(function( ele ){
     var defaultBorderWidth = Number(ele.css("border-width").substring(0,ele.css("border-width").length-2));
-    ele.css("border-width", defaultBorderWidth + 2);
+    let newCSS = {"border-width" : `${defaultBorderWidth + 2}`, "border-color": "red" }
+    // ele.css("border-width", defaultBorderWidth + 2);
+    ele.css(newCSS);
   });
   eles.data("thickBorder", true);
   return eles;
@@ -256,7 +265,9 @@ function thickenBorder(eles){
 function thinBorder(eles){
   eles.forEach(function( ele ){
     var defaultBorderWidth = Number(ele.css("border-width").substring(0,ele.css("border-width").length-2));
-    ele.css("border-width", defaultBorderWidth - 2);
+    let newCSS = {"border-width" : `${defaultBorderWidth - 2}`, "border-color": "black" }
+    // ele.css("border-width", defaultBorderWidth - 2);
+    ele.css(newCSS);
   });
   eles.removeData("thickBorder");
   return eles;
@@ -276,7 +287,7 @@ function removeHighLights (cyUndoRedo) {
     cyUndoRedo.do("removeHighlights");
 }
 
-function hideSelectedNodes(cy){
+function hideSelectedNodes(cy, thisComponent){
     var actions = [];
     var nodesToHide = cy.$(":selected").add(cy.$(":selected").nodes().descendants());
     var nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes().intersection(nodesToHide);
@@ -286,18 +297,39 @@ function hideSelectedNodes(cy){
         .nodes().difference(nodesToHide).difference(cy.nodes("[thickBorder]"));
     actions.push({name: "thickenBorder", param: nodesWithHiddenNeighbor});
     cy.undoRedo().do("batch", actions);
+    if (nodesToHide.length > 0) {
+      thisComponent.set('nodesHidden', true)
+    }
 }
 
-function showAdjecentNodes(cy) {
+function showAdjecentNodes(cy, thisComponent) {
     var hiddenEles = cy.$(":selected").neighborhood().filter(':hidden');
     var actions = [];
     var nodesWithHiddenNeighbor = (hiddenEles.neighborhood(":visible").nodes("[thickBorder]"))
-        .difference(cy.edges(":hidden").difference(hiddenEles.edges().union(hiddenEles.nodes().connectedEdges())).connectedNodes());
+        .difference(cy.edges(":hidden").difference(hiddenEles.edges()
+        .union(hiddenEles.nodes().connectedEdges())).connectedNodes());
     actions.push({name: "thinBorder", param: nodesWithHiddenNeighbor});
     actions.push({name: "show", param: hiddenEles.union(hiddenEles.parent())});
     nodesWithHiddenNeighbor = hiddenEles.nodes().edgesWith(cy.nodes(":hidden").difference(hiddenEles.nodes()))
         .connectedNodes().intersection(hiddenEles.nodes());
     actions.push({name: "thickenBorder", param: nodesWithHiddenNeighbor});
     cy.undoRedo().do("batch", actions);
+    if (cy.nodes("[thickBorder]").length == 0) {
+      thisComponent.set('nodesHidden', false)
+    }
 }
+
+function showAllHiddenNodes(cy, cyUndoRedo, thisComponent) {
+    var actions = [];
+    var nodesWithHiddenNeighbor = cy.nodes("[thickBorder]");
+    actions.push({name: "thinBorder", param: nodesWithHiddenNeighbor});
+    actions.push({name: "show", param: cy.elements()});
+    cyUndoRedo.do("batch", actions);
+    thisComponent.set('nodesHidden', false)
+}
+
+function zoomToArea(cyViewUtilities) {
+  cyViewUtilities.enableMarqueeZoom();
+}
+
 // #endregion

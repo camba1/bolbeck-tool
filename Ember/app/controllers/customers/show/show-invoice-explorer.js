@@ -12,6 +12,8 @@ let expandIcon = '<svg id="bolbeckExpand" viewBox="0 0 448 512" xmlns="http://ww
 // #endregion
 
 export default Controller.extend({
+
+// #region Gui controlling properties
   hideSideCards: false,
   sideCardsClass: computed("hideSideCards", function() {
     return this.hideSideCards ? "col-md-4 d-none" : "col-md-4"
@@ -19,10 +21,12 @@ export default Controller.extend({
   graphColClass: computed("hideSideCards", function() {
     return this.hideSideCards ? "col-md" : "col-md-8"
   }),
-  // myClass: "col-md d-none",
+// #endregion
+
   init() {
     this._super(...arguments);
-  //  this.graphNodesAndEdges = [],
+
+// #region graph style & layout
     this.graphStyle = [
                   {
                     selector: 'node.invo',
@@ -56,9 +60,6 @@ export default Controller.extend({
                     }
                   }
               ],
-    this.graphLayout = {
-                    name: 'cose'
-                  },
     this.graphMenuOptions = [
           {menuSelector:"node.prodGroup",
            menuItems: [ {content:`${expandIcon}`,
@@ -102,10 +103,16 @@ export default Controller.extend({
                         dataReturnField: "id",
                         menuItemId: "hLight"}
                         ] }
-          ]
+          ],
+//#endregion
+
+    this.graphLayout = {
+                          name: 'cose'
+                        }
   },
   selectedNode: undefined,
   selectedNodeProdCount: undefined,
+  nodesExpansion: undefined,
   graphGroupMode: 'none',
   nodesAndEdges: computed('model','graphGroupMode', function() {
     this.set('selectedNode', undefined);
@@ -147,7 +154,8 @@ export default Controller.extend({
                this.transitionToRoute(`${mainObject}.show.show-detail`,key)
                break;
            case 'expand':
-               alert('expand')
+               let expansionNodes = populateNodeExpansion(this, clickedItemKey)
+               this.set('nodesExpansion',expansionNodes)
                break;
            default:
                throw 'Unknown menu option in the graph. Please contact support.'
@@ -333,6 +341,7 @@ function populateNodeInfoFromGroup(thisController, clickedItemKey, populatedInvo
           } else {
             foundProds.push(invProduct.product_key)
             prodsReturn.push({ product_key: invProduct.product_key,
+                                product_id: invProduct.product_id,
                                 productName: invProduct.productName,
                                 unitPrice: invProduct.unitPrice,
                                 quanty: invProduct.quanty,
@@ -452,4 +461,41 @@ function populateEdgeInfo(thisController, clickedItemKey, clickItemType) {
   }
   thisController.set("selectedNode", clickedItem) ;
   thisController.set("selectedNodeProdCount", clickedItem[0] ? clickedItem[0].products.length : undefined ) ;
+}
+
+
+function populateNodeExpansion(thisController, clickedItemKey){
+  let groupId = clickedItemKey
+  let prodIds = []
+  let nodes = []
+  let edges = []
+  let returnVal = undefined
+  let relatedInvoices = populateNodeInfoFromGroup(thisController, groupId)
+  if (relatedInvoices[0]){
+    let products = relatedInvoices[0].products
+
+    products.forEach( function(product) {
+      if (!prodIds.includes(product.product_id)){
+        prodIds.push(product.product_id)
+        nodes.push({ group: "nodes",
+                      data: {id: product.product_id,
+                            name: product.product_key,
+                            key: product.product_key,
+                            type: 'prod'
+                            },
+                      classes: 'prod'
+
+                    })
+        edges.push({ group: "edges", data: {id: `${groupId}${product.product_id}`,
+                                          source: groupId,
+                                          target: product.product_id,
+                                          key: `${groupId}_${product.product_id}`,
+                                          type: 'prodProdGrp'
+                                         }
+                  })
+      }
+    })
+    returnVal = [...nodes, ...edges]
+  }
+  return returnVal
 }

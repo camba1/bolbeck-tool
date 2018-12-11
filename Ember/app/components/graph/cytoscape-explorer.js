@@ -248,6 +248,19 @@ function parentMenuOption (ele, itemKey, itemGroupName, itemType, menuOptiontNam
   }
 }
 
+function runExpandNodes(cy, thisComponent, ele, itemKey, itemGroupName, itemType, menuOptiontName){
+  //run only for non-expanded elements
+  //thisComponent.set('nodesExpansion', undefined)
+  if (!ele.target.outdegree  || ele.target.outdegree(true) == 0) {
+    parentMenuOption (ele, itemKey, itemGroupName, itemType, menuOptiontName, thisComponent)
+    if (thisComponent.nodesExpansion && thisComponent.nodesExpansion.length > 0){
+      cy.batch(function(){
+        cy.add(thisComponent.nodesExpansion);
+      });
+    }
+  }
+}
+
 function runMenuOptionClick(thisComponent, ele, itemKey, itemGroupName, itemType, menuOptiontName) {
   // Exec only of we called it
   if (itemKey) {
@@ -260,6 +273,10 @@ function runMenuOptionClick(thisComponent, ele, itemKey, itemGroupName, itemType
          break
        case "show":
          showAdjecentNodes(thisComponent.cy, thisComponent)
+         break
+      case "expand":
+         runExpandNodes(thisComponent.cy, thisComponent, ele, itemKey,
+                        itemGroupName, itemType, menuOptiontName)
          break
        default:
          //Push the item up to the parent

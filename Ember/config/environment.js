@@ -40,7 +40,10 @@ module.exports = function(environment) {
                                     'bars',
                                     'minus-square',
                                     `plus-square`,
-                                    'lightbulb'
+                                    'lightbulb',
+                                    'eye',
+                                    'expand',
+                                    'search-plus'
                                    ]
         }
       }

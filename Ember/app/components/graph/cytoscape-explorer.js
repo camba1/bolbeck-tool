@@ -23,6 +23,7 @@ export default Component.extend(ComponentQueryManager, {
   selectedLayout: null,
   selectedGroup: null,
   nodesHidden: false,
+  restyleAfterExpandGraph: false,
   prevLayout: null,
   cyUndoRedo : null,
   cyViewUtilities: null,
@@ -124,6 +125,26 @@ export default Component.extend(ComponentQueryManager, {
     },
     areaZoom(){
       zoomToArea(this.cyViewUtilities)
+    },
+    expandGraph(){
+      // this.onExpandGraphClicked()
+      Promise.resolve(this.onExpandGraphClicked()).then(function() {
+        this.cy.resize()
+      }.bind(this)
+     ).then(function() {
+         if (this.restyleAfterExpandGraph) {
+           let prevLayout = this.prevLayout;
+           if( prevLayout ){
+               prevLayout.stop();
+             }
+
+             let layout = prevLayout = this.cy.layout( {name: this.selectedLayout} );
+             if (layout) {
+               return layout.run().promiseOn('layoutstop');
+             }
+         }
+       }.bind(this)
+     )
     }
   }
 

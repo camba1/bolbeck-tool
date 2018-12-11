@@ -2,7 +2,7 @@
 <div class="container bg-light">
   <br/>
   <div class="row">
-    <div class="col-md-8">
+    <div class={{graphColClass}}>
       {{graph/cytoscape-explorer
           nodesAndEdges = nodesAndEdges
           graphStyle = graphStyle
@@ -11,9 +11,11 @@
           graphMenuOptions = graphMenuOptions
           onNodeClicked=(action "graphNodeClicked")
           onMenuClicked=(action "graphMenuClicked")
+          onExpandGraphClicked=(action "graphExpandClicked")
       }}
     </div>
-    <div class="col-md">
+    <!-- <div class="col-md"> -->
+    <div class={{sideCardsClass}}>
       <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
           Invoice

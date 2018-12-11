@@ -18,7 +18,7 @@
         {{/if}}
       </div>
       <div class="col-1 d-flex justify-content-end">
-        <button class="btn btn-link p-0" type="button">
+        <button class="btn btn-link p-0" type="button" {{action "expandGraph"}}>
           {{fa-icon 'expand'}}
         </button>
       </div>
@@ -47,6 +47,10 @@
             <option value={{groupOption.value}}>{{groupOption.label}}</option>
           {{/each}}
         </select>
+      </div>
+      <div>
+        {{input id="restyleAfterExpandGraph" type="checkbox" checked=restyleAfterExpandGraph}}
+        <label for="restyleAfterExpandGraph">Auto restyle after expand graph</label>
       </div>
     </div>
   </div>

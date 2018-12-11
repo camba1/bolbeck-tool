@@ -12,6 +12,14 @@ let expandIcon = '<svg id="bolbeckExpand" viewBox="0 0 448 512" xmlns="http://ww
 // #endregion
 
 export default Controller.extend({
+  hideSideCards: false,
+  sideCardsClass: computed("hideSideCards", function() {
+    return this.hideSideCards ? "col-md-4 d-none" : "col-md-4"
+  }),
+  graphColClass: computed("hideSideCards", function() {
+    return this.hideSideCards ? "col-md" : "col-md-8"
+  }),
+  // myClass: "col-md d-none",
   init() {
     this._super(...arguments);
   //  this.graphNodesAndEdges = [],
@@ -20,7 +28,7 @@ export default Controller.extend({
                     selector: 'node.invo',
                     style: {
                       'label': 'data(name)',
-                      'min-zoomed-font-size': 8,
+                      'min-zoomed-font-size': 10,
                       'background-color': '#7a45ae'
                       //'font-size': 10
                     }
@@ -29,7 +37,7 @@ export default Controller.extend({
                     selector: 'node.prod',
                     style: {
                       'label': 'data(key)',
-                      'min-zoomed-font-size': 8,
+                      'min-zoomed-font-size': 18,
                       'background-color': '#6574cd'
                     }
                   },
@@ -37,7 +45,7 @@ export default Controller.extend({
                     selector: 'node.prodGroup',
                     style: {
                       'label': 'data(name)',
-                      'min-zoomed-font-size': 8,
+                      'min-zoomed-font-size': 10,
                       'background-color': '#C3C3E5'
                     }
                   },
@@ -144,6 +152,9 @@ export default Controller.extend({
            default:
                throw 'Unknown menu option in the graph. Please contact support.'
        }
+    },
+    graphExpandClicked(){
+      this.set('hideSideCards', !this.hideSideCards);
     }
   }
 });

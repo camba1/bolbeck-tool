@@ -32,6 +32,8 @@ export default Controller.extend({
                     selector: 'node.invo',
                     style: {
                       'label': 'data(name)',
+                      "width": "mapData(prodCount, 0, 50, 20, 35)",
+                      "height": "mapData(prodCount, 0, 50, 20, 35)",
                       'min-zoomed-font-size': 10,
                       'background-color': '#7a45ae'
                       //'font-size': 10
@@ -41,7 +43,8 @@ export default Controller.extend({
                     selector: 'node.prod',
                     style: {
                       'label': 'data(key)',
-                      'min-zoomed-font-size': 18,
+                      'min-zoomed-font-size': 10,
+                      'font-size': 10,
                       'background-color': '#6574cd'
                     }
                   },
@@ -49,6 +52,8 @@ export default Controller.extend({
                     selector: 'node.prodGroup',
                     style: {
                       'label': 'data(name)',
+                      "width": "mapData(products.length, 0, 20, 10, 25)",
+                      "height": "mapData(products.length, 0, 20, 10, 25)",
                       'min-zoomed-font-size': 10,
                       'background-color': '#C3C3E5'
                     }
@@ -57,6 +62,39 @@ export default Controller.extend({
                     selector: "node:selected",
                     style: {
                       "background-color": "#7ABA7A",
+                    }
+                  },
+                  {
+                    selector: "node.prod[[degree < 2]]",
+                    style: {
+                      "width": "10",
+                      "height": "10",
+                    }
+                  },
+                  {
+                    selector: "node.prod[[degree >= 2]][[degree < 5]]",
+                    style: {
+                      "width": "15",
+                      "height": "15",
+                    }
+                  },
+                  {
+                    selector: "node.prod[[degree > 5]]",
+                    style: {
+                      "width": "20",
+                      "height": "20",
+                    }
+                  },
+                  {
+                    selector: "edge",
+                    style: {
+                      "line-color": "#CCCCCC"
+                    }
+                  },
+                  {
+                    selector: "edge:selected",
+                    style: {
+                      "line-color": "#7ABA7A",
                     }
                   }
               ],
@@ -115,8 +153,8 @@ export default Controller.extend({
   nodesExpansion: undefined,
   graphGroupMode: 'none',
   nodesAndEdges: computed('model','graphGroupMode', function() {
-    this.set('selectedNode', undefined);
-    this.set('selectedNodeProdCount', undefined);
+    // this.set('selectedNode', undefined);
+    // this.set('selectedNodeProdCount', undefined);
     if (this.graphGroupMode == "none") {
       if (this.get('model')) {
         let model = this.get('model');
@@ -147,6 +185,7 @@ export default Controller.extend({
                                populateEdgeInfo(this, clickedItemKey, clickItemType)
     },
     graphMenuClicked(clickedItemKey, clickType, clickItemType, menuOptionName ) {
+      let expansionNodes
       let key = clickedItemKey.substring(clickedItemKey.indexOf('/')+1);
       let mainObject = (clickItemType == 'prod') ? 'products' : 'invoices'
        switch(menuOptionName) {
@@ -154,7 +193,7 @@ export default Controller.extend({
                this.transitionToRoute(`${mainObject}.show.show-detail`,key)
                break;
            case 'expand':
-               let expansionNodes = populateNodeExpansion(this, clickedItemKey)
+               expansionNodes = populateNodeExpansion(this, clickedItemKey)
                this.set('nodesExpansion',expansionNodes)
                break;
            default:
@@ -163,6 +202,10 @@ export default Controller.extend({
     },
     graphExpandClicked(){
       this.set('hideSideCards', !this.hideSideCards);
+    },
+    postGraphReloadData(){
+      this.set('selectedNode', undefined);
+      this.set('selectedNodeProdCount', undefined);
     }
   }
 });
@@ -211,7 +254,9 @@ function getInvCustNodes(model){
                                  data: { id: a._id,
                                         name: a._key,
                                         key: a.invoBillTo_key,
-                                        type: 'invo'
+                                        type: 'invo',
+                                        idate: a.invoiceDate,
+                                        prodCount: a.products.length,
                                         },
                                  classes: 'invo'
 
@@ -364,7 +409,7 @@ function populateNodeInfoFromGroup(thisController, clickedItemKey, populatedInvo
  * @param {String} clickedItemKey Key of the item for which we need to look up product information
  */
 function populateNodeInfo(thisController, clickedItemKey, clickItemType) {
-  let prodCount = undefined;
+  // let prodCount = undefined;
   let searchLevel = 0;
   let searchFieldName = "";
   let clickedItem = [];

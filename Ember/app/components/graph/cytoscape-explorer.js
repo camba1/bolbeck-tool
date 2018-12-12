@@ -1,6 +1,6 @@
 import Component from '@ember/component';
 import $ from 'jquery';
-import { scheduleOnce, next } from '@ember/runloop';
+import { scheduleOnce } from '@ember/runloop';
 import { ComponentQueryManager } from 'ember-apollo-client';
 
 
@@ -27,7 +27,7 @@ export default Component.extend(ComponentQueryManager, {
   prevLayout: null,
   cyUndoRedo : null,
   cyViewUtilities: null,
-  getLayout: name => Promise.resolve( layouts[ name ] ),
+  // getLayout: name => Promise.resolve( layouts[ name ] ),
   //We need a global instance of the graph so that we can manipulate it later
   cy : cytoscape({container: $('#cy')[0] }),
 
@@ -36,7 +36,7 @@ export default Component.extend(ComponentQueryManager, {
   nodeClicked: function(clickedNodeKey, clickType, clickItemType) {
       this.onNodeClicked(clickedNodeKey, clickType, clickItemType);
   },
-  menuClicked: function(clickedNodeKey, clickType, clickItemType, menuOptionName, nodeOutDegree) {
+  menuClicked: function(clickedNodeKey, clickType, clickItemType, menuOptionName) {
       this.onMenuClicked(clickedNodeKey, clickType, clickItemType, menuOptionName);
   },
 
@@ -116,6 +116,7 @@ export default Component.extend(ComponentQueryManager, {
     },
     setselectedLayout(selected){
       this.set('selectedLayout',selected)
+      //this.cy.nodes("node.invo").style({"label": "data(idate)"})
     },
     setSelectedGroup(selected){
       this.set('selectedGroup',selected)
@@ -166,6 +167,7 @@ export default Component.extend(ComponentQueryManager, {
                      // replace eles
                      thisComponent.cy.elements().remove();
                      thisComponent.cy.add( customNodesAndEdges );
+                     thisComponent.onPostReloadData()
                    }.bind(thisComponent) );
    }
  }

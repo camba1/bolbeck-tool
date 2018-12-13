@@ -44,10 +44,22 @@
         </div>
         <select class="custom-select" onchange={{action "setSelectedGroup" value="target.value" }}>
           {{#each graphGroupings as |groupOption| }}
-            <option value={{groupOption.value}}>{{groupOption.label}}</option>
+            <option value={{groupOption.value}} selected={{eq groupOption.value graphGroupMode}}>{{groupOption.label}}</option>
           {{/each}}
         </select>
       </div>
+      {{#each graphLabelOptions as |labelitems| }}
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="{{labelitems.id}}">{{labelitems.label}}</label>
+          </div>
+          <select class="custom-select" onchange={{action "setNodeLabels" value="target.value"}}>
+            {{#each labelitems.options as |labeloption| }}
+              <option value={{labeloption.value}}>{{labeloption.label}}</option>
+            {{/each}}
+          </select>
+        </div>
+      {{/each}}
       <div>
         {{input id="restyleAfterExpandGraph" type="checkbox" checked=restyleAfterExpandGraph}}
         <label for="restyleAfterExpandGraph">Auto restyle after expand graph</label>

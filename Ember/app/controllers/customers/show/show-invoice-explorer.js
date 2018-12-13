@@ -1,5 +1,6 @@
 import Controller from '@ember/controller';
 import { computed } from '@ember/object';
+import format from 'date-fns/format'
 
 // #region IconSvgs
 
@@ -31,12 +32,30 @@ export default Controller.extend({
                   {
                     selector: 'node.invo',
                     style: {
-                      'label': 'data(name)',
+                      // 'label': 'data(name)',
                       "width": "mapData(prodCount, 0, 50, 20, 35)",
                       "height": "mapData(prodCount, 0, 50, 20, 35)",
                       'min-zoomed-font-size': 10,
                       'background-color': '#7a45ae'
                       //'font-size': 10
+                    }
+                  },
+                  {
+                    selector: 'node.invoLblNm',
+                    style: {
+                      'label': 'data(name)'
+                    }
+                  },
+                  {
+                    selector: 'node.invoLblDt',
+                    style: {
+                      'label': 'data(idate)'
+                    }
+                  },
+                  {
+                    selector: 'node.ireturn',
+                    style: {
+                      'shape': 'square'
                     }
                   },
                   {
@@ -143,7 +162,19 @@ export default Controller.extend({
                         ] }
           ],
 //#endregion
-
+    this.graphLabelOptions = [{   id: "InvoLbl",
+                                  label: "Invoice Label",
+                                  options: [
+                                    {
+                                      label: "Invoice Number",
+                                      value: "InvoLbl.invoLblNm.invoLblDt"
+                                    },
+                                    {
+                                      label: "Invoice Date",
+                                      value: "InvoLbl.invoLblDt.invoLblNm"
+                                    }
+                                  ]
+                              }],
     this.graphLayout = {
                           name: 'cose'
                         }
@@ -248,17 +279,18 @@ function getProdNodesAndEdges(model){
   }
   return [...nodes, ...edges];
 }
-
 function getInvCustNodes(model){
-  return model.map(a => {return { group: "nodes",
+  return model.map(a => {
+                        let returnInvoice = (a.totAmount < 0) ? "ireturn" : "";
+                        return { group: "nodes",
                                  data: { id: a._id,
                                         name: a._key,
                                         key: a.invoBillTo_key,
                                         type: 'invo',
-                                        idate: a.invoiceDate,
+                                        idate: format( new Date(a.invoiceDate), 'MM/DD/YY'),
                                         prodCount: a.products.length,
                                         },
-                                 classes: 'invo'
+                                 classes: `invo invoLblNm ${returnInvoice}`
 
                                 }
                           })

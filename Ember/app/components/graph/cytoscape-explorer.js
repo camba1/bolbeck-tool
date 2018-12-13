@@ -22,6 +22,7 @@ export default Component.extend(ComponentQueryManager, {
   tagName: '',
   selectedLayout: null,
   selectedGroup: null,
+  selectedLabels: null,
   nodesHidden: false,
   restyleAfterExpandGraph: false,
   prevLayout: null,
@@ -110,16 +111,21 @@ export default Component.extend(ComponentQueryManager, {
           if (layout) {
             return layout.run().promiseOn('layoutstop');
           }
+          Object.values(this.selectedLabels).forEach(function(value) {
+            changeLabels(value)
+          })
       }.bind(this) )
       //restyle the graph
 
     },
     setselectedLayout(selected){
       this.set('selectedLayout',selected)
-      //this.cy.nodes("node.invo").style({"label": "data(idate)"})
     },
     setSelectedGroup(selected){
       this.set('selectedGroup',selected)
+    },
+    setNodeLabels(selected){
+      changeLabels(this, selected)
     },
     showAllNodes(){
       showAllHiddenNodes(this.cy, this.cyUndoRedo, this)
@@ -154,6 +160,12 @@ export default Component.extend(ComponentQueryManager, {
 
 // #region data loading
 
+/**
+ * Reset the groupMode, which causes the parent module to provide new data. Then,
+   add the new data to the graph and trigger a restyle of the graph. Finally, trigger
+   a post reload user exit so that the parent can do any last minute changes on it side
+   @param Object thisComponent reference to the component (this)
+ */
  function reLoadData(thisComponent){
    if (thisComponent.selectedGroup != thisComponent.graphGroupMode) {
      Promise.resolve( thisComponent.set('graphGroupMode',thisComponent.selectedGroup)).then( function() {
@@ -172,7 +184,14 @@ export default Component.extend(ComponentQueryManager, {
    }
  }
 
-
+/**
+ * Parent can provide either one array with both nodes and edges, or two separate
+   arrays. This function combines them if necessary and returns a single Object.
+   @param [Object] Optional. Nodes and edges to be plotted on the graph
+   @param [Object] Optional. Nodes to be plotted on the graph
+   @param [Object] Optional. Edges to be plotted on the graph
+   @returns [Object] Combined nodes and edges to be plotted on the graph
+ */
  function getNodesAndEdgesForGraph(nodesAndEdges,nodes,edges){
    let customNodesAndEdges = [];
    if (nodesAndEdges) {
@@ -188,14 +207,11 @@ export default Component.extend(ComponentQueryManager, {
 // #region  cxtMenu functions
 
 /**
- * Gets the menu options to be attached to the ctxMenu. It can either use the default
- * options or used the ones passed to the component from the parent UI
- * @param {object} menuFromParentUI the menu options that were passed from the menuFromParentUI
- * UI to the component in the graphMenuOptions parameter. This will be used instead of the default
- * menu items
- * @param {String} menuSelector Used to buid the default menu so that specific items are attached
- * to the bottom of the hierarchy. Not use for customer menu options
- * @returns {object} menuOptions ready to be attached to the menu
+ * Build the menu to be attached to the ctxMenu. It used the options passed to
+ * the component from the parent UI
+ * @param {object[]} menuBuildingBlocks the menu options that were passed from the menuFromParentUI
+ * UI to the component in the graphMenuOptions parameter.
+ * @returns {object[]} menuOptions ready to be attached to the menu
  */
 function getMenuOptions(menuBuildingBlocks){
   let menuOptions = [];
@@ -205,15 +221,10 @@ function getMenuOptions(menuBuildingBlocks){
   return menuOptions
 }
 /**
- * Builds a default menu  for the ctxmenu of cytoscape. Currently
- * the options are:
- * - 'Go' which sends the link command along with the id of the element clicked
- *    so we may navigate to the detail page of the element
- * - 'Exp' which expands the clicked element by bringing more data from the db
- *    and adding it to the graph
- * @param {String} menuSelector The selection criteria on which nodes to attach the menu options
- * @param {Boolean} enableSecondCommand Indicates wether the expand option should be enabled
- * @returns {object} cyMenuOptions Configured menu options ready to be attached to the menu
+ * Builds the individual ctxMenu options based on the information passed from the
+ * parent UI and the default values setup here.
+ * @param {Object} menuBuildingBlock Values needed to setup the menus
+ * @returns {object} cyMenuOptions configured menu option ready to be attached to the menu
  */
 function buildMenuOptions(menuBuildingBlock){
 
@@ -242,6 +253,15 @@ function buildMenuOptions(menuBuildingBlock){
     return cyMenuOptions
 }
 
+/**
+ * Receives a menu option click and forwards to the parent UI
+   @param {Object} ele cytoscape object that was clicked
+   @param {string} itemKey value that ids the element clicked as per the menu configuration
+   @param {string} itemGroupName The group associated with the item clicked (node or edge)
+   @param {string} itemtype Type of element clicked as per the element configuration
+   @param {string} menuOptionName Name of the menu option that was clicked
+   @param {object} thisComponent Refence to the calling component (this)
+ */
 function parentMenuOption (ele, itemKey, itemGroupName, itemType, menuOptiontName, thisComponent) {
   // Exec only of we called it
   if (itemKey) {
@@ -373,3 +393,16 @@ function zoomToArea(cyViewUtilities) {
 }
 
 // #endregion
+
+function changeLabels(thisComponent, selected){
+  if (selected) {
+    let nodeClasses = selected.split(".");
+    if (nodeClasses && nodeClasses.length == 3) {
+        if (!thisComponent.selectedLabels) {
+          thisComponent.selectedLabels = {}
+        }
+        thisComponent.selectedLabels[`${nodeClasses[0]}`] = selected
+        thisComponent.cy.nodes("node").removeClass(nodeClasses[2]).addClass(nodeClasses[1])
+    }
+  }
+}

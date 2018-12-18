@@ -12,7 +12,7 @@ var generic = module.context.dependencies.generic;
  * @param {Date} dateThru Bounds the time frame for which the invoices will be fetched
  * @param {String} invoice_key Invoice Primary key will cause the query to return a single invoice
  * @param {String} customerName Nake of a customer for which we will retrieve invoices
- * @returns {[Object]} List of invoices, including the total spend per invoice 
+ * @returns {[Object]} List of invoices, including the total spend per invoice
  */
 var getInvoices = function(dateFrom, dateThru, invoice_key, customerName){
 
@@ -24,8 +24,8 @@ var getInvoices = function(dateFrom, dateThru, invoice_key, customerName){
   let customCustomerFilter = "";
   var aqlParams = { };
 
-  aqlParams.dateFrom = dateFrom.toLocaleDateString();
-  aqlParams.dateThru = dateThru.toLocaleDateString();
+  aqlParams.dateFrom = dateFrom.toISOString();
+  aqlParams.dateThru = dateThru.toISOString();
 
 
   if (invoice_key){
@@ -61,7 +61,6 @@ var getInvoices = function(dateFrom, dateThru, invoice_key, customerName){
                   invoBillTo_key:pathToBillTos.vertices[0]._key,
                   totAmount: round(sum(prods[*].amount)*100)/100
                 }`
-
   let documents = db._query(query, aqlParams)
   return documents;
 }

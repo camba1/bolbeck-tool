@@ -27,13 +27,13 @@ type invoice {
 input invoiceSearchInput {
   _key: ID,
   customerName: String,
-  invoiceDate: String
+  invoiceDate: DateTime
 }
 
 input invoiceInput {
   _key: ID,
   _id: String,
-  invoiceDate: String!,
+  invoiceDate: DateTime!,
   invoBillTo_key: String,
   customer_key: String
 }
@@ -41,7 +41,7 @@ input invoiceInput {
 input invoicePatchInput {
   _key: ID,
   _id: String,
-  invoiceDate: String,
+  invoiceDate: DateTime,
   invoBillTo_key: String,
   customer_key: String
 }

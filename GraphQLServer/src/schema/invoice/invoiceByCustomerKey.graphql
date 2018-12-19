@@ -5,7 +5,7 @@ type Query {
 type invoicesByCustomerKey {
   _key: ID,
   _id: String,
-  invoiceDate: String!,
+  invoiceDate: DateTime!,
   totAmount: Float!,
   invoBillTo_key: String,
   invoBillTo_id: String,
@@ -18,7 +18,7 @@ type invoicesByCustomerKey {
 
 input invoiceByCustomerKeyIntput {
   includeProducts: Boolean,
-  invoiceDate: String,
+  invoiceDate: DateTime,
   productKey: String
 }
 

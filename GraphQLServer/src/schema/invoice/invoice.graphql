@@ -11,11 +11,12 @@ type Mutation {
   invoiceDeleteLogical(_key: ID!):Boolean
   invoiceDeleteFull(_key: ID!):Boolean
 }
+scalar DateTime
 
 type invoice {
   _key: ID,
   _id: String!,
-  invoiceDate: String!,
+  invoiceDate: DateTime!,
   totAmount: Float!,
   invoBillTo_key: String,
   customer_key: String,

@@ -18,8 +18,8 @@ type Product {
   name: String!
   hierarchyLevel: String!
   type: String!
-  validFrom: String!
-  validThru: String!
+  validFrom: DateTime!
+  validThru: DateTime!
 }
 
 input ProductInput {
@@ -28,8 +28,8 @@ input ProductInput {
   name: String!
   hierarchyLevel: String!
   type: String!
-  validFrom: String!
-  validThru: String!
+  validFrom: DateTime!
+  validThru: DateTime!
 }
 
 input ProductPatchInput {

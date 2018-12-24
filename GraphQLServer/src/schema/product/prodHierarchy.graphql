@@ -7,13 +7,13 @@ type ProdHierarchy {
   _id: String!,
   name: String!,
   hierarchyLevel: String!,
-  validFrom: String!,
-  validThru: String!,
+  validFrom: DateTime!,
+  validThru: DateTime!,
   eFrom: String!,
   eTo: String!,
   e_key: String!,
-  eValidFrom: String!,
-  eValidThru: String!
+  eValidFrom: DateTime!,
+  eValidThru: DateTime!
 }
 
 input TraversalInput {

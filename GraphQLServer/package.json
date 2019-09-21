@@ -11,8 +11,8 @@
   },
   "dependencies": {
     "chai": "^4.1.2",
-    "graphql-yoga": "^1.16.1",
-    "merge-graphql-schemas": "^1.5.7",
+    "graphql-yoga": "1.16.1",
+    "merge-graphql-schemas": "1.5.7",
     "mocha": "^5.2.0"
   }
 }

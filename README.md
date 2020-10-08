@@ -20,13 +20,13 @@ Potential advantages of this architecture include:
 
 - Containers can be shared and deployed independently. They also allow allow developers to be productive faster (once the initial images are created), as well as allowing them to have multiple development environments without having to install mutliple versions  of tools and dlls on their machines.
 - ArangoDB's multi-model database will allow us to optimize the data storage depending on the expected usage of such data. Additionally, the DB has potential to provide data retrieval, storage and general utilization with high levels of performance. Finally, the Foxx framework can allow the creation of micro services directly in the DB that would allow complete control of how applications access the DB as well as runing data aggregations directly in the DB instead of sending unnecessarily large amounts of data to the app server
-- GraphQL can reduce the total amount of data shared between the client and the app server by allowing significant flexibility of the data required to be sent to the client. It will also allow less data to be sent out by allowing the client to request just the data needed insead of the set data blocks sent by a typical REST application API.
+- GraphQL can reduce the total amount of data shared between the client and the app server by allowing significant flexibility of the data required to be sent to the client. It will also allow less data to be sent out by allowing the client to request just the data needed instead of the set data blocks sent by a typical REST application API.
 - EmberJS could speed the development of the front end by reducing the amount of boiler plate code that needs to be written to get the application going. This should additionally allow the application to be developed faster versus using plain javascript.
 
-The application is expected to have the following sections,among others, once completed:
+The application is expected to have the following sections, among others, once completed:
 
 - Product: Product master data information
-- Customer: Customer master data information
+- [Customer](Documentation/customer/README.md): Customer master data information
 - Customer KPI Formula: Formulas to be used when calculating customer KPIs
 - Invoices: Customer Invoices related to product sales
 - Promotions: Information about promotional discounts given to customers

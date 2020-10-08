@@ -6,7 +6,7 @@ The customer module depicts all information related to the company's clients. Wh
 
  Once the user enters the customer's details, these are currently subdivided into the following tabs:
 
-- [Main](file:///Documentation/customer/tabs/main.markdown)
+- [Main](file:////Documentation/customer/tabs/main.markdown)
 - [Invoice Dashboard](file:///Documentation/customer/tabs/invoiceDashboard.markdown)
 - [Invoice Explorer](file:///Documentation/customer/tabs/invoiceExplorer.markdown)
-
+- [Main](/Documentation/customer/tabs/main.markdown)

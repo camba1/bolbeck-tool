@@ -2,4 +2,4 @@
 
 The customer main tab displays master data related to the company's clients. A screenshot of the tab can be see below:
 
-![Customer main sub tab](Documentation/images/customerMain.png)
+![Customer main sub tab](/Documentation/images/customerMain.png)
